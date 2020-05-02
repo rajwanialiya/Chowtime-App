@@ -1,0 +1,17 @@
+{
+  "name": "Chowtime",
+  "displayName": "Chowtime",
+  "expo": {
+    "name": "Chowtime",
+    "slug": "Chowtime",
+    "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
