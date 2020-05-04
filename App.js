@@ -1,80 +1,116 @@
+// import 'react-native-gesture-handler';
+// import * as React from 'react';
+// import { NavigationContainer } from '@react-navigation/native';
+
+// export default function App() {
+//   return (
+//     <NavigationContainer>{/* Rest of your app code */}</NavigationContainer>
+//   );
+// }
+
 import * as React from 'react';
-import { useState, useEffect } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
-import { TouchableOpacity } from 'react-native';
-import { Camera } from 'expo-camera';
-const instructions = Platform.select({
-  ios: `Press Cmd+R to reload,\nCmd+D or shake for dev menu`,
-  android: `Double tap R on your keyboard to reload,\nShake or press menu button for dev menu`,
-});
+import { Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
 
-export default function App() {
-  const [hasPermission, setHasPermission] = useState(null);
-  const [type, setType] = useState(Camera.Constants.Type.back);
-
-  useEffect(() => {
-    (async () => {
-      const { status } = await Camera.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
-    })();
-  }, []);
-
-  if (hasPermission === null) {
-    return <View />;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
+function CameraScreen() {
   return (
-    <>
-    <View style={{ flex: 1 }}>
-      <Camera style={{ flex: 1 }} type={type}>
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: 'transparent',
-            flexDirection: 'row',
-          }}>
-          <TouchableOpacity
-            style={{
-              flex: 0.1,
-              alignSelf: 'flex-end',
-              alignItems: 'center',
-            }}
-            onPress={() => {
-              setType(
-                type === Camera.Constants.Type.back
-                  ? Camera.Constants.Type.front
-                  : Camera.Constants.Type.back
-              );
-            }}>
-            <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> Flip </Text>
-          </TouchableOpacity>
-        </View>
-      </Camera>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Camera SCREEN WOOH</Text>
     </View>
-    <View style={{flex:2}}>
-      <Text>TEST</Text>
-    </View>
-    </>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+function RecipeScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Recipes!!!</Text>
+    </View>
+  );
+}
+
+function SavedScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Settings!</Text>
+    </View>
+  );
+}
+
+const Tab = createBottomTabNavigator();
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === 'Camera') {
+              iconName = focused ? 'ios-information-circle' : 'ios-information-circle-outline';
+            } else if (route.name === 'Recipes') {
+              iconName = focused ? 'ios-list-box' : 'ios-list';
+            } else if (route.name === 'Saved') {
+              iconName = focused ? 'ios-list-box' : 'ios-list';
+            } else {
+              iconName = focused ? 'ios-list-box' : 'ios-list';
+            }
+
+            // You can return any component that you like here!
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+        })}
+        
+        tabBarOptions={{
+          activeTintColor: 'tomato',
+          inactiveTintColor: 'gray',
+        }}
+      >
+        <Tab.Screen name="Camera" component={CameraScreen} />
+        <Tab.Screen name="Recipes" component={RecipeScreen} />
+        <Tab.Screen name="Saved" component={SavedScreen} />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+}
+
+// import * as React from 'react';
+// import { Platform, StyleSheet, Text, View } from 'react-native';
+
+// const instructions = Platform.select({
+//   ios: `Press Cmd+R to reload,\nCmd+D or shake for dev menu`,
+//   android: `Double tap R on your keyboard to reload,\nShake or press menu button for dev menu`,
+// });
+
+
+// export default function App() {
+//   return (
+//     <View style={styles.container}>
+//       <Text style={styles.welcome}>Welcome to React Native!</Text>
+//       <Text style={styles.instructions}>To get started, edit App.js</Text>
+//       <Text style={styles.instructions}>{instructions}</Text>
+//     </View>
+//   );
+// }
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     backgroundColor: '#F5FCFF',
+//   },
+//   welcome: {
+//     fontSize: 20,
+//     textAlign: 'center',
+//     margin: 10,
+//   },
+//   instructions: {
+//     textAlign: 'center',
+//     color: '#333333',
+//     marginBottom: 5,
+//   },
+// });
+
