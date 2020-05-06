@@ -11,7 +11,7 @@
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/bottom-tabs": "^5.3.3",
     "@react-navigation/native": "^5.2.3",
-    "@react-navigation/stack": "^5.2.18",
+    "@react-navigation/stack": "^5.2.19",
     "expo": "~37.0.3",
     "expo-camera": "^8.2.0",
     "expo-cli": "^3.20.1",

@@ -1,87 +1,79 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
-import { TouchableOpacity } from 'react-native';
-import { Camera } from 'expo-camera';
+import { Platform, StyleSheet, Text, View, AppRegistry } from 'react-native';
+
+//Tab Navigation
+import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+//Components
+import { Camera } from './components/camera'; 
+
+const Tab = createBottomTabNavigator();
+
 const instructions = Platform.select({
   ios: `Press Cmd+R to reload,\nCmd+D or shake for dev menu`,
   android: `Double tap R on your keyboard to reload,\nShake or press menu button for dev menu`,
 });
-const Tab = createBottomTabNavigator();
 
-function CameraScreen() {
-  const [hasPermission, setHasPermission] = useState(null);
-  const [type, setType] = useState(Camera.Constants.Type.back);
-
-  useEffect(() => {
-    (async () => {
-      const { status } = await Camera.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
-    })();
-  }, []);
-
-  if (hasPermission === null) {
-    return <View />;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
+export default function App() {
   return (
-    <>
-    <View style={{flex:2}}>
-      <Text>TEST</Text>
-    </View>
-    <View style={{ flex: 1 }}>
-      <Camera style={{ flex: 1 }} type={type}>
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: 'transparent',
-            flexDirection: 'row',
-          }}>
-          <TouchableOpacity
-            style={{
-              flex: 0.1,
-              alignSelf: 'flex-end',
-              alignItems: 'center',
-            }}
-            onPress={() => {
-              setType(
-                type === Camera.Constants.Type.back
-                  ? Camera.Constants.Type.front
-                  : Camera.Constants.Type.back
-              );
-            }}>
-            <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> Flip </Text>
-          </TouchableOpacity>
-        </View>
-      </Camera>
-    </View>
-    <View style={{flex:2}}>
-      <Text>TEST</Text>
-    </View>
-    </>
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === 'Camera') {
+              iconName = focused ? 'ios-information-circle' : 'ios-information-circle-outline';
+            } else if (route.name === 'Recipes') {
+              iconName = focused ? 'ios-list-box' : 'ios-list';
+            } else if (route.name === 'Saved') {
+              iconName = focused ? 'ios-list-box' : 'ios-list';
+            } else {
+              iconName = focused ? 'ios-list-box' : 'ios-list';
+            }
+
+            //PUT RIKIN'S PICS HERE
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+        })}
+
+        tabBarOptions={{
+          activeTintColor: 'tomato',
+          inactiveTintColor: 'gray',
+        }}
+      >
+        <Tab.Screen name="Camera" component={CameraScreen} />
+        <Tab.Screen name="Recipes" component={RecipeScreen} />
+        <Tab.Screen name="Saved" component={SavedScreen} />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
 
-export default function App() {
-
+function CameraScreen() {
   return (
-    <>
-   <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name="Home" component={CameraScreen} />
-        <Tab.Screen name="Settings" component={CameraScreen} />
-      </Tab.Navigator>
-    </NavigationContainer>
-
-
-    
-    
-    </>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Camera></Camera>
+    </View>
   );
+}
+
+function RecipeScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Recipes!!!</Text>
+    </View>
+  );
+}
+
+function SavedScreen() {
+  return ( 
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Settings!</Text>
+    </View>
+  ); 
 }
 
 const styles = StyleSheet.create({
@@ -102,3 +94,5 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
+
+AppRegistry.registerComponent('Chowtime', () => App);
