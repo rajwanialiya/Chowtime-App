@@ -8,13 +8,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 //Components
 import { Camera } from './components/camera'; 
+import { Recipes } from './components/recipes'
 
 const Tab = createBottomTabNavigator();
-
-const instructions = Platform.select({
-  ios: `Press Cmd+R to reload,\nCmd+D or shake for dev menu`,
-  android: `Double tap R on your keyboard to reload,\nShake or press menu button for dev menu`,
-});
 
 export default function App() {
   return (
@@ -63,7 +59,7 @@ function CameraScreen() {
 function RecipeScreen() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Recipes!!!</Text>
+      <Recipes></Recipes>
     </View>
   );
 }
