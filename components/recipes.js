@@ -26,7 +26,7 @@ export function Recipes() {
 
   //organize in a carousel, figure out how to save info
   return (
-    <View style={{ flex: 1, padding: 24 }}>
+    <View>
       <Text> hell0o </Text>
       {isLoading ? <ActivityIndicator/> : (
         <FlatList

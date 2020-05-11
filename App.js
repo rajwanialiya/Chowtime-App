@@ -4,45 +4,54 @@ import { Platform, StyleSheet, Text, View, AppRegistry } from 'react-native';
 //Tab Navigation
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 //Components
 import { Camera } from './components/camera'; 
 import { Recipes } from './components/recipes'
 
-const Tab = createBottomTabNavigator();
+const Tab = createMaterialBottomTabNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
       <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
-
-            if (route.name === 'Camera') {
-              iconName = focused ? 'ios-information-circle' : 'ios-information-circle-outline';
-            } else if (route.name === 'Recipes') {
-              iconName = focused ? 'ios-list-box' : 'ios-list';
-            } else if (route.name === 'Saved') {
-              iconName = focused ? 'ios-list-box' : 'ios-list';
-            } else {
-              iconName = focused ? 'ios-list-box' : 'ios-list';
-            }
-
-            //PUT RIKIN'S PICS HERE
-            return <Ionicons name={iconName} size={size} color={color} />;
-          },
-        })}
-
-        tabBarOptions={{
-          activeTintColor: 'tomato',
-          inactiveTintColor: 'gray',
-        }}
+        shifting={true}
+        initialRouteName="Camera"
+        activeColor="#e91e63"
+        barStyle={styles.navContainer}
       >
-        <Tab.Screen name="Camera" component={CameraScreen} />
-        <Tab.Screen name="Recipes" component={RecipeScreen} />
-        <Tab.Screen name="Saved" component={SavedScreen} />
+        <Tab.Screen
+          name="Camera"
+          component={CameraScreen}
+          options={{
+            tabBarLabel: "Camera", 
+            tabBarIcon: ({color}) => (
+              <Ionicons name="ios-camera" color={color} size={26} /> //REPLACE ICON
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Recipes"
+          component={RecipesScreen}
+          options= {{
+            tabBarLabel: "Recipes",
+            tabBarIcon: ({color}) => (
+              <Ionicons name="ios-copy" color={color} size={26} /> //REPLACE ICON
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Profile"
+          component={SavedScreen}
+          options={{
+            shifting: true,
+            tabBarLabel: "Profile",
+            tabBarIcon: ({color}) => (
+              <Ionicons name="ios-copy" color={color} size={26} /> //REPLACE ICON
+            ),
+          }}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );
@@ -50,15 +59,15 @@ export default function App() {
 
 function CameraScreen() {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <View style={styles.container}>
       <Camera></Camera>
     </View>
   );
 }
 
-function RecipeScreen() {
+function RecipesScreen() {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <View style={styles.container}>
       <Recipes></Recipes>
     </View>
   );
@@ -66,29 +75,23 @@ function RecipeScreen() {
 
 function SavedScreen() {
   return ( 
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <View style={styles.container}>
       <Text>Settings!</Text>
-    </View>
+    </View >
   ); 
 }
 
 const styles = StyleSheet.create({
+  navContainer: {
+    backgroundColor: 'white',
+    paddingTop: 5,
+    paddingBottom: 5
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+    padding: 24
+  }
 });
-
-AppRegistry.registerComponent('Chowtime', () => App);
