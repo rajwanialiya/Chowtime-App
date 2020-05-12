@@ -1,70 +1,190 @@
 import * as React from 'react';
-import { Component } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import { Button, Image, View } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import Constants from 'expo-constants';
+import * as Permissions from 'expo-permissions';
+import  { useState, useEffect } from 'react';
+import { Text, TouchableOpacity } from 'react-native';
+import { Camera } from 'expo-camera';
+import { Ionicons } from '@expo/vector-icons';
+import { useIsFocused} from '@react-navigation/native';
 
-//Camera Imports
-import { TouchableOpacity } from 'react-native';
-import { useState, useEffect } from 'react';
-import { Camera as Cam } from 'expo-camera';
+//  export class ImagePickerExample extends React.Component {
+//   state = {
+//     image: null,
+//   };
 
-// function CameraScreen() {
-//   const [hasPermission, setHasPermission] = useState(null);
-//   const [type, setType] = useState(Cam.Constants.Type.back);
+//   render() {
+//     let { image } = this.state;
 
+//     return (
+//       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+//         <Button title="Pick an image from camera roll" onPress={this._pickImage} />
+//         <Button title="Take a picture with Camera" onPress={() => navigation.navigate('Camera Home')} />
+//         {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+//       </View>
+//     );
+//   }
+
+//   componentDidMount() {
+//     this.getPermissionAsync();
+//   }
+
+//   getPermissionAsync = async () => {
+//     if (Constants.platform.ios) {
+//       const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+//       if (status !== 'granted') {
+//         alert('Sorry, we need camera roll permissions to make this work!');
+//       }
+//     }
+//   };
+
+//   _pickImage = async () => {
+//     try {
+//       let result = await ImagePicker.launchImageLibraryAsync({
+//         mediaTypes: ImagePicker.MediaTypeOptions.All,
+//         allowsEditing: true,
+//         aspect: [4, 3],
+//         quality: 1,
+//       });
+//       if (!result.cancelled) {
+//         this.setState({ image: result.uri });
+//       }
+
+//       console.log(result);
+//     } catch (E) {
+//       console.log(E);
+//     }
+//   };
+// }
+export function ImageSelect({navigation}) {
+  const [image, setImage] = useState(null);
+  useEffect(() => {
+    (async () => {
+      if (Constants.platform.ios) {
+        const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        if (status !== 'granted') {
+          alert('Sorry, we need camera roll permissions to make this work!');
+        }
+      }
+    })();
+  }, []);
+  pickImage = async () => {
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+      if (!result.cancelled) {
+        setImage(result.uri );
+      }
+
+      console.log(result);
+    } catch (E) {
+      console.log(E);
+    }
+  };
+  return (
+<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <Text>Menu Screen</Text>
+    <Button
+      title="Take Picture"
+      onPress={() => navigation.push('Camera')}
+    />
+    <Button title="Pick Image" onPress={pickImage} />
+    {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+  </View>
+  );
+}
+
+
+// export function ImagePickerExample ({navigation}) {
+//   const [image, setImage] = useState(null);
 //   useEffect(() => {
 //     (async () => {
-//       const { status } = await Cam.requestPermissionsAsync();
-//       setHasPermission(status === 'granted');
+//       if (Constants.platform.ios) {
+//         const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+//         if (status !== 'granted') {
+//           alert('Sorry, we need camera roll permissions to make this work!');
+//         }
+//       }
 //     })();
 //   }, []);
+//   pickImage = async () => {
+//     try {
+//       let result = await ImagePicker.launchImageLibraryAsync({
+//         mediaTypes: ImagePicker.MediaTypeOptions.All,
+//         allowsEditing: true,
+//         aspect: [4, 3],
+//         quality: 1,
+//       });
+//       if (!result.cancelled) {
+//         setImage(result.uri );
+//       }
 
-//   if (hasPermission === null) {
-//     return <View />;
-//   }
-//   if (hasPermission === false) {
-//     return <Text>No access to camera</Text>;
-//   }
-//   return (
-//     <>
-//     <View style={{ flex: 1 }}>
-//       <Cam style={{ flex: 1 }} type={type}>
-//         <View
-//           style={{
-//             flex: 1,
-//             backgroundColor: 'transparent',
-//             flexDirection: 'row',
-//           }}>
-//           <TouchableOpacity
-//             style={{
-//               flex: 0.1,
-//               alignSelf: 'flex-end',
-//               alignItems: 'center',
-//             }}
-//             onPress={() => {
-//               setType(
-//                 type === Cam.Constants.Type.back
-//                   ? Cam.Constants.Type.front
-//                   : Cam.Constants.Type.back
-//               );
-//             }}>
-//             <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> Flip </Text>
-//           </TouchableOpacity>
-//         </View>
-//       </Cam>
-//     </View>
-//     <View style={{flex:2}}>
-//       <Text>TEST</Text>
-//     </View>
-//     </>
-//   );
-// }
+//       console.log(result);
+//     } catch (E) {
+//       console.log(E);
+//     }
+//   };
+//     return (
+//       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+//         <Button title="Pick an image from camera roll" onPress={pickImage} />
+//         <Button title="Take a picture with Camera" onPress={() => navigation.push('Camera')} />
+//         {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+//       </View>
+//     );
+//     }
 
-export class Camera extends Component {
-    render() {
-      return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Text>HELLO</Text>    
-        </View>
-      );
+
+
+
+
+export default function CameraScreen({navigation}) {
+  const [hasPermission, setHasPermission] = useState(null);
+  const [type, setType] = useState(Camera.Constants.Type.back);
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestPermissionsAsync();
+      setHasPermission(status === 'granted');
+    })();
+  }, []);
+
+  if (hasPermission === null ) {
+    return <View />;
   }
+  else if (hasPermission === false) {
+    return <Text>No access to camera</Text>;
+  }
+  return (
+    <View style={{ flex: 1 }}>
+    { isFocused && <Camera style={{ flex: 1 }} type={type}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: 'transparent',
+            flexDirection: 'row',
+          }}>
+          <TouchableOpacity
+            style={{
+              flex: 0.1,
+              alignSelf: 'flex-end',
+              alignItems: 'center',
+            }}
+            onPress={() => {
+              setType(
+                type === Camera.Constants.Type.back
+                  ? Camera.Constants.Type.front
+                  : Camera.Constants.Type.back
+              );
+            }}>
+            <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> Flip </Text>
+          </TouchableOpacity>
+        </View>
+      </Camera>}
+    </View>
+  );
 }
