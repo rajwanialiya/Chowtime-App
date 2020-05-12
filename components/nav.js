@@ -7,7 +7,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 //Components
-import { Camera } from './camera'; 
+import  CameraScreen  from './camera'; 
+
 import { Recipes } from './recipes';
 
 //Style
@@ -61,13 +62,13 @@ export function TabNav() {
   );
 }
 
-function CameraScreen() {
-  return (
-    <View style={styles.view}>
-      <Camera></Camera>
-    </View>
-  );
-}
+// function CameraScreen() {
+//   return (
+//     <View style={styles.view}>
+//       <Camera></Camera>
+//     </View>
+//   );
+// }
 
 function RecipesScreen() {
   return (

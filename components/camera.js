@@ -8,6 +8,9 @@ import { Text, TouchableOpacity } from 'react-native';
 import { Camera } from 'expo-camera';
 import { Ionicons } from '@expo/vector-icons';
 import { useIsFocused} from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
+const CameraNavigator = createStackNavigator();
 
 //  export class ImagePickerExample extends React.Component {
 //   state = {
@@ -57,6 +60,25 @@ import { useIsFocused} from '@react-navigation/native';
 //     }
 //   };
 // }
+
+// function CameraScreen() {
+//   return (
+//     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+//       <Camera/>
+//     </View>
+//   );
+// }
+
+export default function CameraStack() {
+  return (
+  
+    <CameraNavigator.Navigator>
+      <CameraNavigator.Screen name="Upload" component={ImageSelect} />
+      <CameraNavigator.Screen name="Camera" component={CameraScreen} />
+    </CameraNavigator.Navigator>
+  
+  );
+}
 export function ImageSelect({navigation}) {
   const [image, setImage] = useState(null);
   useEffect(() => {
@@ -142,7 +164,7 @@ export function ImageSelect({navigation}) {
 
 
 
-export default function CameraScreen({navigation}) {
+function CameraScreen({navigation}) {
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const isFocused = useIsFocused();
