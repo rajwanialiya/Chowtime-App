@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, Text, View, StyleSheet } from 'react-native';
+import { view } from '../styles';
 
 export function Recipes() {
   const [isLoading, setLoading] = useState(true);
@@ -26,8 +27,8 @@ export function Recipes() {
 
   //organize in a carousel, figure out how to save info
   return (
-    <View>
-      <Text> hell0o </Text>
+    <View style={ styles.view }>
+      <Text style={ styles.view }> hell0o </Text>
       {isLoading ? <ActivityIndicator/> : (
         <FlatList
           data={data}
@@ -39,4 +40,10 @@ export function Recipes() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  view: {
+    ...view
+  },
+})
 
