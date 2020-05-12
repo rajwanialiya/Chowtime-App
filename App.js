@@ -11,6 +11,7 @@ import { Camera } from './components/camera';
 import { Recipes } from './components/recipes'
 
 const Tab = createMaterialBottomTabNavigator();
+// loadFonts();
 
 export default function App() {
   return (
