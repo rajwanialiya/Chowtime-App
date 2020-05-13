@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, Text, View, StyleSheet } from 'react-native';
+import { ActivityIndicator, FlatList, View, StyleSheet, Text } from 'react-native';
+// import { Text } from '../styles'
 
 export function Recipes() {
   const [isLoading, setLoading] = useState(true);

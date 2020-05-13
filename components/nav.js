@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View} from 'react-native';
 
 //Tab Navigation
@@ -7,13 +7,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 //Components
-import  CameraScreen  from './camera'; 
-
+import CameraScreen from './camera'; 
 import { Recipes } from './recipes';
 
 //Style
 import { view } from '../styles';
-import { font } from '../styles'
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -81,7 +79,7 @@ function RecipesScreen() {
 function SavedScreen() {
   return ( 
     <View style={styles.view}>
-      <Text style={styles.text}>Settings!</Text>
+      <Text>Settings!</Text>
     </View >
   ); 
 }
