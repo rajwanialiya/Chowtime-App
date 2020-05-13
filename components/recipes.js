@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, View, StyleSheet, Text } from 'react-native';
-// import { Text } from '../styles'
+import { ActivityIndicator, FlatList} from 'react-native';
+import { global } from '../styles'
+import { Button, Text, ThemeProvider, View } from 'react-native-elements';
 
 export function Recipes() {
   const [isLoading, setLoading] = useState(true);
@@ -27,20 +28,21 @@ export function Recipes() {
 
   //organize in a carousel, figure out how to save info
   return (
-    <View>
-      <Text style={{fontFamily: 'Poppins-Regular'}}> hell0o </Text>
-      {isLoading ? <ActivityIndicator/> : (
-        <FlatList
-          data={data}
-          renderItem={({ item }) => (
-            <Text>{ item.recipe.calories }</Text>
-          )}
-        />
-      )}
-    </View>
+    <ThemeProvider theme={global}>
+      {/* <View> */}
+        <Button title="Button"/>
+        <Text> hell0o </Text>
+        {isLoading ? <ActivityIndicator/> : (
+          <FlatList
+            data={data}
+            renderItem={({ item }) => (
+              <Text>{ item.recipe.calories }</Text>
+            )}
+          />
+        )}
+      {/* </View> */}
+    </ThemeProvider>
   );
 }
 
-const styles = StyleSheet.create({
-})
 

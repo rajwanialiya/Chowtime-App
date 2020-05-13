@@ -3,7 +3,7 @@ import * as Font from 'expo-font';
 
 //Components
 import { TabNav } from './components/nav'
-import { AppLoading} from 'expo';
+import { AppLoading } from 'expo';
 
 const loadFonts = () => Font.loadAsync({
   'Poppins-Black': require('./assets/fonts/Poppins-Black.ttf'),

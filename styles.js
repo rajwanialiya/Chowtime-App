@@ -1,29 +1,49 @@
+import { DefaultTheme } from 'react-native-paper'
+
 //App Colours
 const green='#32CA81'
 const red= '#EC5454'
 const white= '#FFFFFF'
+const black='#000000'
 
-//Text
-export const baseText = {
-  fontFamily: 'Poppins-Regular',
-  fontSize: 16,
-}
+//Theme
+export const global = {
+  ...DefaultTheme,
+  roundness: 10,
+  colors: {
+    primary: green,
+    background: red,
+    text: black
+  },
+  fonts: {
+    regular: {
+      fontFamily: 'Poppins-Regular',
+    },
+    medium: {
+      fontFamily: 'Poppins-Medium',
+    },
+    light: {
+      fontFamily: 'Poppins-Light',
+    },
+    thin: {
+      fontFamily: 'Poppins-Thin',
+    }
+  },
+};
 
-export const titleText = {
-  color: green,
-  fontFamily: 'Poppins-SemiBold',
-  fontSize: 32
-}
-
-//
 export const view = {
   backgroundColor: white,
   padding: 24,
   paddingBottom: 0,
   paddingTop: 50,
   flex: 1,
-  justifyContent: 'center',
-  alignItems: 'center',
-  textAlign: 'center',
   fontFamily: 'Poppins-Regular'
 };
+
+//Text
+export const title = {
+  color: green,
+  fontFamily: 'Poppins-SemiBold',
+  fontSize: 32,
+  justifyContent: 'flex-start'
+}

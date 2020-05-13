@@ -9,6 +9,7 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 //Components
 import CameraScreen from './camera'; 
 import { Recipes } from './recipes';
+import { Demo } from './demo';
 
 //Style
 import { view } from '../styles';
@@ -70,17 +71,13 @@ export function TabNav() {
 
 function RecipesScreen() {
   return (
-    <View style={styles.view}>
-      <Recipes></Recipes>
-    </View>
+    <Recipes style={styles.view}></Recipes>
   );
 }
 
 function SavedScreen() {
   return ( 
-    <View style={styles.view}>
-      <Text>Settings!</Text>
-    </View >
+    <Demo style={styles.view}></Demo>
   ); 
 }
 
