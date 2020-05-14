@@ -70,5 +70,5 @@ export const view = {
   paddingBottom: 0,
   paddingTop: 50,
   flex: 1,
-  fontFamily: 'Poppins-Regular'
+  fontFamily: 'Poppins-Regular',
 };

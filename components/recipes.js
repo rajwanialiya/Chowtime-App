@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
+
+import { StyleSheet, View, FlatList } from 'react-native';
 import { Text, ActivityIndicator, Chip } from 'react-native-paper';
+import Carousel from 'react-native-snap-carousel';
 
 //Theme
 import { global } from '../styles';
@@ -16,7 +18,7 @@ export function Recipes() {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
 
-  const foodItems = ['chicken', 'tomato', 'apple', 'lemonsssssss'] // REPLACE AFTER
+  const foodItems = ['chicken', 'tomato', 'apple', 'lemonsssssss', 'chicken', 'tomato', 'apple', 'lemonsssssss', 'chicken', 'tomato', 'apple', 'lemonsssssss'] // REPLACE AFTER
   const appKey = '4e12a9394efa795c901712637778f43c'
   const appID = 'd0721604'
   const base = 'https://api.edamam.com/search'
@@ -34,7 +36,7 @@ export function Recipes() {
       .catch((error) => console.error('oh no')) //figure out how to display error 
       .finally(() => setLoading(false));
       return (
-        <View style={styles.view}>
+        <View style={styles.viewCenter}>
           <ActivityIndicator 
             color='#32CA81'
             size='large'
@@ -50,8 +52,8 @@ export function Recipes() {
           {/* Your Ingredients */}
           <Text style={styles.subtitle}> Your Ingredients </Text>
           <FlatList
+            contentContainerStyle={{flexWrap:'wrap', flex: 0}}
             style={styles.row}
-            // numColumns={2}
             horizontal={true}
             scrollEnabled={false}
             data={foodItems}
@@ -61,7 +63,25 @@ export function Recipes() {
           />
 
           {/* Recipes */}
-          <Text style={styles.subtitle}> Recipes </Text>
+          <Text style={styles.subtitle}> Recipes</Text>
+          <FlatList
+            data={data}
+            renderItem={({ item }) => (
+              <Text>{ item.recipe.calories }</Text>
+            )}
+        />
+          {/* <Carousel
+              layout={'default'}
+              // activeSlideOffset={2}
+              sliderWidth={200}
+              itemWidth={100}
+              inactiveSlideScale={0.98}
+
+              data={data}
+              renderItem={({ item }) => (
+                <Text>{item.recipe.calories}</Text>
+              )}
+            /> */}
         </View>
       </PaperProvider>
     );
@@ -70,8 +90,11 @@ export function Recipes() {
 
 const styles = StyleSheet.create({
   view: {
+    ...view
+  }, 
+  viewCenter: {
     ...view,
-    justifyContent:'center'
+    justifyContent: 'center'
   }, 
   title: {
     ...title
@@ -80,15 +103,11 @@ const styles = StyleSheet.create({
     ...subtitle
   }, 
   row: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    // flex: 1,
-    marginTop: 8,
+    flexDirection: 'column',
+    flexGrow: 0,
+    marginVertical: 8,
   }, 
   chip: {
-    ...chip,
-    // flexWrap: 'wrap',
-    // flex: 1
-    // flex: 3
+    ...chip
   }
 })
