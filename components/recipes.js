@@ -33,7 +33,6 @@ export function Recipes() {
       .then((json) => setData(json.hits))
       .catch((error) => console.error('oh no')) //figure out how to display error 
       .finally(() => setLoading(false));
-    
       return (
         <View style={styles.view}>
           <ActivityIndicator 
@@ -47,6 +46,8 @@ export function Recipes() {
       <PaperProvider theme={global}>
         <View style={styles.view}>
           <Text style={styles.title}> Recipes </Text>
+
+          {/* Your Ingredients */}
           <Text style={styles.subtitle}> Your Ingredients </Text>
           <FlatList
             style={styles.row}
@@ -58,19 +59,9 @@ export function Recipes() {
               <Text style={styles.chip}>{item}</Text>
             )}
           />
-          {/* <View style={styles.row}>
-            <Chip>chicken</Chip>
-            <Chip>chicken</Chip>
-            <Chip>chicken</Chip>
-            <Chip>chicken</Chip>
-            <Chip>chicken</Chip>
-          </View> */}
-          {/* <FlatList
-            data={data}
-            renderItem={({ item }) => (
-              <Text>{item.recipe.calories}</Text>
-            )}
-          /> */}
+
+          {/* Recipes */}
+          <Text style={styles.subtitle}> Recipes </Text>
         </View>
       </PaperProvider>
     );
@@ -91,7 +82,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    flex: 1,
+    // flex: 1,
     marginTop: 8,
   }, 
   chip: {
