@@ -21,7 +21,6 @@ export function SmallButton(props) {
         minHeight: 30,
         padding: 0,
         margin: 12,
-        borderWidth: 2,
         borderRadius: 30,
       }}
     >
