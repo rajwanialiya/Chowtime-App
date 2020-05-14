@@ -44,6 +44,14 @@ export const view = {
 export const title = {
   color: green,
   fontFamily: 'Poppins-SemiBold',
-  fontSize: 32,
+  fontSize: 35,
+  justifyContent: 'flex-start',
+  marginBottom: 4
+}
+
+export const subtitle = {
+  color: black,
+  fontFamily: 'Poppins-SemiBold',
+  fontSize: 25,
   justifyContent: 'flex-start'
 }

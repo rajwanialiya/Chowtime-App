@@ -9,6 +9,7 @@ import { global } from '../styles';
 //Styles
 import { view } from '../styles'
 import { title } from '../styles'
+import { subtitle } from '../styles'
 
 //Components
 import { SolidButton } from '../components/buttons/solidButton';
@@ -20,6 +21,7 @@ export function Demo() {
     <PaperProvider theme={global}>
       <View style={styles.view}>
         <Text style={styles.title}>Title</Text>
+        <Text style={styles.subtitle}>Subtitle</Text>
         <Text>Regular Text</Text>
 
         <SolidButton color='#EC5454' text="Filled"></SolidButton>
@@ -40,5 +42,8 @@ const styles = StyleSheet.create({
   }, 
   title: {
     ...title
+  },
+  subtitle: {
+    ...subtitle
   }
 })
