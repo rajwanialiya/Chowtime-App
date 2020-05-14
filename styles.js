@@ -53,5 +53,6 @@ export const subtitle = {
   color: black,
   fontFamily: 'Poppins-SemiBold',
   fontSize: 25,
-  justifyContent: 'flex-start'
+  justifyContent: 'flex-start',
+  marginBottom: 3
 }
