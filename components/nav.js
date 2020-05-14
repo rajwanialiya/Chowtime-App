@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 //Tab Navigation
 import { Ionicons } from '@expo/vector-icons';

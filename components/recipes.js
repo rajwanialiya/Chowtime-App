@@ -1,7 +1,7 @@
-import React, { useState }from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
-import { Text, ActivityIndicator } from 'react-native-paper';
+import { Text, ActivityIndicator, Chip } from 'react-native-paper';
 
 //Theme
 import { global } from '../styles';
@@ -9,12 +9,14 @@ import { global } from '../styles';
 //Styles
 import { view } from '../styles'
 import { title } from '../styles'
+import { subtitle } from '../styles'
+import { chip } from '../styles'
 
 export function Recipes() {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
 
-  const foodItems = ['chicken', 'tomato', 'apple', 'lemon'] // REPLACE AFTER
+  const foodItems = ['chicken', 'tomato', 'apple', 'lemonsssssss'] // REPLACE AFTER
   const appKey = '4e12a9394efa795c901712637778f43c'
   const appID = 'd0721604'
   const base = 'https://api.edamam.com/search'
@@ -45,12 +47,30 @@ export function Recipes() {
       <PaperProvider theme={global}>
         <View style={styles.view}>
           <Text style={styles.title}> Recipes </Text>
+          <Text style={styles.subtitle}> Your Ingredients </Text>
           <FlatList
-              data={data}
-              renderItem={({ item }) => (
-                <Text>{item.recipe.calories}</Text>
-              )}
-            />
+            style={styles.row}
+            // numColumns={2}
+            horizontal={true}
+            scrollEnabled={false}
+            data={foodItems}
+            renderItem={({ item }) => (
+              <Text style={styles.chip}>{item}</Text>
+            )}
+          />
+          {/* <View style={styles.row}>
+            <Chip>chicken</Chip>
+            <Chip>chicken</Chip>
+            <Chip>chicken</Chip>
+            <Chip>chicken</Chip>
+            <Chip>chicken</Chip>
+          </View> */}
+          {/* <FlatList
+            data={data}
+            renderItem={({ item }) => (
+              <Text>{item.recipe.calories}</Text>
+            )}
+          /> */}
         </View>
       </PaperProvider>
     );
@@ -64,5 +84,20 @@ const styles = StyleSheet.create({
   }, 
   title: {
     ...title
+  }, 
+  subtitle: {
+    ...subtitle
+  }, 
+  row: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    flex: 1,
+    marginTop: 8,
+  }, 
+  chip: {
+    ...chip,
+    // flexWrap: 'wrap',
+    // flex: 1
+    // flex: 3
   }
 })
