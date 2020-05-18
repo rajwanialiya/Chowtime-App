@@ -1,32 +1,28 @@
 import React, { useState } from 'react';
 import { Provider as PaperProvider } from 'react-native-paper';
 
-import { StyleSheet, View, FlatList, ScrollView, Dimensions, ImageBackground} from 'react-native';
+import { StyleSheet, View, FlatList, ScrollView, Dimensions, ImageBackground, TouchableWithoutFeedback } from 'react-native';
 import { Text, ActivityIndicator } from 'react-native-paper';
-import Carousel from 'react-native-snap-carousel';
 
 //Styles & Theme
 import { global, noPadding, title, subtitle, chip } from '../styles'
 
 export function Recipes() {
   const [isLoading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
+  const [recipes, setRecipes] = useState([]);
 
   const foodItems = ['chicken', 'tomato', 'apple', 'tomato', 'apple'] // REPLACE AFTER
-  const appKey = '4e12a9394efa795c901712637778f43c'
-  const appID = 'd0721604'
-  const base = 'https://api.edamam.com/search'
+  const apiKey = 'b556ab3c2afc492591f1fefb19578bb4'
+  const base='https://api.spoonacular.com/recipes/findByIngredients'
 
   const url = base 
-    + '?q=' + foodItems.join(", ") 
-    + '&app_id=' + appID 
-    + '&app_key=' + appKey
-
+    + '?ingredients=' + foodItems.join(", ") 
+    + '&apiKey=' + apiKey 
 
   if (isLoading) {
     fetch(url)
       .then((response) => response.json())
-      .then((json) => setData(json.hits))
+      .then((json) => setRecipes(json))
       .catch((error) => console.error('oh no')) //figure out how to display error 
       .finally(() => setLoading(false));
 
@@ -53,7 +49,7 @@ export function Recipes() {
               horizontal={true}
               scrollEnabled={false}
               data={foodItems}
-              renderItem={({ item }) => (
+              renderItem={({item}) => (
                 <Text style={styles.chip}>{item}</Text>
               )}
             />
@@ -69,24 +65,11 @@ export function Recipes() {
                 snapToAlignment={"center"}
                 horizontal={true}
                 scrollEnabled={true}
-                data={data}
-                keyExtractor={item => item.recipe.label}
+                data={recipes}
+                keyExtractor={(item,index) => item.id}
                 renderItem={_renderItem}
               />
             </View>
-            {/* <Carousel
-              layout={'default'}
-              sliderWidth={Dimensions.get('window').width}
-              itemWidth={Dimensions.get('window').width - 32}
-              inactiveSlideScale={1}
-              slideStyle={{
-                paddingHorizontal: 8,
-              }}
-
-              data={data}
-              keyExtractor={item => item.recipe.label}
-              renderItem={_renderItem}
-              /> */}
           </ScrollView>
         </View>
       </PaperProvider>
@@ -96,16 +79,24 @@ export function Recipes() {
 
 function _renderItem({item,index}){
   return (
-    <View style={styles.recipesItem}>
-      <ImageBackground
-        style={styles.imageBackground}
-        source={{uri: item.recipe.image}}
-        resizeMode='cover'
-      >
-          <Text style={styles.name}>{item.recipe.label}</Text>
-      </ImageBackground>
-    </View>
+    <TouchableWithoutFeedback onPress={() => getId(item)}>
+      <View style={styles.recipesItem}>
+        <ImageBackground
+          style={styles.imageBackground}
+          source={{uri: item.image}}
+          resizeMode='cover'
+        >
+            <View style={styles.overlay} />
+            <Text style={styles.name}>{item.title}</Text>
+            <Text style={[styles.name, styles.ingredientCount]}>Fridge Ingredients:  {item.usedIngredientCount}</Text>
+        </ImageBackground>
+      </View>
+    </TouchableWithoutFeedback>
   )
+}
+
+function getId(item){
+  alert(item.id);
 }
 
 const styles = StyleSheet.create({
@@ -144,7 +135,7 @@ const styles = StyleSheet.create({
   },
   recipesItem: {
     paddingRight:18, 
-    height: 380
+    height: 380,
   },
   imageBackground: {
     height:360, 
@@ -155,5 +146,19 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 10,
     elevation: 6,
+    justifyContent:'space-between',
+    paddingBottom: 10
+  }, 
+  overlay: {
+    height: 360,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.4)'
+  }, 
+  ingredientCount: {
+    fontSize: 18
   }
 })
