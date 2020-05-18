@@ -62,25 +62,16 @@ export function Recipes() {
             <Text style={styles.subtitle}> Recipes</Text>
             <View>
               <FlatList
-                contentContainerStyle={{overflow:'scroll', paddingHorizontal:16}}
+                contentContainerStyle={styles.recipesContainer}
+                showsHorizontalScrollIndicator={false}
                 decelerationRate={0}
-                snapToInterval={Dimensions.get('window').width - 52 + 18} //your element width
+                snapToInterval={Dimensions.get('window').width - 52 + 18} //el width
                 snapToAlignment={"center"}
                 horizontal={true}
                 scrollEnabled={true}
                 data={data}
                 keyExtractor={item => item.recipe.label}
-                // renderItem={_renderItem}
-                renderItem={({ item }) => (
-                  <View style={{paddingRight:18}}>
-                    <ImageBackground
-                      style={{height:360, width:Dimensions.get('window').width - 52, borderRadius: 10, overflow:'hidden'}}
-                      source={{uri: item.recipe.image}}
-                      resizeMode='cover'
-                    />
-                    <Text style={styles.chip}>{item.recipe.calories}</Text>
-                  </View>
-                )}
+                renderItem={_renderItem}
               />
             </View>
             {/* <Carousel
@@ -103,17 +94,17 @@ export function Recipes() {
   }
 }
 
-// , shadowOffset:{  width: 10,  height: 10,  },
-//                 shadowColor: 'black',
-                // shadowOpacity: 1.0,
-
 function _renderItem({item,index}){
-  // const {height, width} = Dimensions.get('screen');
   return (
-      <View>
-        {/* <Image style={{height: 350}} resizeMode='cover' source={{uri: item.recipe.image}}/> */}
-        <Text>{item.recipe.calories}</Text>
-      </View>
+    <View style={styles.recipesItem}>
+      <ImageBackground
+        style={styles.imageBackground}
+        source={{uri: item.recipe.image}}
+        resizeMode='cover'
+      >
+          <Text style={styles.name}>{item.recipe.label}</Text>
+      </ImageBackground>
+    </View>
   )
 }
 
@@ -133,6 +124,11 @@ const styles = StyleSheet.create({
     ...subtitle,
     marginHorizontal: 16
   }, 
+  name: {
+    ...subtitle,
+    color: 'white',
+    margin: 20
+  }, 
   chip: {
     ...chip
   }, 
@@ -141,5 +137,23 @@ const styles = StyleSheet.create({
     flexGrow: 0,
     marginVertical: 8,
     marginHorizontal: 16
+  },
+  recipesContainer: {
+    overflow:'scroll',
+    paddingHorizontal:16
+  },
+  recipesItem: {
+    paddingRight:18, 
+    height: 380
+  },
+  imageBackground: {
+    height:360, 
+    width:Dimensions.get('window').width - 52, 
+    borderRadius: 10, 
+    overflow:'hidden',
+    shadowColor: 'black',
+    shadowOpacity: 0.5,
+    shadowRadius: 10,
+    elevation: 6,
   }
 })
