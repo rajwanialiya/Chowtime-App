@@ -66,7 +66,15 @@ export const chip = {
 
 export const view = {
   backgroundColor: white,
-  padding: 24,
+  padding: 16,
+  paddingBottom: 0,
+  paddingTop: 50,
+  flex: 1,
+  fontFamily: 'Poppins-Regular',
+};
+
+export const noPadding = {
+  backgroundColor: white,
   paddingBottom: 0,
   paddingTop: 50,
   flex: 1,
