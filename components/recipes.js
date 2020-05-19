@@ -88,7 +88,7 @@ function _renderItem({item,index}){
         >
             <View style={styles.overlay} />
             <Text style={styles.name}>{item.title}</Text>
-            <Text style={[styles.name, styles.ingredientCount]}>Fridge Ingredients:  {item.usedIngredientCount}</Text>
+            <Text style={[styles.name, styles.ingredientCount]}>Your Ingredients:  {item.usedIngredientCount}</Text>
         </ImageBackground>
       </View>
     </TouchableWithoutFeedback>
