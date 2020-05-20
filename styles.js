@@ -35,11 +35,13 @@ export const global = {
 
 //Text
 export const title = {
-  color: green,
+  backgroundColor: green,
+  color: white,
+  paddingTop: 75,
   fontFamily: 'Poppins-SemiBold',
   fontSize: 35,
   justifyContent: 'flex-start',
-  marginBottom: 4
+  marginBottom: 20
 }
 
 export const subtitle = {
@@ -65,14 +67,12 @@ export const chip = {
 }
 
 export const view = {
-  // padding: 24,
   paddingBottom: 0,
-  paddingTop: 50,
   fontFamily: 'Poppins-Regular',
   flex: 1,
   backgroundColor: white,
 };
 
 export const padding = {
-  padding: 16
+  paddingHorizontal: 18
 };
