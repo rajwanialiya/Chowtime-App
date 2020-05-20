@@ -6,13 +6,14 @@ import { Text, ActivityIndicator } from 'react-native-paper';
 
 //Styles & Theme
 import { global, noPadding, title, subtitle, chip } from '../styles'
+import { getId } from '../components/one_recipe'
 
+const apiKey = 'b556ab3c2afc492591f1fefb19578bb4'
 export function Recipes() {
   const [isLoading, setLoading] = useState(true);
   const [recipes, setRecipes] = useState([]);
 
   const foodItems = ['chicken', 'tomato', 'apple', 'tomato', 'apple'] // REPLACE AFTER
-  const apiKey = 'b556ab3c2afc492591f1fefb19578bb4'
   const base='https://api.spoonacular.com/recipes/findByIngredients'
 
   const url = base 
@@ -79,7 +80,7 @@ export function Recipes() {
 
 function _renderItem({item,index}){
   return (
-    <TouchableWithoutFeedback onPress={() => getId(item)}>
+    <TouchableWithoutFeedback onPress={() => getId(item, apiKey)}>
       <View style={styles.recipesItem}>
         <ImageBackground
           style={styles.imageBackground}
@@ -93,10 +94,6 @@ function _renderItem({item,index}){
       </View>
     </TouchableWithoutFeedback>
   )
-}
-
-function getId(item){
-  alert(item.id);
 }
 
 const styles = StyleSheet.create({
