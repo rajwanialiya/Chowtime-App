@@ -65,7 +65,7 @@ export const chip = {
 }
 
 export const view = {
-  padding: 24,
+  // padding: 24,
   paddingBottom: 0,
   paddingTop: 50,
   fontFamily: 'Poppins-Regular',
@@ -73,6 +73,6 @@ export const view = {
   backgroundColor: white,
 };
 
-export const section = {
-
-}
+export const padding = {
+  padding: 16
+};

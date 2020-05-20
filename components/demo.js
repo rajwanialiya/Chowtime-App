@@ -7,9 +7,7 @@ import {Text} from 'react-native-paper';
 import { global } from '../styles';
 
 //Styles
-import { view } from '../styles'
-import { title } from '../styles'
-import { subtitle } from '../styles'
+import { view, padding, title, subtitle } from '../styles'
 
 //Components
 import { SolidButton } from '../components/buttons/solidButton';
@@ -19,7 +17,7 @@ import { SmallButton } from '../components/buttons/smallButton'
 export function Demo() {
   return(
     <PaperProvider theme={global}>
-      <View style={styles.view}>
+      <View style={[styles.view, styles.padding]}>
         <Text style={styles.title}>Title</Text>
         <Text style={styles.subtitle}>Subtitle</Text>
         <Text>Regular Text</Text>
@@ -45,5 +43,8 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     ...subtitle
+  }, 
+  padding: {
+    ...padding
   }
 })
