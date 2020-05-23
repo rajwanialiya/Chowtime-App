@@ -76,3 +76,6 @@ export const view = {
 export const padding = {
   paddingHorizontal: 18
 };
+
+//Small button icons are size={26}
+//Large button icons are size={36}
