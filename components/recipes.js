@@ -1,15 +1,39 @@
 import React, { useState } from 'react';
 import { Provider as PaperProvider } from 'react-native-paper';
 
+//Components
+import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, View, FlatList, ScrollView, Dimensions, ImageBackground, TouchableWithoutFeedback } from 'react-native';
 import { Text, ActivityIndicator } from 'react-native-paper';
+import { oneRecipe } from '../components/oneRecipe';
 
 //Styles & Theme
 import { global, noPadding, title, subtitle, chip } from '../styles'
-import { getId } from '../components/one_recipe'
 
 const apiKey = 'b556ab3c2afc492591f1fefb19578bb4'
-export function Recipes() {
+
+export function RecipesTab() {
+  const Stack = createStackNavigator();
+  return (
+      <Stack.Navigator
+        initialRouteName="oneRecipe"
+        screenOptions={{
+          headerShown: false
+        }}
+      >
+        <Stack.Screen
+          name="Recipes" 
+          component={Recipes}
+        />
+        <Stack.Screen
+          name="oneRecipe" 
+          component={oneRecipe}
+        />
+      </Stack.Navigator>
+  );
+}
+
+function Recipes() {
   const [isLoading, setLoading] = useState(true);
   const [recipes, setRecipes] = useState([]);
 
@@ -40,10 +64,10 @@ export function Recipes() {
       <PaperProvider theme={global}>
         <View style={styles.view}>
           <ScrollView showsVerticalScrollIndicator={false}>
-            <Text style={styles.title}> Recipes </Text>
+            <Text style={styles.title}>Recipes</Text>
             
             {/* Your Ingredients */}
-            <Text style={styles.subtitle}> Your Ingredients </Text>
+            <Text style={styles.subtitle}>Your Ingredients</Text>
             <FlatList
               contentContainerStyle={{flexWrap:'wrap', flex: 0}}
               style={styles.row}
@@ -56,7 +80,7 @@ export function Recipes() {
             />
 
             {/* Recipes */}
-            <Text style={styles.subtitle}> Recipes</Text>
+            <Text style={styles.subtitle}>Recipes</Text>
             <View>
               <FlatList
                 contentContainerStyle={styles.recipesContainer}
@@ -74,13 +98,13 @@ export function Recipes() {
           </ScrollView>
         </View>
       </PaperProvider>
-    );
+    )
   }
 }
 
-function _renderItem({item,index}){
+function _renderItem({item, navigation}) {
   return (
-    <TouchableWithoutFeedback onPress={() => getId(item, apiKey)}>
+    <TouchableWithoutFeedback onPress={() => navigation.navigate('oneRecipe', {itemId: item.id, apiKey: apiKey})}>
       <View style={styles.recipesItem}>
         <ImageBackground
           style={styles.imageBackground}
