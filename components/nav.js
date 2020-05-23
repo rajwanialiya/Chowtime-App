@@ -8,7 +8,7 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 
 //Components
 import CameraScreen from './camera'; 
-import { Recipes } from './recipes';
+import { RecipesTab } from './recipes';
 import { Demo } from './demo';
 
 //Style
@@ -24,6 +24,9 @@ export function TabNav() {
         initialRouteName='Camera'
         activeColor='#32CA81'
         barStyle={styles.navContainer}
+        screenOptions={{
+          headerShown: false
+        }}
       >
         <Tab.Screen
           name='Camera'
@@ -71,7 +74,7 @@ export function TabNav() {
 
 function RecipesScreen() {
   return (
-    <Recipes style={styles.view}></Recipes>
+    <RecipesTab style={styles.view}></RecipesTab>
   );
 }
 
