@@ -16,7 +16,7 @@ export function RecipesTab() {
   const Stack = createStackNavigator();
   return (
       <Stack.Navigator
-        initialRouteName="oneRecipe"
+        initialRouteName="Recipes"
         screenOptions={{
           headerShown: false
         }}
@@ -142,7 +142,8 @@ const styles = StyleSheet.create({
     margin: 20
   }, 
   chip: {
-    ...chip
+    ...chip,
+    marginRight: 8
   }, 
   row: {
     flexDirection: 'column',
