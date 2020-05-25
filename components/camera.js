@@ -9,6 +9,7 @@ import { Camera } from 'expo-camera';
 import { Ionicons } from '@expo/vector-icons';
 import { useIsFocused} from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { SimpleLineIcons } from '@expo/vector-icons';
 
 const CameraNavigator = createStackNavigator();
 
@@ -108,6 +109,16 @@ export function ImageSelect({navigation}) {
       console.log(E);
     }
   };
+  takePicture = async () => {
+    if (this.camera) {
+        this.camera.takePictureAsync({ onPictureSaved: this.onPictureSaved });
+    }
+  };
+  
+  onPictureSaved = photo => {
+    console.log(photo);
+    setImage(photo.uri )
+  } 
   return (
 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
     <Text>Menu Screen</Text>
@@ -183,12 +194,16 @@ function CameraScreen({navigation}) {
   }
   return (
     <View style={{ flex: 1 }}>
-    { isFocused && <Camera style={{ flex: 1 }} type={type}>
+    { isFocused && <Camera style={{ flex: 1 }} type={type} ref={ref => {
+    this.camera = ref;
+  }}>
         <View
           style={{
             flex: 1,
             backgroundColor: 'transparent',
             flexDirection: 'row',
+            justifyContent: "center",
+            alignItems: "center",
           }}>
           <TouchableOpacity
             style={{
@@ -196,14 +211,16 @@ function CameraScreen({navigation}) {
               alignSelf: 'flex-end',
               alignItems: 'center',
             }}
-            onPress={() => {
-              setType(
-                type === Camera.Constants.Type.back
-                  ? Camera.Constants.Type.front
-                  : Camera.Constants.Type.back
-              );
+            onPress={() => {takePicture()
+              // setType(
+              //   type === Camera.Constants.Type.back
+              //     ? Camera.Constants.Type.front
+              //     : Camera.Constants.Type.back
+              // );
+
             }}>
-            <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> Flip </Text>
+              
+              <SimpleLineIcons name="camera" size={42} color="white" />
           </TouchableOpacity>
         </View>
       </Camera>}
