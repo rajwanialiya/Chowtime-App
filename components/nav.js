@@ -10,6 +10,7 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import CameraScreen from './camera'; 
 import { RecipesTab } from './recipes';
 import { Demo } from './demo';
+import {oneRecipe as OneRecipe} from './oneRecipe'
 
 //Style
 import { view } from '../styles';
@@ -80,7 +81,7 @@ function RecipesScreen() {
 
 function SavedScreen() {
   return ( 
-    <Demo style={styles.view}></Demo>
+    <OneRecipe style={styles.view}></OneRecipe>
   ); 
 }
 

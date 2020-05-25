@@ -62,7 +62,6 @@ export const chip = {
   borderRadius: 10, 
   paddingHorizontal: 12, 
   paddingVertical: 8,
-  marginLeft: 8,
   marginBottom: 8,
   justifyContent: 'center', 
   alignItems: 'center'
