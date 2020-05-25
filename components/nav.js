@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View} from 'react-native';
+import React from 'react';
+import { StyleSheet } from 'react-native';
 
 //Tab Navigation
 import { Ionicons } from '@expo/vector-icons';
@@ -7,13 +7,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 //Components
-import  CameraScreen  from './camera'; 
-
-import { Recipes } from './recipes';
+import CameraScreen from './camera'; 
+import { RecipesTab } from './recipes';
+import { Demo } from './demo';
 
 //Style
 import { view } from '../styles';
-import { font } from '../styles'
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -25,6 +24,9 @@ export function TabNav() {
         initialRouteName="Camera"
         activeColor="#e91e63"
         barStyle={styles.navContainer}
+        screenOptions={{
+          headerShown: false
+        }}
       >
         <Tab.Screen
           name="Camera"
@@ -72,17 +74,13 @@ export function TabNav() {
 
 function RecipesScreen() {
   return (
-    <View style={styles.view}>
-      <Recipes></Recipes>
-    </View>
+    <RecipesTab style={styles.view}></RecipesTab>
   );
 }
 
 function SavedScreen() {
   return ( 
-    <View style={styles.view}>
-      <Text style={styles.text}>Settings!</Text>
-    </View >
+    <Demo style={styles.view}></Demo>
   ); 
 }
 
