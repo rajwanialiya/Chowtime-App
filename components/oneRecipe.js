@@ -8,6 +8,9 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 //Styles & Theme
 import { global, noPadding, title, subtitle, chip } from '../styles'
+import { grey, darkGrey, green} from '../styles'
+import { OutlinedButton } from './buttons/outlinedButton';
+import { SolidButton } from './buttons/solidButton';
 
 export function oneRecipe() {
 // export function oneRecipe(item, apiKey) { FOR TESTING
@@ -33,7 +36,7 @@ export function oneRecipe() {
     return (
       <View style={styles.viewCenter}>
         <ActivityIndicator 
-          color='#32CA81'
+          color={green}
           size='large'
         />
       </View>
@@ -70,15 +73,29 @@ export function oneRecipe() {
             </View>
             <Text style={styles.subtitle}>Ingredients</Text>
             <FlatList
-              style={styles.ingredientList}
+              style={styles.list}
               data={recipe.extendedIngredients}
               renderItem={({item}) => (
                 <View style={styles.ingredient}>
-                  <Text>{item.name}</Text>
-                  <Text>{item.amount} {item.units}</Text>
+                  <Text style={styles.ingredientName}>{item.name}</Text>
+                  <Text style={styles.ingredientAmount}>{item.measures.us.amount} {item.measures.us.unitShort}</Text>
                 </View>
               )}
             />
+            <FlatList
+              style={styles.list}
+              data={recipe.analyzedInstructions[0].steps}
+              renderItem={({item}) => (
+                <View>
+                  <Text style={styles.stepName}>Step {item.number}</Text>
+                  <Text style={styles.instructions}>{item.step}</Text>
+                </View>
+              )}
+            />
+            <View style={styles.buttonContainer}>
+              <SolidButton color={green} text="Share"></SolidButton>
+              <OutlinedButton color={green} text="Save"></OutlinedButton>
+            </View>
           </ScrollView>
         </View>
       </PaperProvider>
@@ -118,7 +135,7 @@ const styles = StyleSheet.create({
   }, 
   imageBackground: {
     height: 300, 
-    width:Dimensions.get('window').width - 62, 
+    width:Dimensions.get('window').width - 32, 
     borderRadius: 10, 
     overflow:'hidden',
     shadowColor: 'black',
@@ -136,12 +153,36 @@ const styles = StyleSheet.create({
   info: {
     fontSize: 18
   },
-  ingredientList: {
-    marginHorizontal: 16
+  list: {
+    marginHorizontal: 16,
+    marginTop: 12
   },
   ingredient: {
     ...chip,
     justifyContent: 'space-between',
+    flexDirection: 'row',
+    backgroundColor: grey, 
+    borderRadius: 10, 
+    marginBottom: 8,
+    alignItems: 'center'
+  }, 
+  ingredientName: {
+    fontSize: 16,
+    color: darkGrey, 
+    paddingLeft: 6, 
+    paddingVertical: 4,
+  }, 
+  ingredientAmount: {
+    fontSize: 16,
+    color: green, 
+    paddingRight: 6, 
+  }, 
+  stepName: {
+    ...subtitle, 
+    fontSize: 22,
+    marginVertical: 12
+  }, 
+  buttonContainer: {
     flexDirection: 'row',
   }
 })

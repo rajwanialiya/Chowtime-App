@@ -9,6 +9,7 @@ import { oneRecipe } from '../components/oneRecipe';
 
 //Styles & Theme
 import { global, noPadding, title, subtitle, chip } from '../styles'
+import { green } from '../styles'
 
 const apiKey = 'b556ab3c2afc492591f1fefb19578bb4'
 
@@ -54,7 +55,7 @@ function Recipes() {
     return (
         <View style={styles.viewCenter}>
           <ActivityIndicator 
-            color='#32CA81'
+            color={green}
             size='large'
           />
         </View>
