@@ -26,8 +26,8 @@ export function Demo() {
         <OutlinedButton color='#32CA81' text="Unfilled" style={styles.padding}></OutlinedButton>
 
         <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-          <SmallButton color='#EC5454' text="Small"></SmallButton>
-          <SmallButton color='#32CA81' text="Small"></SmallButton>
+          <SmallButton color={green} text="Small"></SmallButton>
+          <SmallButton color={red} text="Small"></SmallButton>
         </View>
       </View>
     </PaperProvider>

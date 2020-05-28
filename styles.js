@@ -1,12 +1,12 @@
 import { DefaultTheme } from 'react-native-paper'
 
 //App Colours
-const green='#32CA81'
-const red= '#EC5454'
-const white= '#FFFFFF'
-const black='#000000'
-const grey='#F0F3F4'
-const darkGrey='#949494'
+export const green='#32CA81'
+export const red= '#EC5454'
+export const white= '#FFFFFF'
+export const black='#000000'
+export const grey='#F0F3F4'
+export const darkGrey='#949494'
 
 //Theme
 export const global = {
