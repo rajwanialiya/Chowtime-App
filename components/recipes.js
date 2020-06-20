@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
   }, 
   title: {
     ...title,
-    marginHorizontal: 16
+    paddingHorizontal: 16
   }, 
   subtitle: {
     ...subtitle,
