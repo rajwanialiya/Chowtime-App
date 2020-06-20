@@ -41,7 +41,8 @@ export const title = {
   fontFamily: 'Poppins-SemiBold',
   fontSize: 35,
   justifyContent: 'flex-start',
-  marginBottom: 20
+  marginBottom: 20,
+  paddingHorizontal: 18
 }
 
 export const subtitle = {
@@ -49,7 +50,8 @@ export const subtitle = {
   fontFamily: 'Poppins-SemiBold',
   fontSize: 25,
   justifyContent: 'flex-start',
-  marginBottom: 4
+  marginBottom: 4,
+  paddingHorizontal: 18
 }
 
 //Other

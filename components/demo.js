@@ -18,8 +18,8 @@ export function Demo() {
   return(
     <PaperProvider theme={global}>
       <View style={styles.view}>
-        <Text style={[styles.title, styles.padding]}>Title</Text>
-        <Text style={[styles.subtitle, styles.padding]}>Subtitle</Text>
+        <Text style={styles.title}>Title</Text>
+        <Text style={styles.subtitle}>Subtitle</Text>
         <Text style={styles.padding}>Regular Text</Text>
 
         <SolidButton color='#EC5454' text="Filled" style={styles.padding}></SolidButton>
@@ -44,7 +44,4 @@ const styles = StyleSheet.create({
   subtitle: {
     ...subtitle
   }, 
-  padding: {
-    ...padding
-  }
 })
