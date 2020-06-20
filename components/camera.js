@@ -104,7 +104,7 @@ export function ImageSelect({navigation}) {
       <View style={styles.view}>
         <Text style={styles.title} >Your Fridge</Text>
         <Text style={styles.subtitle} >Add an Image</Text>
-        <View style={{flex: 1}}>
+        {/* <View style={{flex: 1}}> */}
           <TouchableOpacity onPress={() => refRBSheet.current.open()} style={styles.touchableOpacity}>
             <Ionicons name="md-add-circle-outline" size={60} color="white" />
             <Text style={styles.name} color="white">Add an Image</Text>
@@ -124,7 +124,7 @@ export function ImageSelect({navigation}) {
           >
             <ButtonStack />
           </RBSheet>
-        </View>
+        {/* </View> */}
       </View>
     </PaperProvider>
   );
