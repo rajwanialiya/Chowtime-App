@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 
 //Tab Navigation
-import { Ionicons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons'
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
@@ -22,45 +22,45 @@ export function TabNav() {
     <NavigationContainer>
       <Tab.Navigator
         shifting={true}
-        initialRouteName="Camera"
-        activeColor="#e91e63"
+        initialRouteName='Camera'
+        activeColor='#32CA81'
         barStyle={styles.navContainer}
         screenOptions={{
           headerShown: false
         }}
       >
         <Tab.Screen
-          name="Camera"
+          name='Camera'
           component={CameraScreen}
           // options={({ route }) => ({
           //   tabBarVisible: isCameraScreen(route),
            
           // })}
           options={{
-            tabBarLabel: "Camera", 
+            tabBarLabel: 'Camera', 
             tabBarIcon: ({color}) => (
-              <Ionicons name="ios-camera" color={color} size={26} /> //REPLACE ICON
+              <MaterialIcons name='camera-alt' color={color} size={26} /> 
             ),
           }}
         />
         <Tab.Screen
-          name="Recipes"
+          name='Recipes'
           component={RecipesScreen}
           options= {{
-            tabBarLabel: "Recipes",
+            tabBarLabel: 'Recipes',
             tabBarIcon: ({color}) => (
-              <Ionicons name="ios-copy" color={color} size={26} /> //REPLACE ICON
+              <MaterialIcons name='restaurant-menu' color={color} size={26} />
             ),
           }}
         />
         <Tab.Screen
-          name="Profile"
+          name='Profile'
           component={SavedScreen}
           options={{
             shifting: true,
-            tabBarLabel: "Profile",
+            tabBarLabel: 'Profile',
             tabBarIcon: ({color}) => (
-              <Ionicons name="ios-copy" color={color} size={26} /> //REPLACE ICON
+              <MaterialIcons name='favorite' color={color} size={26} />
             ),
           }}
         />
@@ -97,8 +97,8 @@ const styles = StyleSheet.create({
   },
   navContainer: {
     backgroundColor: 'white',
-    paddingTop: 5,
-    paddingBottom: 5
+    paddingTop: 10,
+    paddingBottom: 10
   },
   container: {
     flex: 1,

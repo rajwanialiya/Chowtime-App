@@ -35,11 +35,13 @@ export const global = {
 
 //Text
 export const title = {
-  color: green,
+  backgroundColor: green,
+  color: white,
+  paddingTop: 75,
   fontFamily: 'Poppins-SemiBold',
   fontSize: 35,
   justifyContent: 'flex-start',
-  marginBottom: 4
+  marginBottom: 20
 }
 
 export const subtitle = {
@@ -58,24 +60,22 @@ export const chip = {
   borderRadius: 10, 
   paddingHorizontal: 12, 
   paddingVertical: 8,
+  marginLeft: 8,
   marginBottom: 8,
   justifyContent: 'center', 
   alignItems: 'center'
 }
 
 export const view = {
-  backgroundColor: white,
-  padding: 16,
   paddingBottom: 0,
-  paddingTop: 50,
-  flex: 1,
   fontFamily: 'Poppins-Regular',
+  flex: 1,
+  backgroundColor: white,
 };
 
-export const noPadding = {
-  backgroundColor: white,
-  paddingBottom: 0,
-  paddingTop: 50,
-  flex: 1,
-  fontFamily: 'Poppins-Regular',
+export const padding = {
+  paddingHorizontal: 18
 };
+
+//Small button icons are size={26}
+//Large button icons are size={36}
