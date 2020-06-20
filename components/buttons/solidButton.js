@@ -6,6 +6,7 @@ export function SolidButton(props) {
     <Button 
       mode='contained'
       color={props.color}  
+      onPress={props.onPress}
       uppercase={false}
       labelStyle={{
         fontFamily: 'Poppins-Medium',

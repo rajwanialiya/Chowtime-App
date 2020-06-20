@@ -32,6 +32,10 @@ export function TabNav() {
         <Tab.Screen
           name="Camera"
           component={CameraScreen}
+          // options={({ route }) => ({
+          //   tabBarVisible: isCameraScreen(route),
+           
+          // })}
           options={{
             tabBarLabel: "Camera", 
             tabBarIcon: ({color}) => (
@@ -84,6 +88,8 @@ function SavedScreen() {
     <OneRecipe style={styles.view}></OneRecipe>
   ); 
 }
+
+
 
 const styles = StyleSheet.create({
   view: {
