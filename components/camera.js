@@ -15,6 +15,7 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import Icon from 'react-native-vector-icons/FontAwesome';
 //Styles & Theme
 import { global, noPadding, title, subtitle, chip } from '../styles'
+import { green } from '../styles'
 //Components
 import { SolidButton } from '../components/buttons/solidButton';
 import { OutlinedButton } from '../components/buttons/outlinedButton'
@@ -78,18 +79,17 @@ export function ImageSelect({navigation}) {
     }
   };
   ButtonStack = () => {
-    return (<PaperProvider theme={global}>
-      <SolidButton
+    return (
+      <PaperProvider theme={global}>
+        <SolidButton
             text="Take Picture"
             navigation={navigation}
             onPress={() =>{ navigation.push('CameraCapture'); refRBSheet.current.close() }  }
-          />
-          <SolidButton text="Pick Image" onPress={() => {pickImage(); } } />
-      
-      </PaperProvider>);
-
-    
-    };
+        />
+        <SolidButton text="Pick Image" onPress={() => {pickImage(); } } />
+      </PaperProvider>
+    );
+  };
   
   onPictureSaved = photo => {
     console.log(photo);
@@ -102,49 +102,33 @@ export function ImageSelect({navigation}) {
   return (
     <PaperProvider theme={global}>
       <View style={styles.view}>
-      
         <Text style={styles.title} >Your Fridge</Text>
-      
-     
         <Text style={styles.subtitle} >Add an Image</Text>
-     
-{/* <View style={styles.viewCenter}> */}
-<View style={{flex:10}}>
-        
-      
-<TouchableOpacity onPress={() => refRBSheet.current.open()} style={{ alignItems:'center',
-        justifyContent: 'center', flex:1,  margin:20, backgroundColor: global.colors.primary, borderRadius: 10, }}>
-          <Ionicons name="md-add-circle-outline" size={60} color="white" />
-          <Text style={styles.name} color="white">Add an Image</Text>
-</TouchableOpacity>
-
-
-      <RBSheet
-        ref={refRBSheet}
-        closeOnDragDown={true}
-        closeOnPressMask={true}
-      
-        customStyles={{
-          wrapper: {
-            backgroundColor: 'rgba(0, 0, 0, 0.45)',
-            
-          },
-          draggableIcon: {
-            backgroundColor: "#000"
-          }
-        }}
-      >
-        <ButtonStack />
-      </RBSheet>
-     </View>
-     <View style={{flex:3}}></View>
-     </View>
-     {/* </View> */}
-  </PaperProvider>
+        <View style={{flex: 1}}>
+          <TouchableOpacity onPress={() => refRBSheet.current.open()} style={styles.touchableOpacity}>
+            <Ionicons name="md-add-circle-outline" size={60} color="white" />
+            <Text style={styles.name} color="white">Add an Image</Text>
+          </TouchableOpacity>
+          <RBSheet
+            ref={refRBSheet}
+            closeOnDragDown={true}
+            closeOnPressMask={true}
+            customStyles={{
+              wrapper: {
+                backgroundColor: 'rgba(0, 0, 0, 0.45)',     
+              },
+              draggableIcon: {
+                backgroundColor: "#000"
+              }
+            }}
+          >
+            <ButtonStack />
+          </RBSheet>
+        </View>
+      </View>
+    </PaperProvider>
   );
 }
-
-
 
 // export function ImagePickerExample ({navigation}) {
 //   const [image, setImage] = useState(null);
@@ -183,9 +167,6 @@ export function ImageSelect({navigation}) {
 //       </View>
 //     );
 //     }
-
-
-
 
 
 function CameraScreen({navigation}) {
@@ -256,11 +237,9 @@ const styles = StyleSheet.create({
   }, 
   title: {
     ...title,
-    marginHorizontal: 16
   }, 
   subtitle: {
     ...subtitle,
-    marginHorizontal: 16
   }, 
   name: {
     ...subtitle,
@@ -308,5 +287,11 @@ const styles = StyleSheet.create({
   }, 
   ingredientCount: {
     fontSize: 18
+  }, 
+  touchableOpacity: {
+    alignItems:'center', 
+    margin: 18, 
+    backgroundColor: green, 
+    borderRadius: 10,
   }
 })
