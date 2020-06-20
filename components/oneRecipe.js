@@ -48,7 +48,7 @@ export function oneRecipe() {
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.row}>
               <Text style={[styles.title, {flex: 3}]}>{item.title}</Text>
-              <IconButton icon='keyboard-backspace' color='black' size={36} style={{justifyContent: 'flex-start'}} /> 
+              <IconButton icon='keyboard-backspace' color='black' size={36} style={styles.back} /> 
               {/* MAKE THIS A BUTTON */}
             </View>
             <View style={styles.imageContainer}>
@@ -114,20 +114,17 @@ const styles = StyleSheet.create({
   title: {
     ...title,
     flexWrap: 'wrap',
-    marginHorizontal: 16
-  }, 
+  },
+  icon: {
+    ...title,
+    justifyContent: 'flex-start',
+  },
   subtitle: {
     ...subtitle,
-    marginHorizontal: 16
   },
   row: {
     flexDirection: 'row'
   }, 
-  back: {
-    flex: 1, 
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start'
-  },
   imageContainer: {
     alignItems: 'center',
     marginVertical: 20,

@@ -131,11 +131,9 @@ const styles = StyleSheet.create({
   }, 
   title: {
     ...title,
-    paddingHorizontal: 16
   }, 
   subtitle: {
     ...subtitle,
-    marginHorizontal: 16
   }, 
   name: {
     ...subtitle,
