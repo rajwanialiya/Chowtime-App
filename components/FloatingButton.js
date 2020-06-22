@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, Animated, TouchableWithoutFeedback, TouchableOp
 import { AntDesign, Entypo, Feather} from "@expo/vector-icons";
 import { global, view, title, subtitle, chip, coloredSection } from '../styles'
 import Touchable from 'react-native-touchable-safe'
+import * as ImagePicker from 'expo-image-picker';
+
 
 export default class FloatingButton extends React.Component {
     constructor(props) {
@@ -18,6 +20,7 @@ export default class FloatingButton extends React.Component {
             },
             cameraClicked: false,
             pictureClicked: false,
+            image: null,
 
 
         };
@@ -51,6 +54,33 @@ export default class FloatingButton extends React.Component {
         this.open = !this.open;
         this.toggleOffStyle();
     }
+
+    pickImage = async () => {
+        try {
+          let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [16, 9],
+            quality: 1,
+          });
+          console.log('here1')
+          if (!result.cancelled) {
+
+            console.log(result);
+            this.props.navigation.navigate('ImageProcess', {
+              image: result.uri,
+              text: 'anything you want here',
+            });
+            
+          }
+    
+          console.log(result);
+          
+        } catch (E) {
+          console.log(E);
+        }
+      };
+
     render(){
         const pictureStyle = {
             transform: [
@@ -109,14 +139,7 @@ export default class FloatingButton extends React.Component {
                     })
                 }
                 else {
-                    // this.setState({
-                    //     cameraColorScheme:{
-                    //         backgroundColor: "white",
-                    //         color: "black"
-        
-                    //     },
-                    //     cameraClicked: false
-                    // })
+                 
                     this.toggleOffStyle();
                 }
                 
@@ -134,15 +157,7 @@ export default class FloatingButton extends React.Component {
                     })
                 }
                 else {
-                    
-                    // this.setState({
-                    //     pictureColorScheme:{
-                    //         backgroundColor: "white",
-                    //         color: "black"
         
-                    //     },
-                    //     pictureClicked: !this.state.pictureClicked
-                    // })
                     this.toggleOffStyle();
                 }
                 
@@ -164,7 +179,7 @@ export default class FloatingButton extends React.Component {
     return(
         <View style={[styles.container, this.props.style]}>
             <View style={[styles.leftShifted]}>
-            <TouchableWithoutFeedback onPress={() => changeStyle('camera')} >
+            <TouchableWithoutFeedback onPress={() => {changeStyle('camera'); this.props.navigation.push('CameraCapture');}} >
                <Animated.View style={[cameraStyle, styles.positionAbsolute, opacity]}>
                
                 
@@ -176,7 +191,7 @@ export default class FloatingButton extends React.Component {
                    
                </Animated.View>
                </TouchableWithoutFeedback>
-           <TouchableWithoutFeedback   onPress={() => changeStyle('picture')}>
+           <TouchableWithoutFeedback   onPress={() => {changeStyle('picture'); this.pickImage();}}>
                <Animated.View style={[styles.positionAbsolute, pictureStyle, opacity]} >
                    <View style={[styles.chipAndDip, this.state.pictureColorScheme]}>
                    <AntDesign style={[styles.dip]} name="picture" size={32} color={this.state.pictureColorScheme.color} />

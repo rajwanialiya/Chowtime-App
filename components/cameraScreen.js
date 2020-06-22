@@ -4,6 +4,9 @@ import { useIsFocused} from '@react-navigation/native';
 import { Button, Image, View , StyleSheet, Dimensions, Text, TouchableOpacity} from 'react-native';
 import { Camera } from 'expo-camera';
 import { SimpleLineIcons } from '@expo/vector-icons';
+import { global, view, title, subtitle, chip, coloredSection } from '../styles'
+import { green } from '../styles'
+
 export function CameraScreen({navigation}) {
     const [hasPermission, setHasPermission] = useState(null);
     const [type, setType] = useState(Camera.Constants.Type.back);
@@ -60,3 +63,76 @@ export function CameraScreen({navigation}) {
       </View>
     );
   }
+
+  const styles = StyleSheet.create({
+  view: {
+    ...view
+  }, 
+  viewCenter: {
+    ...view,
+    justifyContent: 'center',
+    alignItems:'center'
+  }, 
+  title: {
+    ...title,
+  }, 
+  coloredSection: {
+    ...coloredSection
+  },
+  subtitle: {
+    ...subtitle,
+  }, 
+  name: {
+    ...subtitle,
+    color: 'white',
+    margin: 20
+  }, 
+  chip: {
+    ...chip,
+    marginRight: 8
+  }, 
+  row: {
+    flexDirection: 'column',
+    flexGrow: 0,
+    marginVertical: 8,
+    marginHorizontal: 16
+  },
+  recipesContainer: {
+    overflow:'scroll',
+    paddingHorizontal:16
+  },
+  recipesItem: {
+    paddingRight:18, 
+    height: 380,
+  },
+  imageBackground: {
+    height:360, 
+    width:Dimensions.get('window').width - 52, 
+    borderRadius: 10, 
+    overflow:'hidden',
+    shadowColor: 'black',
+    shadowOpacity: 0.5,
+    shadowRadius: 10,
+    elevation: 6,
+    justifyContent:'space-between',
+    paddingBottom: 10
+  }, 
+  overlay: {
+    height: 360,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.4)'
+  }, 
+  ingredientCount: {
+    fontSize: 18
+  }, 
+  touchableOpacity: {
+    alignItems:'center', 
+    margin: 18, 
+    backgroundColor: green, 
+    borderRadius: 10,
+  }
+})

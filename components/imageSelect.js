@@ -76,7 +76,7 @@ export function ImageSelect({navigation}) {
         <Text style={styles.title} >Capture</Text>
         <Text style={styles.subtitle} >Your fridge</Text>
         <Text style={styles.text} >Let's start by adding a picture of your fridge.</Text>
-        <FloatingButton style={{bottom: 80, right: 60} }/>
+        <FloatingButton navigation={navigation} style={{bottom: 80, right: 60} }/>
       </View>
     </PaperProvider>
     );
