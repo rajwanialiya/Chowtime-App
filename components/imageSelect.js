@@ -6,7 +6,7 @@ import { global, view,text, title, subtitle, chip, coloredSection } from '../sty
 import FloatingButton from './FloatingButton';
 import { Provider as PaperProvider } from 'react-native-paper';
 
-export function ImageSelect({navigation}) {
+export function ImageSelect(props) {
     const [open, setOpen] = useState(false);
     
     const [image, setImage] = useState(null);
@@ -39,7 +39,7 @@ export function ImageSelect({navigation}) {
         if (!result.cancelled) {
           setImage(result.uri );
           refRBSheet.current.close();
-          navigation.navigate('ImageProcess', {
+          props.navigation.navigate('ImageProcess', {
             image: result.uri,
             text: 'anything you want here',
           });
@@ -62,7 +62,7 @@ export function ImageSelect({navigation}) {
     onPictureSaved = photo => {
       console.log(photo);
       setImage(photo.uri )
-      navigation.navigate('ImageProcess', {
+      props.navigation.navigate('ImageProcess', {
         image: photo.uri,
         text: 'anything you want here',
       });
@@ -76,7 +76,7 @@ export function ImageSelect({navigation}) {
         <Text style={styles.title} >Capture</Text>
         <Text style={styles.subtitle} >Your fridge</Text>
         <Text style={styles.text} >Let's start by adding a picture of your fridge.</Text>
-        <FloatingButton navigation={navigation} style={{bottom: 80, right: 60} }/>
+        <FloatingButton navigation={props.navigation} style={{bottom: 80, right: 60} }/>
       </View>
     </PaperProvider>
     );
