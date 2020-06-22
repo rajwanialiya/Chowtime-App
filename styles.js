@@ -54,6 +54,15 @@ export const subtitle = {
   paddingHorizontal: 18
 }
 
+export const text = {
+  color: '#6b8ba9',
+  fontSize: 14,
+  fontFamily: 'Poppins-Regular',
+  justifyContent: 'flex-start',
+  paddingHorizontal: 18,
+
+}
+
 //Other
 export const chip = {
   fontSize: 16,
@@ -78,6 +87,20 @@ export const view = {
 export const padding = {
   paddingHorizontal: 18
 };
+
+export const coloredSection = {
+  backgroundColor: green,
+  color: white,
+  paddingVertical:10, 
+  borderRadius:10,
+  margin:20,
+  fontFamily: 'Poppins-SemiBold',
+  fontSize: 35,
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginBottom: 20,
+  paddingHorizontal: 18
+}
 
 //Small button icons are size={26}
 //Large button icons are size={36}

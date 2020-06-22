@@ -8,7 +8,7 @@ import { Text, ActivityIndicator } from 'react-native-paper';
 import { oneRecipe } from '../components/oneRecipe';
 
 //Styles & Theme
-import { global, noPadding, title, subtitle, chip } from '../styles'
+import { global, view, title, subtitle, chip } from '../styles'
 
 const apiKey = 'b556ab3c2afc492591f1fefb19578bb4'
 
@@ -122,10 +122,10 @@ function _renderItem({item, navigation}) {
 
 const styles = StyleSheet.create({
   view: {
-    ...noPadding
+    ...view
   }, 
   viewCenter: {
-    ...noPadding,
+    ...view,
     justifyContent: 'center'
   }, 
   title: {

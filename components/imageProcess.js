@@ -12,7 +12,7 @@ import { useIsFocused} from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { SimpleLineIcons } from '@expo/vector-icons';
 //Styles & Theme
-import { global, noPadding, title, subtitle, chip } from '../styles'
+import { global, view, title, subtitle, chip } from '../styles'
 //Components
 import { SolidButton } from '../components/buttons/solidButton';
 import { OutlinedButton } from '../components/buttons/outlinedButton'
@@ -35,10 +35,10 @@ export function ImageProcess ({ route, navigation }) {
 
 const styles = StyleSheet.create({
     view: {
-      ...noPadding
+      ...view
     }, 
     viewCenter: {
-      ...noPadding,
+      ...view,
       justifyContent: 'center'
     }, 
     title: {
