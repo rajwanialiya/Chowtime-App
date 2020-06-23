@@ -14,7 +14,9 @@ export const global = {
   roundness: 10,
   colors: {
     primary: green,
-    background: red,
+    background: white,
+    surface: white,
+    backdrop: white,
     text: black
   },
   fonts: {
@@ -71,7 +73,7 @@ export const view = {
   paddingBottom: 0,
   fontFamily: 'Poppins-Regular',
   flex: 1,
-  backgroundColor: white,
+  backgroundColor: white
 };
 
 export const padding = {

@@ -16,7 +16,7 @@ export function OutlinedButton(props) {
         margin: 0,
         padding: 4
       }}
-      style={[styles.button, styles.padding, {borderColor:props.color}]}
+      style={[styles.button, styles.padding, {borderColor:props.color}, {flex:props.flex}]}
     >
       {props.text}
     </Button>
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     minHeight: 36,
     margin: 12,
     marginHorizontal: 18,
-    borderWidth: 2
+    borderWidth: 2,
   },
   padding: {
     ...padding

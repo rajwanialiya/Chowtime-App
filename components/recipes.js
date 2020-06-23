@@ -5,10 +5,11 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, View, FlatList, ScrollView, Dimensions, ImageBackground, TouchableWithoutFeedback } from 'react-native';
 import { Text, ActivityIndicator } from 'react-native-paper';
-import { oneRecipe } from '../components/oneRecipe';
+import { oneRecipe } from '../components/oneRecipe.js';
+import { savedRecipes } from '.../components/savedRecipes.js';
 
 //Styles & Theme
-import { global, noPadding, title, subtitle, chip } from '../styles'
+import { global, view, title, subtitle, chip } from '../styles'
 import { green } from '../styles'
 
 const apiKey = 'b556ab3c2afc492591f1fefb19578bb4'
@@ -17,18 +18,22 @@ export function RecipesTab() {
   const Stack = createStackNavigator();
   return (
       <Stack.Navigator
-        initialRouteName="Recipes"
+        initialRouteName="oneRecipe"
         screenOptions={{
           headerShown: false
         }}
       >
-        <Stack.Screen
+        {/* <Stack.Screen
           name="Recipes" 
           component={Recipes}
-        />
+        /> */}
         <Stack.Screen
           name="oneRecipe" 
           component={oneRecipe}
+        />
+        <Stack.Screen
+          name="saved" 
+          component={savedRecipes}
         />
       </Stack.Navigator>
   );
@@ -123,11 +128,12 @@ function _renderItem({item, navigation}) {
 
 const styles = StyleSheet.create({
   view: {
-    ...noPadding
+    ...view,
   }, 
   viewCenter: {
-    ...noPadding,
-    justifyContent: 'center'
+    ...view,
+    justifyContent: 'center',
+    alignItems: 'center'
   }, 
   title: {
     ...title,
@@ -138,7 +144,7 @@ const styles = StyleSheet.create({
   name: {
     ...subtitle,
     color: 'white',
-    margin: 20
+    marginVertical: 20
   }, 
   chip: {
     ...chip,

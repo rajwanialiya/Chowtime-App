@@ -17,7 +17,7 @@ export function SolidButton(props) {
         margin: 0,
         padding: 4
       }}
-      style={[styles.button, styles.padding]}
+      style={[styles.button, styles.padding, {flex:props.flex}]}
     >
       {props.text}
     </Button>
@@ -30,8 +30,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     minWidth: 64,
     minHeight: 36,
-    margin: 12,
-    marginHorizontal: 18,
+    marginVertical: 12,
+    marginLeft: 18,
   },
   padding: {
     ...padding

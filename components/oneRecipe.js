@@ -7,15 +7,16 @@ import { Text, ActivityIndicator, IconButton } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons'; 
 
 //Styles & Theme
-import { global, noPadding, title, subtitle, chip } from '../styles'
+import { global, view, title, subtitle, chip } from '../styles'
 import { grey, darkGrey, green} from '../styles'
 import { OutlinedButton } from './buttons/outlinedButton';
 import { SolidButton } from './buttons/solidButton';
+import { sub } from 'react-native-reanimated';
 
 export function oneRecipe() {
 // export function oneRecipe(item, apiKey) { FOR TESTING
   const apiKey = 'b556ab3c2afc492591f1fefb19578bb4'// FOR TESTING
-  const item = {title: 'Rosemary Chicken', id: '510891', image:'https://spoonacular.com/recipeImages/472598-312x231.jpg'}// FOR TESTING
+  const item = {title: 'Rosemary Chicken', id: '531620', image:'https://spoonacular.com/recipeImages/472598-312x231.jpg'} //FOR TESTING
 
   const [isLoading, setLoading] = useState(true);
   const [recipe, setRecipe] = useState([]);
@@ -46,9 +47,9 @@ export function oneRecipe() {
       <PaperProvider theme={global}>
         <View style={styles.view}>
           <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={styles.row}>
+            <View style={[styles.row, {backgroundColor: green}]}>
               <Text style={[styles.title, {flex: 3}]}>{item.title}</Text>
-              <IconButton icon='keyboard-backspace' color='black' size={36} style={styles.back} /> 
+              <IconButton icon='keyboard-backspace' color='black' size={36} style={styles.icon} /> 
               {/* MAKE THIS A BUTTON */}
             </View>
             <View style={styles.imageContainer}>
@@ -57,6 +58,7 @@ export function oneRecipe() {
                 source={{uri: item.image}}
                 resizeMode='cover'
               >
+                <View style={styles.overlay}></View>
                 <View style={{flexDirection:'row'}}>
                   <MaterialIcons name="access-time" size={36} color="white" />
                   <Text style={styles.time}>{recipe.readyInMinutes} mins</Text>
@@ -93,8 +95,8 @@ export function oneRecipe() {
               )}
             />
             <View style={styles.buttonContainer}>
-              <SolidButton color={green} text="Share"></SolidButton>
-              <OutlinedButton color={green} text="Save"></OutlinedButton>
+              <SolidButton color={green} flex={1} text="Share"></SolidButton>
+              <OutlinedButton color={green} flex={1} text="Save"></OutlinedButton>
             </View>
           </ScrollView>
         </View>
@@ -105,22 +107,22 @@ export function oneRecipe() {
 
 const styles = StyleSheet.create({
   view: {
-    ...noPadding
+    ...view
   }, 
   viewCenter: {
-    ...noPadding,
-    justifyContent: 'center'
+    ...view,
+    justifyContent: 'center',
+    alignItems: 'center'
   }, 
   title: {
     ...title,
     flexWrap: 'wrap',
   },
   icon: {
-    ...title,
-    justifyContent: 'flex-start',
+    marginTop: 75,
   },
   subtitle: {
-    ...subtitle,
+    ...subtitle
   },
   row: {
     flexDirection: 'row'
@@ -129,6 +131,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 20,
     height: 310
+  }, 
+  overlay: {
+    height: 360,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.3)'
   }, 
   imageBackground: {
     height: 300, 
@@ -145,9 +156,10 @@ const styles = StyleSheet.create({
   time: {
     ...subtitle,
     color: 'white',
-    marginLeft: 10
   },
   info: {
+    fontFamily: 'Poppins-Medium',
+    color: 'white',
     fontSize: 18
   },
   list: {
@@ -177,9 +189,12 @@ const styles = StyleSheet.create({
   stepName: {
     ...subtitle, 
     fontSize: 22,
-    marginVertical: 12
+    marginVertical: 12, 
+    paddingHorizontal: 0
   }, 
   buttonContainer: {
+    justifyContent: 'center',
+    marginVertical: 40,
     flexDirection: 'row',
-  }
+  },
 })
