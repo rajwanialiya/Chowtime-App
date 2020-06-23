@@ -73,7 +73,7 @@ export function TabNav() {
 //   );
 // }
 
-function RecipesScreen() {
+function RecipesScreen(props) {
   return (
     <RecipesTab style={styles.view}></RecipesTab>
   );

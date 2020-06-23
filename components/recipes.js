@@ -15,7 +15,7 @@ import { green } from '../styles'
 const apiKey = 'b556ab3c2afc492591f1fefb19578bb4';
 
 const Stack = createStackNavigator();
-export function RecipesTab() {
+export function RecipesTab(props) {
   return (
       <Stack.Navigator
         initialRouteName="Recipes"
@@ -110,7 +110,7 @@ function Recipes(props) {
 
 function _renderItem({item}) {
   return (
-    <TouchableWithoutFeedback onPress={() => props.navigation.navigate('oneRecipe', {itemId: item.id, apiKey: apiKey})}>
+    <TouchableWithoutFeedback onPress={() => props.navigation.push('oneRecipe', {itemId: item.id, apiKey: apiKey})}>
       <View style={styles.recipesItem}>
         <ImageBackground
           style={styles.imageBackground}
