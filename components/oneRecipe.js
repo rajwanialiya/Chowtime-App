@@ -7,11 +7,10 @@ import { Text, ActivityIndicator, IconButton } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons'; 
 
 //Styles & Theme
-import { global, view, title, subtitle, chip } from '../styles'
+import { global, noPadding, title, subtitle, chip } from '../styles'
 import { grey, darkGrey, green} from '../styles'
 import { OutlinedButton } from './buttons/outlinedButton';
 import { SolidButton } from './buttons/solidButton';
-import { sub } from 'react-native-reanimated';
 
 export function oneRecipe() {
 // export function oneRecipe(item, apiKey) { FOR TESTING

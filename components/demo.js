@@ -8,6 +8,7 @@ import { global } from '../styles';
 
 //Styles
 import { view, padding, title, subtitle } from '../styles';
+import { red, green } from '../styles';
 
 //Components
 import { SolidButton } from '../components/buttons/solidButton';
@@ -22,8 +23,8 @@ export function Demo() {
         <Text style={styles.subtitle}>Subtitle</Text>
         <Text style={styles.padding}>Regular Text</Text>
 
-        <SolidButton color='#EC5454' text="Filled" style={styles.padding}></SolidButton>
-        <OutlinedButton color='#32CA81' text="Unfilled" style={styles.padding}></OutlinedButton>
+        <SolidButton color={red} text="Filled"></SolidButton>
+        <OutlinedButton color={green} text="Unfilled"></OutlinedButton>
 
         <View style={{flexDirection: 'row', justifyContent: 'center'}}>
           <SmallButton color={green} text="Small"></SmallButton>
