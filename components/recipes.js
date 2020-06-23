@@ -6,40 +6,40 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, View, FlatList, ScrollView, Dimensions, ImageBackground, TouchableWithoutFeedback } from 'react-native';
 import { Text, ActivityIndicator } from 'react-native-paper';
 import { oneRecipe } from '../components/oneRecipe.js';
-import { savedRecipes } from '.../components/savedRecipes.js';
+// import { savedRecipes } from '.../components/savedRecipes.js';
 
 //Styles & Theme
 import { global, view, title, subtitle, chip } from '../styles'
 import { green } from '../styles'
 
-const apiKey = 'b556ab3c2afc492591f1fefb19578bb4'
+const apiKey = 'b556ab3c2afc492591f1fefb19578bb4';
 
+const Stack = createStackNavigator();
 export function RecipesTab() {
-  const Stack = createStackNavigator();
   return (
       <Stack.Navigator
-        initialRouteName="oneRecipe"
+        initialRouteName="Recipes"
         screenOptions={{
           headerShown: false
         }}
       >
-        {/* <Stack.Screen
+        <Stack.Screen
           name="Recipes" 
           component={Recipes}
-        /> */}
+        />
         <Stack.Screen
           name="oneRecipe" 
           component={oneRecipe}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="saved" 
           component={savedRecipes}
-        />
+        /> */}
       </Stack.Navigator>
   );
 }
 
-function Recipes() {
+function Recipes(props) {
   const [isLoading, setLoading] = useState(true);
   const [recipes, setRecipes] = useState([]);
 
@@ -108,9 +108,9 @@ function Recipes() {
   }
 }
 
-function _renderItem({item, navigation}) {
+function _renderItem({item}) {
   return (
-    <TouchableWithoutFeedback onPress={() => navigation.navigate('oneRecipe', {itemId: item.id, apiKey: apiKey})}>
+    <TouchableWithoutFeedback onPress={() => props.navigation.navigate('oneRecipe', {itemId: item.id, apiKey: apiKey})}>
       <View style={styles.recipesItem}>
         <ImageBackground
           style={styles.imageBackground}
