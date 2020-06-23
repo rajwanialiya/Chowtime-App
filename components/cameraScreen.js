@@ -21,7 +21,21 @@ export function CameraScreen({navigation}) {
         setHasPermission(status === 'granted');
       })();
     }, []);
+    takePicture = async () => {
+      if (this.camera) {
+          this.camera.takePictureAsync({ onPictureSaved: this.onPictureSaved });
+      }
+    };
   
+    
+    onPictureSaved = photo => {
+      // console.log(photo);
+  
+      navigation.navigate('Upload', {
+        image: photo.uri,
+        subtitle:"Images",
+      });
+    } 
     if (hasPermission === null ) {
       return <View />;
     }

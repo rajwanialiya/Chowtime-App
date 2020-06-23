@@ -7,10 +7,17 @@ import FloatingButton from './FloatingButton';
 import { Provider as PaperProvider } from 'react-native-paper';
 
 export function ImageSelect(props) {
+ 
+    const [reset, setReset] = useState(false);
     const [open, setOpen] = useState(false);
-    
-    const [image, setImage] = useState(null);
-  
+    const [subtitle, setSubtitle] = useState(null);
+    const [images,setImages] = useState([]);
+    try {
+      setSubtitle(props.route.params.subtitle);
+      if(subtitle) setReset(true);
+     }
+     catch {}
+
     const handleOpen = () => {
       setOpen(true);
     };
@@ -28,55 +35,28 @@ export function ImageSelect(props) {
         }
       })();
     }, []);
-    pickImage = async () => {
-      try {
-        let result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.All,
-          allowsEditing: true,
-          aspect: [16, 9],
-          quality: 1,
-        });
-        if (!result.cancelled) {
-          setImage(result.uri );
-          refRBSheet.current.close();
-          props.navigation.navigate('ImageProcess', {
-            image: result.uri,
-            text: 'anything you want here',
-          });
-          
-        }
-  
-        console.log(result);
-        
-      } catch (E) {
-        console.log(E);
-      }
-    };
-    takePicture = async () => {
-      if (this.camera) {
-          this.camera.takePictureAsync({ onPictureSaved: this.onPictureSaved });
-      }
-    };
-  
-    
-    onPictureSaved = photo => {
-      console.log(photo);
-      setImage(photo.uri )
-      props.navigation.navigate('ImageProcess', {
-        image: photo.uri,
-        text: 'anything you want here',
-      });
-    } 
 
+    
+    for (let i = 0; i < 10; i++) {
+      images.push({
+          name: "Hello",
+          country: "World"
+      });
+  }
 
 
     return (
       <PaperProvider theme={global}>
       <View style={styles.view}>
         <Text style={styles.title} >Capture</Text>
-        <Text style={styles.subtitle} >Your fridge</Text>
+        <Text style={styles.subtitle} >{subtitle? subtitle : "Your fridge"}</Text>
         <Text style={styles.text} >Let's start by adding a picture of your fridge.</Text>
-        <FloatingButton navigation={props.navigation} style={{bottom: 80, right: 60} }/>
+        <View>
+        {images.map((image, index) => (
+        <Text>Hello, {image.name} from {image.country}!</Text>
+    ))}
+        </View>
+        <FloatingButton navigation={props.navigation} reset={reset} style={{bottom: 80, right: 60} }/>
       </View>
     </PaperProvider>
     );

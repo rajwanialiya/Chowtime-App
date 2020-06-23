@@ -24,6 +24,8 @@ export default class FloatingButton extends React.Component {
 
 
         };
+        console.log(this.props.reset + ", " + this.open);
+        if(this.props.reset) this.toggleMenuOff();
       }
     animation = new Animated.Value(0);
      toggleOffStyle = () => {
@@ -55,6 +57,15 @@ export default class FloatingButton extends React.Component {
         this.toggleOffStyle();
     }
 
+    toggleMenuOff = () => {
+        const toValue = 0;
+        Animated.spring(new Animated.Value(0), {
+            toValue,
+            friction: 5
+
+        }).start();
+        this.toggleOffStyle();
+    }
     pickImage = async () => {
         try {
           let result = await ImagePicker.launchImageLibraryAsync({
@@ -63,18 +74,18 @@ export default class FloatingButton extends React.Component {
             aspect: [16, 9],
             quality: 1,
           });
-          console.log('here1')
+        //   console.log('here1')
           if (!result.cancelled) {
 
             console.log(result);
-            this.props.navigation.navigate('ImageProcess', {
-              image: result.uri,
-              text: 'anything you want here',
-            });
+            this.props.navigation.navigate('Upload', {
+                image: result.uri,
+                subtitle:"Images",
+              });
             
           }
     
-          console.log(result);
+        //   console.log(result);
           
         } catch (E) {
           console.log(E);
@@ -82,6 +93,7 @@ export default class FloatingButton extends React.Component {
       };
 
     render(){
+        
         const pictureStyle = {
             transform: [
                 {scale: this.animation},
@@ -179,7 +191,7 @@ export default class FloatingButton extends React.Component {
     return(
         <View style={[styles.container, this.props.style]}>
             <View style={[styles.leftShifted]}>
-            <TouchableWithoutFeedback onPress={() => {changeStyle('camera'); this.props.navigation.push('CameraCapture');}} >
+            <TouchableWithoutFeedback onPress={ () => {changeStyle('camera'); this.props.navigation.push('CameraCapture'); }} >
                <Animated.View style={[cameraStyle, styles.positionAbsolute, opacity]}>
                
                 
@@ -191,7 +203,7 @@ export default class FloatingButton extends React.Component {
                    
                </Animated.View>
                </TouchableWithoutFeedback>
-           <TouchableWithoutFeedback   onPress={() => {changeStyle('picture'); this.pickImage();}}>
+           <TouchableWithoutFeedback   onPress={() => {changeStyle('picture'); this.pickImage(); }}>
                <Animated.View style={[styles.positionAbsolute, pictureStyle, opacity]} >
                    <View style={[styles.chipAndDip, this.state.pictureColorScheme]}>
                    <AntDesign style={[styles.dip]} name="picture" size={32} color={this.state.pictureColorScheme.color} />
