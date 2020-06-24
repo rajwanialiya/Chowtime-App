@@ -4,7 +4,7 @@ import { Provider as PaperProvider } from 'react-native-paper';
 //Components
 import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, View, FlatList, ScrollView, Dimensions, ImageBackground, TouchableWithoutFeedback } from 'react-native';
-import { Text, ActivityIndicator } from 'react-native-paper';
+import { Text, ActivityIndicator, Button } from 'react-native-paper';
 import { oneRecipe } from '../components/oneRecipe.js';
 // import { savedRecipes } from '.../components/savedRecipes.js';
 
@@ -15,7 +15,7 @@ import { green } from '../styles'
 const apiKey = 'b556ab3c2afc492591f1fefb19578bb4';
 
 const Stack = createStackNavigator();
-export function RecipesTab(props) {
+export function RecipesTab() {
   return (
       <Stack.Navigator
         initialRouteName="Recipes"
@@ -39,9 +39,13 @@ export function RecipesTab(props) {
   );
 }
 
-function Recipes(props) {
+function Recipes({navigation}) {
   const [isLoading, setLoading] = useState(true);
   const [recipes, setRecipes] = useState([]);
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({ tabBarVisible:false });
+  }, [navigation]);
 
   const foodItems = ['chicken', 'tomato', 'apple', 'tomato', 'apple'] // REPLACE AFTER
   const base='https://api.spoonacular.com/recipes/findByIngredients'
@@ -74,6 +78,7 @@ function Recipes(props) {
             
             {/* Your Ingredients */}
             <Text style={styles.subtitle}>Your Ingredients</Text>
+            <Button style={{backgroundColor: 'red'}} onPress={() => navigation.push('oneRecipe')}>Hello</Button>
             <FlatList
               contentContainerStyle={{flexWrap:'wrap', flex: 0}}
               style={styles.row}
@@ -98,7 +103,7 @@ function Recipes(props) {
                 scrollEnabled={true}
                 data={recipes}
                 keyExtractor={(item,index) => item.id}
-                renderItem={_renderItem}
+                renderItem={_renderItem} //THIS IS THE ISSUEEEEEEEEE
               />
             </View>
           </ScrollView>
@@ -108,9 +113,9 @@ function Recipes(props) {
   }
 }
 
-function _renderItem({item}) {
+function _renderItem({item}) { //HERE
   return (
-    <TouchableWithoutFeedback onPress={() => props.navigation.push('oneRecipe', {itemId: item.id, apiKey: apiKey})}>
+    <TouchableWithoutFeedback onPress={() => navigation.navigate('oneRecipe', {itemId: item.id, apiKey: apiKey})}>
       <View style={styles.recipesItem}>
         <ImageBackground
           style={styles.imageBackground}
