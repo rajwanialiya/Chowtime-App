@@ -12,12 +12,14 @@ import { oneRecipe } from '../components/oneRecipe.js';
 import { global, view, title, subtitle, chip } from '../styles'
 import { green } from '../styles'
 
-const apiKey = 'b556ab3c2afc492591f1fefb19578bb4';
+// const apiKey = 'b556ab3c2afc492591f1fefb19578bb4';
+const apiKey = '2876028f594348bbb355f8f4cc9fd672'; //INTELLIJOINT EMAIL
 
 const Stack = createStackNavigator();
 export function RecipesTab() {
   return (
       <Stack.Navigator
+        mode='card'
         initialRouteName="Recipes"
         screenOptions={{
           headerShown: false
@@ -40,6 +42,7 @@ export function RecipesTab() {
 }
 
 function Recipes({navigation}) {
+  // const { navigation } = this.props.navigation
   const [isLoading, setLoading] = useState(true);
   const [recipes, setRecipes] = useState([]);
 
@@ -78,7 +81,6 @@ function Recipes({navigation}) {
             
             {/* Your Ingredients */}
             <Text style={styles.subtitle}>Your Ingredients</Text>
-            <Button style={{backgroundColor: 'red'}} onPress={() => navigation.push('oneRecipe')}>Hello</Button>
             <FlatList
               contentContainerStyle={{flexWrap:'wrap', flex: 0}}
               style={styles.row}
@@ -102,8 +104,8 @@ function Recipes({navigation}) {
                 horizontal={true}
                 scrollEnabled={true}
                 data={recipes}
-                keyExtractor={(item,index) => item.id}
-                renderItem={_renderItem} //THIS IS THE ISSUEEEEEEEEE
+                keyExtractor={item => item.id}
+                renderItem={(item) => _renderItem(item, navigation)} //THIS IS THE ISSUEEEEEEEEE
               />
             </View>
           </ScrollView>
@@ -113,9 +115,9 @@ function Recipes({navigation}) {
   }
 }
 
-function _renderItem({item}) { //HERE
+function _renderItem({item}, navigation) { //HERE
   return (
-    <TouchableWithoutFeedback onPress={() => navigation.navigate('oneRecipe', {itemId: item.id, apiKey: apiKey})}>
+    <TouchableWithoutFeedback onPress={() => navigation.navigate('oneRecipe', {item:item, apiKey: apiKey})}>
       <View style={styles.recipesItem}>
         <ImageBackground
           style={styles.imageBackground}
@@ -124,7 +126,7 @@ function _renderItem({item}) { //HERE
         >
             <View style={styles.overlay} />
             <Text style={styles.name}>{item.title}</Text>
-            <Text style={[styles.name, styles.ingredientCount]}>Your Ingredients:  {item.usedIngredientCount}</Text>
+            <Text style={[styles.name, styles.ingredientCount]}>Your Ingredients: {item.usedIngredientCount}</Text>
         </ImageBackground>
       </View>
     </TouchableWithoutFeedback>

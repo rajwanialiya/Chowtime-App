@@ -12,10 +12,11 @@ import { grey, darkGrey, green} from '../styles'
 import { OutlinedButton } from './buttons/outlinedButton';
 import { SolidButton } from './buttons/solidButton';
 
-export function oneRecipe() {
+export function oneRecipe({route, navigation}) {
+  const { item, apiKey } = route.params
 // export function oneRecipe(item, apiKey) { FOR TESTING
-  const apiKey = 'b556ab3c2afc492591f1fefb19578bb4'// FOR TESTING
-  const item = {title: 'Rosemary Chicken', id: '531620', image:'https://spoonacular.com/recipeImages/472598-312x231.jpg'} //FOR TESTING
+  // const apiKey = 'b556ab3c2afc492591f1fefb19578bb4'// FOR TESTING
+  // const item = {title: 'Rosemary Chicken', id: '531620', image:'https://spoonacular.com/recipeImages/472598-312x231.jpg'} //FOR TESTING
 
   const [isLoading, setLoading] = useState(true);
   const [recipe, setRecipe] = useState([]);
@@ -48,7 +49,7 @@ export function oneRecipe() {
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={[styles.row, {backgroundColor: green}]}>
               <Text style={[styles.title, {flex: 3}]}>{item.title}</Text>
-              <IconButton icon='keyboard-backspace' color='black' size={36} style={styles.icon} /> 
+              <IconButton onPress={() => navigation.goBack()} icon='keyboard-backspace' color='white' size={36} style={styles.icon} /> 
               {/* MAKE THIS A BUTTON */}
             </View>
             <View style={styles.imageContainer}>
