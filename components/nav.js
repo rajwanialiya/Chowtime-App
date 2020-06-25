@@ -9,7 +9,7 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 //Components
 import CameraScreen from './camera'; 
 import { RecipesTab } from './recipes';
-import {oneRecipe as OneRecipe} from './oneRecipe'
+import { savedRecipes as SavedRecipes } from './savedRecipes'
 
 //Style
 import { view } from '../styles';
@@ -50,11 +50,11 @@ export function TabNav() {
           }}
         />
         <Tab.Screen
-          name='Profile'
+          name='Saved'
           component={SavedScreen}
           options={{
             shifting: true,
-            tabBarLabel: 'Profile',
+            tabBarLabel: 'Saved',
             tabBarIcon: ({color}) => (
               <MaterialIcons name='favorite' color={color} size={26} />
             ),
@@ -81,7 +81,7 @@ function RecipesScreen(props) {
 
 function SavedScreen() {
   return ( 
-    <OneRecipe style={styles.view}></OneRecipe>
+    <SavedRecipes style={styles.view}></SavedRecipes>
   ); 
 }
 

@@ -3,10 +3,10 @@ import { Provider as PaperProvider } from 'react-native-paper';
 
 //Components
 import { createStackNavigator } from '@react-navigation/stack';
+import { TransitionPresets } from '@react-navigation/stack';
 import { StyleSheet, View, FlatList, ScrollView, Dimensions, ImageBackground, TouchableWithoutFeedback } from 'react-native';
 import { Text, ActivityIndicator, Button } from 'react-native-paper';
 import { oneRecipe } from '../components/oneRecipe.js';
-// import { savedRecipes } from '.../components/savedRecipes.js';
 
 //Styles & Theme
 import { global, view, title, subtitle, chip } from '../styles'
@@ -22,16 +22,24 @@ export function RecipesTab() {
         mode='card'
         initialRouteName="Recipes"
         screenOptions={{
-          headerShown: false
+          headerShown: false,
         }}
       >
         <Stack.Screen
           name="Recipes" 
           component={Recipes}
+          options={{
+            gestureDirection: 'horizontal',
+            ...TransitionPresets.SlideFromRightIOS
+          }}
         />
         <Stack.Screen
           name="oneRecipe" 
           component={oneRecipe}
+          options={{
+            gestureDirection: 'horizontal',
+            ...TransitionPresets.SlideFromRightIOS
+          }}
         />
         {/* <Stack.Screen
           name="saved" 
@@ -42,7 +50,6 @@ export function RecipesTab() {
 }
 
 function Recipes({navigation}) {
-  // const { navigation } = this.props.navigation
   const [isLoading, setLoading] = useState(true);
   const [recipes, setRecipes] = useState([]);
 
@@ -50,7 +57,7 @@ function Recipes({navigation}) {
     navigation.setOptions({ tabBarVisible:false });
   }, [navigation]);
 
-  const foodItems = ['chicken', 'tomato', 'apple', 'tomato', 'apple'] // REPLACE AFTER
+  const foodItems = ['chicken', 'tomato', 'apple', 'tomato', 'apple']
   const base='https://api.spoonacular.com/recipes/findByIngredients'
 
   const url = base 
@@ -99,13 +106,13 @@ function Recipes({navigation}) {
                 contentContainerStyle={styles.recipesContainer}
                 showsHorizontalScrollIndicator={false}
                 decelerationRate={0}
-                snapToInterval={Dimensions.get('window').width - 52 + 18} //el width
+                snapToInterval={Dimensions.get('window').width - 52 + 18}
                 snapToAlignment={"center"}
                 horizontal={true}
                 scrollEnabled={true}
                 data={recipes}
                 keyExtractor={item => item.id}
-                renderItem={(item) => _renderItem(item, navigation)} //THIS IS THE ISSUEEEEEEEEE
+                renderItem={(item) => _renderItem(item, navigation)}
               />
             </View>
           </ScrollView>
@@ -115,7 +122,7 @@ function Recipes({navigation}) {
   }
 }
 
-function _renderItem({item}, navigation) { //HERE
+function _renderItem({item}, navigation) {
   return (
     <TouchableWithoutFeedback onPress={() => navigation.navigate('oneRecipe', {item:item, apiKey: apiKey})}>
       <View style={styles.recipesItem}>
