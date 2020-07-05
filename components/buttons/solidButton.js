@@ -9,6 +9,7 @@ export function SolidButton(props) {
     <Button 
       mode='contained'
       color={props.color}  
+      onClick={props.onClick}
       uppercase={false}
       labelStyle={{
         fontFamily: 'Poppins-Medium',

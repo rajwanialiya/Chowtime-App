@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
 import { Provider as PaperProvider } from 'react-native-paper';
+import AsyncStorage from '@react-native-community/async-storage';
 
 //Components
 import { StyleSheet, ScrollView, View, ImageBackground, Dimensions, FlatList } from 'react-native';
-import { Text, ActivityIndicator, IconButton } from 'react-native-paper';
+import { Text, ActivityIndicator, IconButton, Snackbar } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons'; 
 
 //Styles & Theme
 import { global, view, title, subtitle, chip } from '../styles'
-import { grey, darkGrey, green} from '../styles'
+import { grey, darkGrey, green } from '../styles'
 import { OutlinedButton } from './buttons/outlinedButton';
 import { SolidButton } from './buttons/solidButton';
 
 export function oneRecipe({route, navigation}) {
   const { item, apiKey } = route.params
-// export function oneRecipe(item, apiKey) { FOR TESTING
   // const apiKey = 'b556ab3c2afc492591f1fefb19578bb4'// FOR TESTING
   // const item = {title: 'Rosemary Chicken', id: '531620', image:'https://spoonacular.com/recipeImages/472598-312x231.jpg'} //FOR TESTING
-
+  const [visible, setVisible] = useState(false);
   const [isLoading, setLoading] = useState(true);
   const [recipe, setRecipe] = useState([]);
   const base='https://api.spoonacular.com/recipes/'
@@ -32,8 +32,7 @@ export function oneRecipe({route, navigation}) {
     .then((response) => response.json())
     .then((json) => setRecipe(json))
     .catch((error) => console.error('oh no')) //figure out how to display error 
-    .finally(() => setLoading(false));
-    
+    .finally(() => setLoading(false));   
     return (
       <View style={styles.viewCenter}>
         <ActivityIndicator 
@@ -96,13 +95,37 @@ export function oneRecipe({route, navigation}) {
             />
             <View style={styles.buttonContainer}>
               <SolidButton color={green} flex={1} text="Share"></SolidButton>
-              <OutlinedButton color={green} flex={1} text="Save"></OutlinedButton>
+              <OutlinedButton color={green} flex={1} text="Save" onPress={() => {setVisible(true); saveRecipe(recipe)}}></OutlinedButton>
             </View>
           </ScrollView>
+          <View style={styles.snackbarView}>
+            <Snackbar
+              visible={visible}
+              duration={1500}
+              onDismiss={() => setVisible(false)}
+              wrapperStyle={styles.snackbarContainer}
+              style={styles.snackbar}
+              action={{
+                label: 'Undo',
+                onPress: () => {}
+              }}
+            >
+              Added to Favourites
+            </Snackbar>
+          </View>
         </View>
       </PaperProvider>
     )
   }
+}
+
+async function saveRecipe(recipe) {
+  try {
+    await AsyncStorage.setItem('savedRecipes', JSON.stringify(recipe));
+  } catch (e) {
+      // PUT ERROR HERE
+  }
+  console.log("saved")
 }
 
 const styles = StyleSheet.create({
@@ -197,4 +220,20 @@ const styles = StyleSheet.create({
     marginVertical: 40,
     flexDirection: 'row',
   },
+  snackbarView: {
+    position: 'relative',
+    justifyContent:'center',
+    marginHorizontal: 10,
+  },
+  snackbarContainer: {
+    backgroundColor: '#303030',
+    padding: 0,
+    borderRadius: 10,
+    color: 'white',
+    marginVertical: 10
+  }, 
+  snackbar: {
+    backgroundColor: '#303030',
+    margin: 0
+  }
 })

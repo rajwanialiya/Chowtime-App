@@ -8,6 +8,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.11.0",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/bottom-tabs": "^5.3.3",
     "@react-navigation/material-bottom-tabs": "^5.2.2",
@@ -21,8 +22,8 @@
     "expo-font": "^8.1.1",
     "expo-image-picker": "^8.1.0",
     "expo-updates": "~0.1.0",
-    "material-design-icons": "^3.0.1",
     "express": "^2.5.11",
+    "material-design-icons": "^3.0.1",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "~0.61.5",

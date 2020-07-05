@@ -1,44 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
 import { Provider as PaperProvider } from 'react-native-paper';
 
 //Components
-import { StyleSheet, View, FlatList, ScrollView, Dimensions, ImageBackground, TouchableWithoutFeedback } from 'react-native';
-import { Text, ActivityIndicator } from 'react-native-paper';
+import { StyleSheet, View, ScrollView } from 'react-native';
+import { Text } from 'react-native-paper';
 
 //Styles & Theme
 import { global, view, title, subtitle } from '../styles'
-import { green } from '../styles'
 
 export function savedRecipes() {
-  const [isLoading, setLoading] = useState(true);
-  const [recipes, setRecipes] = useState([]);
+  const [saved, setSaved] = useState('');
 
-  // if (isLoading) {
-    // fetch(url)
-    //   .then((response) => response.json())
-    //   .then((json) => setRecipes(json))
-    //   .catch((error) => console.error('oh no')) //figure out how to display error 
-    //   .finally(() => setLoading(false));
-
-  //   return (
-  //       <View style={styles.viewCenter}>
-  //         <ActivityIndicator 
-  //           color={green}
-  //           size='large'
-  //         />
-  //       </View>
-  //     )
-  // } else {
-    return (
-      <PaperProvider theme={global}>
-        <View style={styles.view}>
-          <ScrollView showsVerticalScrollIndicator={true}>
-            <Text style={styles.title}>Saved</Text>
-          </ScrollView>
-        </View>
-      </PaperProvider>
-    )
+  async function getSaved() {
+    try {
+      const value = await AsyncStorage.getItem('savedRecipes');
+      setSaved(JSON.parse(value));
+    } catch(e) {
+      // error reading value
+    }
+    // console.log(saved)
+    console.log("called")
   }
+  
+  useEffect(() => {
+    // getSaved();
+  })
+
+  return (
+    <PaperProvider theme={global}>
+      <View style={styles.view}>
+        <ScrollView showsVerticalScrollIndicator={true}>
+          <Text style={styles.title}>Saved</Text>
+          <Text>visible: {saved.title}</Text>
+        </ScrollView>
+      </View>
+    </PaperProvider>
+  )
+}
 // }
 
 const styles = StyleSheet.create({

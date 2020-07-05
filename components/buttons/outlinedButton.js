@@ -9,6 +9,7 @@ export function OutlinedButton(props) {
     <Button 
       mode='text'
       color={props.color}
+      onPress={props.onPress}
       uppercase={false}
       labelStyle={{
         fontFamily: 'Poppins-Medium',
