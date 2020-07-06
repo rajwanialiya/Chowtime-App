@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Provider as PaperProvider } from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -8,10 +8,9 @@ import { Text, ActivityIndicator, IconButton, Snackbar } from 'react-native-pape
 import { MaterialIcons } from '@expo/vector-icons'; 
 
 //Styles & Theme
-import { global, view, title, subtitle, chip } from '../styles'
-import { grey, darkGrey, green } from '../styles'
+import { global, view, title, subtitle, chip } from '../styles';
+import { grey, darkGrey, green } from '../styles';
 import { OutlinedButton } from './buttons/outlinedButton';
-import { SolidButton } from './buttons/solidButton';
 
 export function oneRecipe({route, navigation}) {
   const { item, apiKey } = route.params
@@ -20,12 +19,34 @@ export function oneRecipe({route, navigation}) {
   const [visible, setVisible] = useState(false);
   const [isLoading, setLoading] = useState(true);
   const [recipe, setRecipe] = useState([]);
+  const [prevFavs, setPrevFavs] = useState([]);
   const base='https://api.spoonacular.com/recipes/'
 
   const url = base 
     + item.id
     + '/information'
     + '?apiKey=' + apiKey
+
+  useEffect(() => {
+    async function getFavs() {
+      try {
+        const favs = await AsyncStorage.getItem('savedRecipes');
+        setPrevFavs(JSON.parse(favs));
+      } catch (e) {
+          // PUT ERROR HERE
+      }
+    }
+    getFavs();
+  })
+
+  async function saveRecipe(recipe) {
+    try {
+      await AsyncStorage.setItem('savedRecipes', JSON.stringify(recipe));
+      setVisible(true);
+    } catch (e) {
+        // PUT ERROR HERE
+    }
+  }
 
   if (isLoading) {
     fetch(url)
@@ -94,8 +115,7 @@ export function oneRecipe({route, navigation}) {
               )}
             />
             <View style={styles.buttonContainer}>
-              <SolidButton color={green} flex={1} text="Share"></SolidButton>
-              <OutlinedButton color={green} flex={1} text="Save" onPress={() => {setVisible(true); saveRecipe(recipe)}}></OutlinedButton>
+              <OutlinedButton color={green} flex={1} text="Add to Favourites" onPress={() => {saveRecipe(recipe)}}></OutlinedButton>
             </View>
           </ScrollView>
           <View style={styles.snackbarView}>
@@ -119,14 +139,6 @@ export function oneRecipe({route, navigation}) {
   }
 }
 
-async function saveRecipe(recipe) {
-  try {
-    await AsyncStorage.setItem('savedRecipes', JSON.stringify(recipe));
-  } catch (e) {
-      // PUT ERROR HERE
-  }
-  console.log("saved")
-}
 
 const styles = StyleSheet.create({
   view: {

@@ -7,20 +7,19 @@ import { StyleSheet, View, ScrollView } from 'react-native';
 import { Text } from 'react-native-paper';
 
 //Styles & Theme
-import { global, view, title, subtitle } from '../styles'
+import { global, view, title, subtitle} from '../styles';
 
 export function savedRecipes() {
   const [saved, setSaved] = useState('');
 
   async function getSaved() {
-    try {
-      const value = await AsyncStorage.getItem('savedRecipes');
-      setSaved(JSON.parse(value));
-    } catch(e) {
-      // error reading value
-    }
-    // console.log(saved)
-    console.log("called")
+      try {
+        const value = await AsyncStorage.getItem('savedRecipes');
+        setSaved(JSON.parse(value));
+      } catch(e) {
+        // error reading value
+      }
+      // console.log("called")
   }
   
   useEffect(() => {

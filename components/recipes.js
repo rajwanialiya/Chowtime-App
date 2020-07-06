@@ -57,7 +57,7 @@ function Recipes({navigation}) {
     navigation.setOptions({ tabBarVisible:false });
   }, [navigation]);
 
-  const foodItems = ['chicken', 'tomato', 'apple', 'tomato', 'apple']
+  const foodItems = ['chicken', 'tomato', 'apple']
   const base='https://api.spoonacular.com/recipes/findByIngredients'
 
   const url = base 
