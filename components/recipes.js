@@ -6,14 +6,14 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { TransitionPresets } from '@react-navigation/stack';
 import { StyleSheet, View, FlatList, ScrollView, Dimensions, ImageBackground, TouchableWithoutFeedback } from 'react-native';
 import { Text, ActivityIndicator, Button } from 'react-native-paper';
-import { oneRecipe } from '../components/oneRecipe.js';
+import { oneRecipe } from './oneRecipe.js';
 
 //Styles & Theme
 import { global, view, title, subtitle, chip } from '../styles'
 import { green } from '../styles'
 
-// const apiKey = 'b556ab3c2afc492591f1fefb19578bb4';
-const apiKey = '2876028f594348bbb355f8f4cc9fd672'; //INTELLIJOINT EMAIL
+const apiKey = 'b556ab3c2afc492591f1fefb19578bb4';
+// const apiKey = '2876028f594348bbb355f8f4cc9fd672'; //INTELLIJOINT EMAIL
 
 const Stack = createStackNavigator();
 export function RecipesTab() {
@@ -94,7 +94,8 @@ function Recipes({navigation}) {
               horizontal={true}
               scrollEnabled={false}
               data={foodItems}
-              renderItem={({item}) => (
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({item, index}) => (
                 <Text style={styles.chip}>{item}</Text>
               )}
             />
@@ -111,7 +112,7 @@ function Recipes({navigation}) {
                 horizontal={true}
                 scrollEnabled={true}
                 data={recipes}
-                keyExtractor={item => item.id}
+                keyExtractor={item => item.id.toString()}
                 renderItem={(item) => _renderItem(item, navigation)}
               />
             </View>

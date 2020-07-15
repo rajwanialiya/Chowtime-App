@@ -1,43 +1,68 @@
 import React, { useState, useEffect } from 'react';
+import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
-import { Provider as PaperProvider } from 'react-native-paper';
+import { Provider as PaperProvider} from 'react-native-paper';
 
 //Components
-import { StyleSheet, View, ScrollView } from 'react-native';
-import { Text } from 'react-native-paper';
+import { StyleSheet, View, ScrollView, FlatList } from 'react-native';
+import { Text, ActivityIndicator } from 'react-native-paper';
 
 //Styles & Theme
-import { global, view, title, subtitle} from '../styles';
+import { global, view, title, subtitle, green} from '../styles';
 
 export function savedRecipes() {
-  const [saved, setSaved] = useState('');
+  const [isLoading, setLoading] = useState(true);
+  const [favs, setFavs] = useState([]);
+  const isFocused = useIsFocused()
 
-  async function getSaved() {
-      try {
-        const value = await AsyncStorage.getItem('savedRecipes');
-        setSaved(JSON.parse(value));
-      } catch(e) {
-        // error reading value
-      }
-      // console.log("called")
-  }
-  
   useEffect(() => {
-    // getSaved();
-  })
+    setLoading(true)
+    getFavs()
+  } , [isFocused])
 
-  return (
-    <PaperProvider theme={global}>
-      <View style={styles.view}>
-        <ScrollView showsVerticalScrollIndicator={true}>
-          <Text style={styles.title}>Saved</Text>
-          <Text>visible: {saved.title}</Text>
-        </ScrollView>
+  async function getFavs() {
+    try {
+      const value = await AsyncStorage.getItem('favRecipes');
+      setFavs(JSON.parse(value))
+    } catch(e) {
+      // error reading value
+    }
+    setLoading(false)
+    console.log(favs)
+  }
+
+  if (isLoading) { 
+    return (
+      <View style={styles.viewCenter}>
+        <ActivityIndicator 
+          color={green}
+          size='large'
+        />
       </View>
-    </PaperProvider>
-  )
+    )
+  } else {
+    return (
+      <PaperProvider theme={global}>
+        <View style={styles.view}>
+          <ScrollView showsVerticalScrollIndicator={true}>
+            <Text style={styles.title}>Saved</Text>
+            <FlatList
+              style={styles.list}
+              data={favs}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({item, index}) => (
+                // <View style={styles.ingredient}>
+                //   <Text style={styles.ingredientName}>{item.name}</Text>
+                //   <Text style={styles.ingredientAmount}>{item.measures.us.amount} {item.measures.us.unitShort}</Text>
+                // </View>
+              )}
+            />
+          </ScrollView>
+        </View>
+      </PaperProvider>
+    )
+  }
 }
-// }
 
 const styles = StyleSheet.create({
   view: {
@@ -55,3 +80,4 @@ const styles = StyleSheet.create({
     ...subtitle,
   }
 })
+

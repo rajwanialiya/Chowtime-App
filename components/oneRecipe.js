@@ -10,17 +10,17 @@ import { MaterialIcons } from '@expo/vector-icons';
 //Styles & Theme
 import { global, view, title, subtitle, chip } from '../styles';
 import { grey, darkGrey, green } from '../styles';
-import { OutlinedButton } from './buttons/outlinedButton';
+import { SolidButton } from './buttons/solidButton';
 
+let allFavs = []
 export function oneRecipe({route, navigation}) {
-  const { item, apiKey } = route.params
-  // const apiKey = 'b556ab3c2afc492591f1fefb19578bb4'// FOR TESTING
-  // const item = {title: 'Rosemary Chicken', id: '531620', image:'https://spoonacular.com/recipeImages/472598-312x231.jpg'} //FOR TESTING
-  const [visible, setVisible] = useState(false);
   const [isLoading, setLoading] = useState(true);
+  const [visible, setVisible] = useState(false);
   const [recipe, setRecipe] = useState([]);
   const [prevFavs, setPrevFavs] = useState([]);
+
   const base='https://api.spoonacular.com/recipes/'
+  const { item, apiKey } = route.params
 
   const url = base 
     + item.id
@@ -28,24 +28,39 @@ export function oneRecipe({route, navigation}) {
     + '?apiKey=' + apiKey
 
   useEffect(() => {
-    async function getFavs() {
-      try {
-        const favs = await AsyncStorage.getItem('savedRecipes');
-        setPrevFavs(JSON.parse(favs));
-      } catch (e) {
-          // PUT ERROR HERE
+    setTimeout(function() { 
+      if (visible) {
+        setVisible(false);
       }
+    }, 1500);
+  }, [visible])
+
+  useEffect(() => {
+    getFavs()
+  }, [])
+
+  async function getFavs() {
+    try {
+      const value = await AsyncStorage.getItem('favRecipes');
+      setPrevFavs(JSON.parse(value))
+      if (allFavs.length === 0 && prevFavs.length > 0) {
+        allFavs.push(prevFavs)
+      }
+    } catch(e) {
+        // PUT ERROR HERE     
     }
-    getFavs();
-  })
+  }
 
   async function saveRecipe(recipe) {
+    allFavs.push(recipe)
     try {
-      await AsyncStorage.setItem('savedRecipes', JSON.stringify(recipe));
+      await AsyncStorage.setItem('favRecipes', JSON.stringify(allFavs));
+      // AsyncStorage.multiRemove('favRecipes', (err) => {})
       setVisible(true);
     } catch (e) {
         // PUT ERROR HERE
     }
+    getFavs()
   }
 
   if (isLoading) {
@@ -70,7 +85,6 @@ export function oneRecipe({route, navigation}) {
             <View style={[styles.row, {backgroundColor: green}]}>
               <Text style={[styles.title, {flex: 3}]}>{item.title}</Text>
               <IconButton onPress={() => navigation.goBack()} icon='keyboard-backspace' color='white' size={36} style={styles.icon} /> 
-              {/* MAKE THIS A BUTTON */}
             </View>
             <View style={styles.imageContainer}>
               <ImageBackground
@@ -86,7 +100,8 @@ export function oneRecipe({route, navigation}) {
                 <View>
                   <FlatList
                     data={recipe.diets}
-                    renderItem={({item}) => (
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({item, index}) => (
                       <Text style={styles.info}>{item}</Text>
                     )}
                   />
@@ -97,7 +112,8 @@ export function oneRecipe({route, navigation}) {
             <FlatList
               style={styles.list}
               data={recipe.extendedIngredients}
-              renderItem={({item}) => (
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({item, index}) => (
                 <View style={styles.ingredient}>
                   <Text style={styles.ingredientName}>{item.name}</Text>
                   <Text style={styles.ingredientAmount}>{item.measures.us.amount} {item.measures.us.unitShort}</Text>
@@ -107,7 +123,8 @@ export function oneRecipe({route, navigation}) {
             <FlatList
               style={styles.list}
               data={recipe.analyzedInstructions[0].steps}
-              renderItem={({item}) => (
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({item, index}) => (
                 <View>
                   <Text style={styles.stepName}>Step {item.number}</Text>
                   <Text style={styles.instructions}>{item.step}</Text>
@@ -115,7 +132,7 @@ export function oneRecipe({route, navigation}) {
               )}
             />
             <View style={styles.buttonContainer}>
-              <OutlinedButton color={green} flex={1} text="Add to Favourites" onPress={() => {saveRecipe(recipe)}}></OutlinedButton>
+              <SolidButton color={green} flex={1} text="Add to Favourites" onPress={() => {saveRecipe(recipe)}}></SolidButton>
             </View>
           </ScrollView>
           <View style={styles.snackbarView}>

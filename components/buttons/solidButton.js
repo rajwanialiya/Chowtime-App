@@ -9,7 +9,7 @@ export function SolidButton(props) {
     <Button 
       mode='contained'
       color={props.color}  
-      onClick={props.onClick}
+      onPress={props.onPress}
       uppercase={false}
       labelStyle={{
         fontFamily: 'Poppins-Medium',
@@ -31,8 +31,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     minWidth: 64,
     minHeight: 36,
-    marginVertical: 12,
-    marginLeft: 18,
+    margin: 12,
+    marginHorizontal: 18,
+    borderWidth: 2,
   },
   padding: {
     ...padding
