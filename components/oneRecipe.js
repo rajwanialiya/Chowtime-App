@@ -55,7 +55,6 @@ export function oneRecipe({route, navigation}) {
     allFavs.push(recipe)
     try {
       await AsyncStorage.setItem('favRecipes', JSON.stringify(allFavs));
-      // AsyncStorage.multiRemove('favRecipes', (err) => {})
       setVisible(true);
     } catch (e) {
         // PUT ERROR HERE
@@ -155,7 +154,6 @@ export function oneRecipe({route, navigation}) {
     )
   }
 }
-
 
 const styles = StyleSheet.create({
   view: {
