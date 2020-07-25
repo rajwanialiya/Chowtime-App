@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Provider as PaperProvider } from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
+import { apiKey } from '../constants';
 
 //Components
 import { StyleSheet, ScrollView, View, ImageBackground, Dimensions, FlatList } from 'react-native';
@@ -20,7 +21,7 @@ export function oneRecipe({route, navigation}) {
   const [prevFavs, setPrevFavs] = useState([]);
 
   const base='https://api.spoonacular.com/recipes/'
-  const { item, apiKey } = route.params
+  const { item } = route.params
 
   const url = base 
     + item.id

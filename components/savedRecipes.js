@@ -6,6 +6,7 @@ import { Provider as PaperProvider} from 'react-native-paper';
 //Components
 import { StyleSheet, View, ScrollView, FlatList, Dimensions, ImageBackground, TouchableWithoutFeedback } from 'react-native';
 import { Text, ActivityIndicator } from 'react-native-paper';
+import { SolidButton } from './buttons/solidButton'
 
 //Styles & Theme
 import { global, view, title, subtitle, green} from '../styles';
@@ -46,18 +47,20 @@ export function savedRecipes({navigation}) {
         <View style={styles.view}>
           <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={true}>
             <Text style={styles.title}>Saved</Text>
-            <FlatList
-              contentContainerStyle={styles.recipesContainer}
-              showsHorizontalScrollIndicator={false}
-              decelerationRate={0}
-              snapToInterval={Dimensions.get('window').width - 52 + 18}
-              snapToAlignment={"center"}
-              horizontal={true}
-              scrollEnabled={true}
-              data={favs}
-              keyExtractor={item => item.id.toString()}
-              renderItem={(item) => _renderItem(item, navigation)}
-            />
+            <View>
+              <FlatList
+                contentContainerStyle={styles.recipesContainer}
+                showsHorizontalScrollIndicator={false}
+                decelerationRate={0}
+                snapToInterval={Dimensions.get('window').width - 52 + 18}
+                snapToAlignment={"center"}
+                horizontal={true}
+                scrollEnabled={true}
+                data={favs}
+                keyExtractor={item => item.id.toString()}
+                renderItem={(item) => _renderItem(item, navigation)}
+              />
+            </View>
           </ScrollView>
         </View>
       </PaperProvider>
@@ -67,7 +70,7 @@ export function savedRecipes({navigation}) {
 
 function _renderItem({item}, navigation) {
   return (
-    <TouchableWithoutFeedback onPress={() => navigation.navigate('oneRecipe', {item:item, apiKey: apiKey})}>
+    <ScrollView>
       <View style={styles.recipesItem}>
         <ImageBackground
           style={styles.imageBackground}
@@ -76,10 +79,13 @@ function _renderItem({item}, navigation) {
         >
             <View style={styles.overlay} />
             <Text style={styles.name}>{item.title}</Text>
-            <Text style={[styles.name, styles.ingredientCount]}>Your Ingredients: {item.usedIngredientCount}</Text>
+            <View>
+                <Text style={styles.info}>Ready in {item.readyInMinutes} mins</Text>
+                <SolidButton color={green} text="Explore" onPress={() => navigation.navigate('oneRecipe', {item:item})}></SolidButton>
+            </View>
         </ImageBackground>
       </View>
-    </TouchableWithoutFeedback>
+    </ScrollView>
   )
 }
 
@@ -95,16 +101,12 @@ const styles = StyleSheet.create({
   title: {
     ...title,
   }, 
-  subtitle: {
-    ...subtitle,
-  },
   recipesItem: {
     paddingRight:18, 
-    flex: 1,
-    height: Dimensions.get('window').height
+    height: 500
   },
   imageBackground: {
-    height: Dimensions.get('window').height, 
+    height: 500,
     width:Dimensions.get('window').width - 52, 
     borderRadius: 10, 
     overflow:'hidden',
@@ -113,7 +115,7 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 6,
     justifyContent:'space-between',
-    paddingBottom: 10
+    padding: 20
   }, 
   overlay: {
     position: 'absolute',
@@ -126,12 +128,20 @@ const styles = StyleSheet.create({
   name: {
     ...subtitle,
     color: 'white',
-    marginVertical: 20
+    margin: 0,
+    paddingHorizontal: 0
   },
   recipesContainer: {
     overflow:'scroll',
     paddingHorizontal:16,
-    flex: 1
   }, 
+  info: {
+    ...subtitle,
+    color: 'white',
+    marginVertical: 0,
+    paddingHorizontal: 0,
+    fontSize: 18,
+    textAlignVertical: 'center'
+  }
 })
 

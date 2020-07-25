@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Provider as PaperProvider } from 'react-native-paper';
+import { apiKey } from '../constants'
 
 //Components
 import { createStackNavigator } from '@react-navigation/stack';
@@ -7,13 +8,11 @@ import { TransitionPresets } from '@react-navigation/stack';
 import { StyleSheet, View, FlatList, ScrollView, Dimensions, ImageBackground, TouchableWithoutFeedback } from 'react-native';
 import { Text, ActivityIndicator, Button } from 'react-native-paper';
 import { oneRecipe } from './oneRecipe.js';
+import { savedRecipes } from './savedRecipes.js';
 
 //Styles & Theme
 import { global, view, title, subtitle, chip } from '../styles'
 import { green } from '../styles'
-
-const apiKey = 'b556ab3c2afc492591f1fefb19578bb4';
-// const apiKey = '2876028f594348bbb355f8f4cc9fd672'; //INTELLIJOINT EMAIL
 
 const Stack = createStackNavigator();
 export function RecipesTab() {
@@ -41,10 +40,14 @@ export function RecipesTab() {
             ...TransitionPresets.SlideFromRightIOS
           }}
         />
-        {/* <Stack.Screen
-          name="saved" 
+        <Stack.Screen
+          name="savedRecipes" 
           component={savedRecipes}
-        /> */}
+          options={{
+            gestureDirection: 'horizontal',
+            ...TransitionPresets.SlideFromRightIOS
+          }}
+        />
       </Stack.Navigator>
   );
 }
@@ -125,7 +128,7 @@ function Recipes({navigation}) {
 
 function _renderItem({item}, navigation) {
   return (
-    <TouchableWithoutFeedback onPress={() => navigation.navigate('oneRecipe', {item:item, apiKey: apiKey})}>
+    <TouchableWithoutFeedback onPress={() => navigation.navigate('oneRecipe', {item:item})}>
       <View style={styles.recipesItem}>
         <ImageBackground
           style={styles.imageBackground}
