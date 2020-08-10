@@ -1,77 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
-import { Provider as PaperProvider} from 'react-native-paper';
+import { Provider as PaperProvider, Text, Button } from 'react-native-paper';
 
 //Components
-import { StyleSheet, View, ScrollView, FlatList, Dimensions, ImageBackground, TouchableWithoutFeedback } from 'react-native';
-import { Text, ActivityIndicator } from 'react-native-paper';
+import { StyleSheet, View, FlatList, Dimensions, ImageBackground } from 'react-native';
 import { SolidButton } from './buttons/solidButton'
+import { MaterialIcons } from '@expo/vector-icons'; 
 
 //Styles & Theme
-import { global, view, title, subtitle, green} from '../styles';
+import { global, view, title, subtitle, green, padding, flexView } from '../styles';
 
-export function savedRecipes({navigation}) {
-  const [isLoading, setLoading] = useState(true);
+export function savedRecipes() {
+  const [empty, setEmpty] = useState(true)
+  const [isSet, set] = useState(false)
   const [favs, setFavs] = useState([]);
   const isFocused = useIsFocused()
 
   useEffect(() => {
-    setLoading(true)
     getFavs()
   } , [isFocused])
 
   async function getFavs() {
+    console.log("start")
     try {
       const value = await AsyncStorage.getItem('favRecipes');
-      setFavs(JSON.parse(value))
+      if (JSON.parse(value) && JSON.parse(value).length > 0) {
+        await setFavs(JSON.parse(value))
+        console.log('done')
+        setEmpty(false)
+      } else {
+        setEmpty(true)
+        // setFavs([])
+      }
+      set(true)
+      console.log(favs)
     } catch(e) {
       // error reading value
     }
-    setLoading(false)
-    console.log(favs)
   }
 
-  if (isLoading) { 
+  function _renderItem({item}) {
     return (
-      <View style={styles.viewCenter}>
-        <ActivityIndicator 
-          color={green}
-          size='large'
-        />
-      </View>
-    )
-  } else {
-    return (
-      <PaperProvider theme={global}>
-        <View style={styles.view}>
-          <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={true}>
-            <Text style={styles.title}>Saved</Text>
-            <View>
-              <FlatList
-                contentContainerStyle={styles.recipesContainer}
-                showsHorizontalScrollIndicator={false}
-                decelerationRate={0}
-                snapToInterval={Dimensions.get('window').width - 52 + 18}
-                snapToAlignment={"center"}
-                horizontal={true}
-                scrollEnabled={true}
-                data={favs}
-                keyExtractor={item => item.id.toString()}
-                renderItem={(item) => _renderItem(item, navigation)}
-              />
-            </View>
-          </ScrollView>
-        </View>
-      </PaperProvider>
-    )
-  }
-}
-
-function _renderItem({item}, navigation) {
-  return (
-    <ScrollView>
-      <View style={styles.recipesItem}>
+      <View style={[styles.recipesItem, styles.flexView]}>
         <ImageBackground
           style={styles.imageBackground}
           source={{uri: item.image}}
@@ -80,33 +51,100 @@ function _renderItem({item}, navigation) {
             <View style={styles.overlay} />
             <Text style={styles.name}>{item.title}</Text>
             <View>
-                <Text style={styles.info}>Ready in {item.readyInMinutes} mins</Text>
-                <SolidButton color={green} text="Explore" onPress={() => navigation.navigate('oneRecipe', {item:item})}></SolidButton>
+                {/* <Text style={styles.info}>Ready in {item.readyInMinutes} mins</Text> */}
+                {/* <SolidButton color={green} text="Explore" onPress={() => navigation.navigate('oneRecipe', {item:item})}></SolidButton> */}
+  
+                <SolidButton color={green} text="Explore" onPress={() => console.log(item.navigate)}></SolidButton>
+                <Button mode="text" color="white" onPress={() => removeItem(item.title)}>Remove</Button>
             </View>
         </ImageBackground>
       </View>
-    </ScrollView>
-  )
+    )
+  }
+  
+  async function removeItem(title) {
+    let updatedFavs = []
+    favs.forEach((recipe) => {
+      if (recipe.title !== title) {
+        updatedFavs.push(recipe)
+      }
+    }) 
+    await AsyncStorage.setItem('favRecipes', JSON.stringify(updatedFavs))
+    getFavs()
+  }
+
+  if (empty && isSet) { 
+    return (
+      <PaperProvider theme={global}>
+        <View style={styles.view}>
+            <Text style={styles.title}>Saved</Text>
+            <View style={[styles.viewCenter, styles.padding]}>
+              <View style={styles.viewCenter}>
+                <MaterialIcons style={styles.emptyIcon} name='favorite-border' color={green} size={60} /> 
+                <Text style={styles.emptySub}>ADD RECIPES TO YOUR FAVOURITES</Text>
+                <Text style={styles.emptyText}>You haven't added any recipes to your favourites yet. Get started by snapping some pics of the items in your fridge!</Text>
+              </View>
+              <SolidButton color={green} text="Get Recipes" onPress={() => navigation.navigate('oneRecipe', {item:item})} />
+            </View>
+        </View>
+      </PaperProvider>
+    )
+  } else {
+    return (
+      <PaperProvider theme={global}>
+        <View style={styles.view}>
+          <Text style={styles.title}>Saved</Text>
+          <FlatList
+            contentContainerStyle={styles.recipesContainer}
+            showsHorizontalScrollIndicator={false}
+            decelerationRate={0}
+            snapToInterval={Dimensions.get('window').width - 52 + 18}
+            snapToAlignment={"center"}
+            horizontal={true}
+            scrollEnabled={true}
+            data={favs}
+            // keyExtractor={item => item.id.toString()}
+            renderItem={(item) => _renderItem(item)}
+          />
+        </View>
+      </PaperProvider>
+    )
+  }
 }
 
 const styles = StyleSheet.create({
+  emptySub: {
+    paddingVertical: 20,
+    fontFamily: 'Poppins-Medium',
+    fontSize: 16
+  },
+  emptyIcon: {
+    paddingTop: 20,
+  },
   view: {
-    ...view,
+    ...view
   }, 
   viewCenter: {
     ...view,
-    justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center', 
+    flexGrow: 1
   }, 
+  flexView: {
+    ...flexView
+  },
+  padding: {
+    ...padding
+  },
   title: {
     ...title,
   }, 
   recipesItem: {
     paddingRight:18, 
-    height: 500
+    // height: 500
   },
   imageBackground: {
-    height: 500,
+    ...flexView,
+    // height: 500,
     width:Dimensions.get('window').width - 52, 
     borderRadius: 10, 
     overflow:'hidden',
@@ -123,7 +161,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0,0,0,0.4)'
+    backgroundColor: 'rgba(0,0,0,0.45)'
   }, 
   name: {
     ...subtitle,

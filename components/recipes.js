@@ -5,13 +5,13 @@ import { apiKey } from '../constants'
 //Components
 import { createStackNavigator } from '@react-navigation/stack';
 import { TransitionPresets } from '@react-navigation/stack';
-import { StyleSheet, View, FlatList, ScrollView, Dimensions, ImageBackground, TouchableWithoutFeedback } from 'react-native';
-import { Text, ActivityIndicator, Button } from 'react-native-paper';
+import { StyleSheet, View, FlatList, Dimensions, ImageBackground, TouchableWithoutFeedback } from 'react-native';
+import { Text, ActivityIndicator } from 'react-native-paper';
 import { oneRecipe } from './oneRecipe.js';
 import { savedRecipes } from './savedRecipes.js';
 
 //Styles & Theme
-import { global, view, title, subtitle, chip } from '../styles'
+import { global, view, title, subtitle, chip, flexView } from '../styles'
 import { green } from '../styles'
 
 const Stack = createStackNavigator();
@@ -40,14 +40,14 @@ export function RecipesTab() {
             ...TransitionPresets.SlideFromRightIOS
           }}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="savedRecipes" 
           component={savedRecipes}
           options={{
             gestureDirection: 'horizontal',
             ...TransitionPresets.SlideFromRightIOS
           }}
-        />
+        /> */}
       </Stack.Navigator>
   );
 }
@@ -86,7 +86,7 @@ function Recipes({navigation}) {
     return (
       <PaperProvider theme={global}>
         <View style={styles.view}>
-          <ScrollView showsVerticalScrollIndicator={false}>
+          {/* <ScrollView showsVerticalScrollIndicator={false}> */}
             <Text style={styles.title}>Recipes</Text>
             
             {/* Your Ingredients */}
@@ -105,7 +105,7 @@ function Recipes({navigation}) {
 
             {/* Recipes */}
             <Text style={styles.subtitle}>Recipes</Text>
-            <View>
+            <View style={styles.flexView}>
               <FlatList
                 contentContainerStyle={styles.recipesContainer}
                 showsHorizontalScrollIndicator={false}
@@ -119,7 +119,7 @@ function Recipes({navigation}) {
                 renderItem={(item) => _renderItem(item, navigation)}
               />
             </View>
-          </ScrollView>
+          {/* </ScrollView> */}
         </View>
       </PaperProvider>
     )
@@ -153,6 +153,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   }, 
+  flexView: {
+    ...flexView
+  },
   title: {
     ...title,
   }, 
@@ -180,10 +183,9 @@ const styles = StyleSheet.create({
   },
   recipesItem: {
     paddingRight:18, 
-    height: 380,
   },
   imageBackground: {
-    height:360, 
+    ...flexView,
     width:Dimensions.get('window').width - 52, 
     borderRadius: 10, 
     overflow:'hidden',
@@ -195,7 +197,6 @@ const styles = StyleSheet.create({
     paddingBottom: 10
   }, 
   overlay: {
-    height: 360,
     position: 'absolute',
     top: 0,
     left: 0,

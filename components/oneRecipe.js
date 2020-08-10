@@ -1,22 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Provider as PaperProvider } from 'react-native-paper';
+import { StyleSheet, ScrollView, View, ImageBackground, Dimensions, FlatList, Linking } from 'react-native';
+import { Provider as PaperProvider, Text, ActivityIndicator, IconButton, Snackbar, Button } from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
 import { apiKey } from '../constants';
-
-//Components
-import { StyleSheet, ScrollView, View, ImageBackground, Dimensions, FlatList } from 'react-native';
-import { Text, ActivityIndicator, IconButton, Snackbar } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons'; 
 
-//Styles & Theme
-import { global, view, title, subtitle, chip } from '../styles';
-import { grey, darkGrey, green } from '../styles';
+import { global, view, title, subtitle, chip, padding, grey, darkGrey, green } from '../styles';
 import { SolidButton } from './buttons/solidButton';
 
 let allFavs = []
 export function oneRecipe({route, navigation}) {
   const [isLoading, setLoading] = useState(true);
+  const [isError, setError] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [snackBarText, setSnackBarText] = useState("Added to Favourites");
   const [recipe, setRecipe] = useState([]);
   const [prevFavs, setPrevFavs] = useState([]);
 
@@ -52,8 +49,14 @@ export function oneRecipe({route, navigation}) {
     }
   }
 
-  async function saveRecipe(recipe) {
-    allFavs.push(recipe)
+  async function saveRecipe(recipe, navigation) {
+    if (!allFavs.includes(recipe)) {
+      // let editedRecipe = Object.assign({navigate: navigation.navigate }, recipe);
+      allFavs.push(recipe)
+    } else {
+      setSnackBarText("This recipe is already a favourite!")
+    }
+
     try {
       await AsyncStorage.setItem('favRecipes', JSON.stringify(allFavs));
       setVisible(true);
@@ -67,7 +70,7 @@ export function oneRecipe({route, navigation}) {
     fetch(url)
     .then((response) => response.json())
     .then((json) => setRecipe(json))
-    .catch((error) => console.error('oh no')) //figure out how to display error 
+    .catch((error) => setError(true))
     .finally(() => setLoading(false));   
     return (
       <View style={styles.viewCenter}>
@@ -78,81 +81,99 @@ export function oneRecipe({route, navigation}) {
       </View>
     )
   } else {
-    return (
-      <PaperProvider theme={global}>
-        <View style={styles.view}>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={[styles.row, {backgroundColor: green}]}>
-              <Text style={[styles.title, {flex: 3}]}>{item.title}</Text>
-              <IconButton onPress={() => navigation.goBack()} icon='keyboard-backspace' color='white' size={36} style={styles.icon} /> 
-            </View>
-            <View style={styles.imageContainer}>
-              <ImageBackground
-                style={styles.imageBackground}
-                source={{uri: item.image}}
-                resizeMode='cover'
-              >
-                <View style={styles.overlay}></View>
-                <View style={{flexDirection:'row'}}>
-                  <MaterialIcons name="access-time" size={36} color="white" />
-                  <Text style={styles.time}>{recipe.readyInMinutes} mins</Text>
-                </View>
-                <View>
-                  <FlatList
-                    data={recipe.diets}
+    if (isError) {
+      <Text> OH NO</Text>
+      console.log('error')
+    } else {
+      return (
+        <PaperProvider theme={global}>
+          <View style={styles.view}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <View style={[styles.row, {backgroundColor: green}]}>
+                <Text style={[styles.title, item.title.length > 24 ? styles.smaller : styles.none]} >{item.title}</Text>
+                <IconButton onPress={() => navigation.goBack()} icon='keyboard-backspace' color='white' size={36} style={styles.icon} /> 
+              </View>
+              <View style={styles.imageContainer}>
+                <ImageBackground
+                  style={styles.imageBackground}
+                  source={{uri: item.image}}
+                  resizeMode='cover'
+                >
+                  <View style={styles.overlay}></View>
+                  <View style={{flexDirection:'row'}}>
+                    <MaterialIcons name="access-time" size={36} color="white" />
+                    <Text style={styles.time}>{recipe.readyInMinutes} mins</Text>
+                  </View>
+                  <View>
+                    <FlatList
+                      data={recipe.diets}
+                      keyExtractor={(item, index) => index.toString()}
+                      renderItem={({item, index}) => (
+                        <Text style={styles.info}>{item}</Text>
+                      )}
+                    />
+                  </View>
+                </ImageBackground>
+              </View>
+              <Text style={styles.subtitle}>Ingredients</Text>
+              <FlatList
+                style={styles.list}
+                data={recipe.extendedIngredients}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({item, index}) => (
+                  <View style={styles.ingredient}>
+                    <Text style={styles.ingredientName}>{item.name}</Text>
+                    <Text style={styles.ingredientAmount}>{item.measures.us.amount} {item.measures.us.unitShort}</Text>
+                  </View>
+                )}
+              />
+              { (() => {
+                if (recipe.analyzedInstructions.length > 0) {
+                  return <FlatList
+                    style={styles.list}
+                    data={recipe.analyzedInstructions[0].steps}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({item, index}) => (
-                      <Text style={styles.info}>{item}</Text>
+                      <View>
+                        <Text style={styles.stepName}>Step {item.number}</Text>
+                        <Text style={styles.instructions}>{item.step}</Text>
+                      </View>
                     )}
                   />
-                </View>
-              </ImageBackground>
+                } else {
+                  const url = recipe.sourceUrl
+                  return (
+                    <View style={styles.padding}>
+                      <Text style={styles.stepName}>Step 1</Text>
+                      <Text> Click the link below to get cooking: </Text>
+                      <Button mode="text" style={{color: green}} onPress={() => {Linking.openURL(url)}}>View Recipe</Button>
+                    </View>
+                  )
+                }
+              })() }
+              <View style={styles.buttonContainer}>
+                <SolidButton color={green} flex={1} text="Add to Favourites" onPress={() => {saveRecipe(recipe, navigation)}}></SolidButton>
+              </View>
+            </ScrollView>
+            <View style={styles.snackbarView}>
+              <Snackbar
+                visible={visible}
+                duration={1500}
+                onDismiss={() => setVisible(false)}
+                wrapperStyle={styles.snackbarContainer}
+                style={styles.snackbar}
+                action={{
+                  label: 'Undo',
+                  onPress: () => {}
+                }}
+              >
+                {snackBarText}
+              </Snackbar>
             </View>
-            <Text style={styles.subtitle}>Ingredients</Text>
-            <FlatList
-              style={styles.list}
-              data={recipe.extendedIngredients}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({item, index}) => (
-                <View style={styles.ingredient}>
-                  <Text style={styles.ingredientName}>{item.name}</Text>
-                  <Text style={styles.ingredientAmount}>{item.measures.us.amount} {item.measures.us.unitShort}</Text>
-                </View>
-              )}
-            />
-            <FlatList
-              style={styles.list}
-              data={recipe.analyzedInstructions[0].steps}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({item, index}) => (
-                <View>
-                  <Text style={styles.stepName}>Step {item.number}</Text>
-                  <Text style={styles.instructions}>{item.step}</Text>
-                </View>
-              )}
-            />
-            <View style={styles.buttonContainer}>
-              <SolidButton color={green} flex={1} text="Add to Favourites" onPress={() => {saveRecipe(recipe)}}></SolidButton>
-            </View>
-          </ScrollView>
-          <View style={styles.snackbarView}>
-            <Snackbar
-              visible={visible}
-              duration={1500}
-              onDismiss={() => setVisible(false)}
-              wrapperStyle={styles.snackbarContainer}
-              style={styles.snackbar}
-              action={{
-                label: 'Undo',
-                onPress: () => {}
-              }}
-            >
-              Added to Favourites
-            </Snackbar>
           </View>
-        </View>
-      </PaperProvider>
-    )
+        </PaperProvider>
+      )
+    }
   }
 }
 
@@ -168,12 +189,19 @@ const styles = StyleSheet.create({
   title: {
     ...title,
     flexWrap: 'wrap',
+    flex: 3
+  },
+  smaller: {
+    fontSize: 24
   },
   icon: {
     marginTop: 75,
   },
   subtitle: {
     ...subtitle
+  },
+  padding: {
+    ...padding
   },
   row: {
     flexDirection: 'row'

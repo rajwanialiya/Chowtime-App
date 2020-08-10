@@ -80,5 +80,10 @@ export const padding = {
   paddingHorizontal: 18
 };
 
+export const flexView = {
+  flexGrow: 1,
+  justifyContent: 'space-between'
+}
+
 //Small button icons are size={26}
 //Large button icons are size={36}
