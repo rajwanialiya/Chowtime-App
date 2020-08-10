@@ -22,19 +22,15 @@ export function savedRecipes() {
   } , [isFocused])
 
   async function getFavs() {
-    console.log("start")
     try {
       const value = await AsyncStorage.getItem('favRecipes');
       if (JSON.parse(value) && JSON.parse(value).length > 0) {
         await setFavs(JSON.parse(value))
-        console.log('done')
         setEmpty(false)
       } else {
         setEmpty(true)
-        // setFavs([])
       }
       set(true)
-      console.log(favs)
     } catch(e) {
       // error reading value
     }
@@ -51,9 +47,6 @@ export function savedRecipes() {
             <View style={styles.overlay} />
             <Text style={styles.name}>{item.title}</Text>
             <View>
-                {/* <Text style={styles.info}>Ready in {item.readyInMinutes} mins</Text> */}
-                {/* <SolidButton color={green} text="Explore" onPress={() => navigation.navigate('oneRecipe', {item:item})}></SolidButton> */}
-  
                 <SolidButton color={green} text="Explore" onPress={() => console.log(item.navigate)}></SolidButton>
                 <Button mode="text" color="white" onPress={() => removeItem(item.title)}>Remove</Button>
             </View>
@@ -140,11 +133,9 @@ const styles = StyleSheet.create({
   }, 
   recipesItem: {
     paddingRight:18, 
-    // height: 500
   },
   imageBackground: {
     ...flexView,
-    // height: 500,
     width:Dimensions.get('window').width - 52, 
     borderRadius: 10, 
     overflow:'hidden',
