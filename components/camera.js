@@ -29,6 +29,8 @@ import { SpeedDialAction } from '@material-ui/lab';
 import { ImageProcess } from './imageProcess';
 import { ImageSelect } from './imageSelect';
 import { CameraScreen } from './cameraScreen';
+import { PicturePage } from './picturePage';
+import { Test } from './test';
 
 const CameraNavigator = createStackNavigator();
 
@@ -38,7 +40,11 @@ export default function CameraStack() {
       <CameraNavigator.Navigator screenOptions={{
         headerShown: false
       }}>
-        <CameraNavigator.Screen name="Upload" component={ImageSelect} />
+
+        
+        {/* <CameraNavigator.Screen name="Upload" component={ImageSelect} /> */}
+        <CameraNavigator.Screen name="PicturePage" component={PicturePage} />
+        <CameraNavigator.Screen name="Test" component={Test} />
         <CameraNavigator.Screen name="ImageProcess" component={ImageProcess} />
         <CameraNavigator.Screen name="CameraCapture" component={CameraScreen} options={{ tabBarVisible: false }} />
       </CameraNavigator.Navigator>

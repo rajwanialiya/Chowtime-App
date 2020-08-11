@@ -4,7 +4,7 @@ import { AntDesign, Entypo, Feather} from "@expo/vector-icons";
 import { global, view, title, subtitle, chip, coloredSection } from '../styles'
 import Touchable from 'react-native-touchable-safe'
 import * as ImagePicker from 'expo-image-picker';
-
+import { AsyncStorage } from 'react-native';
 
 export default class FloatingButton extends React.Component {
     constructor(props) {
@@ -74,11 +74,44 @@ export default class FloatingButton extends React.Component {
             aspect: [16, 9],
             quality: 1,
           });
+          var imageList;
         //   console.log('here1')
           if (!result.cancelled) {
+            var existingImages = false;
+            try{
+                const value = await AsyncStorage.getItem('@Images');
+                if (value != null || value ){
+                existingImages = true;
+                imageList = value
+            }
+            }
+            catch {
 
+            }
+        }
+            try {
+                if (existingImages){
+                    imageList += "," + result.uri;
+                    await AsyncStorage.setItem(
+                        '@Images',
+                        imageList
+                      );
+                }
+                else{
+                    await AsyncStorage.setItem(
+                        '@Images',
+                        result.uri
+                      );
+                }
+                console.log("WE SET DATA")
+      
+              } catch (error) {
+                // Error saving data
+                console.log(error)
+      
+              }
             console.log(result);
-            this.props.navigation.navigate('Upload', {
+            this.props.navigation.push('PicturePage', {
                 image: result.uri,
                 subtitle:"Images",
               });
@@ -87,7 +120,7 @@ export default class FloatingButton extends React.Component {
     
         //   console.log(result);
           
-        } catch (E) {
+         catch (E) {
           console.log(E);
         }
       };

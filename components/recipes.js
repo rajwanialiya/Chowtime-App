@@ -6,6 +6,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, View, FlatList, ScrollView, Dimensions, ImageBackground, TouchableWithoutFeedback } from 'react-native';
 import { Text, ActivityIndicator } from 'react-native-paper';
 import { oneRecipe } from '../components/oneRecipe';
+import { AsyncStorage } from 'react-native';
+
 
 //Styles & Theme
 import { global, view, title, subtitle, chip } from '../styles'
@@ -14,6 +16,15 @@ const apiKey = 'b556ab3c2afc492591f1fefb19578bb4'
 
 export function RecipesTab() {
   const Stack = createStackNavigator();
+  const reset = async () => {await AsyncStorage.setItem(
+    '@Images',
+    ""
+  );
+console.log("WE RESET THE TING")
+console.log(await AsyncStorage.getItem('@Images'))
+}
+
+  reset();
   return (
       <Stack.Navigator
         initialRouteName="Recipes"

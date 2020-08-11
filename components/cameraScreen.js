@@ -6,6 +6,8 @@ import { Camera } from 'expo-camera';
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { global, view, title, subtitle, chip, coloredSection } from '../styles'
 import { green } from '../styles'
+import { AsyncStorage } from 'react-native';
+
 
 export function CameraScreen({navigation}) {
     const [hasPermission, setHasPermission] = useState(null);
@@ -23,19 +25,70 @@ export function CameraScreen({navigation}) {
     }, []);
     takePicture = async () => {
       if (this.camera) {
-          this.camera.takePictureAsync({ onPictureSaved: this.onPictureSaved });
+          await this.camera.takePictureAsync({ onPictureSaved: this.onPictureSaved });
       }
+      // const sizes = await this.camera.getSupportedRatiosAsync();
+      console.log(sizes);
     };
+    const windowWidth = Dimensions.get('window').width;
+    const windowHeight = Dimensions.get('window').height;
+    console.log(windowHeight/windowWidth);
+
+   
+    onPictureSaved = async (photo) => {
+      console.log(photo);
   
+  
+        var imageList;
+        var existingImages = false;
+        try{
+            const value = await AsyncStorage.getItem('@Images');
+            console.log(value);
+            console.log(value == "null")
+            if (value != null || value ){
+                existingImages = true;
+                imageList = value
+            }
+        }
+        catch {
+
+        }
     
-    onPictureSaved = photo => {
-      // console.log(photo);
+        try {
+            if (existingImages){
+                imageList += "," + photo.uri;
+                await AsyncStorage.setItem(
+                    '@Images',
+                    imageList
+                  );
+            }
+            else{
+                await AsyncStorage.setItem(
+                    '@Images',
+                    photo.uri
+                  );
+            }
+            console.log("WE SET DATA")
   
-      navigation.navigate('Upload', {
-        image: photo.uri,
-        subtitle:"Images",
-      });
-    } 
+          } catch (error) {
+            // Error saving data
+            console.log(error)
+  
+          }
+        // console.log(result);
+        navigation.push('PicturePage', {
+            image: photo.uri,
+            subtitle:"Images",
+          });
+        
+     
+
+    //   console.log(result);
+      
+     
+  };
+    
+    
     if (hasPermission === null ) {
       return <View />;
     }
@@ -44,7 +97,7 @@ export function CameraScreen({navigation}) {
     }
     return (
       <View style={styles.view}>
-      { isFocused && <Camera style={{ flex: 1 }} type={type} ref={ref => {
+      { isFocused && <Camera ratio="16:9" style={{ flex: 1 }} type={type} ref={ref => {
       this.camera = ref;
     }}>
           <View
@@ -61,7 +114,7 @@ export function CameraScreen({navigation}) {
                 alignSelf: 'flex-end',
                 alignItems: 'center',
               }}
-              onPress={() => {takePicture()
+              onPress={() => {takePicture(); 
                 // setType(
                 //   type === Camera.Constants.Type.back
                 //     ? Camera.Constants.Type.front

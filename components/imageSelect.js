@@ -7,16 +7,17 @@ import FloatingButton from './FloatingButton';
 import { Provider as PaperProvider } from 'react-native-paper';
 
 export function ImageSelect(props) {
- 
+//  const navigation = props.params.navigation;
+console.log(props)
     const [reset, setReset] = useState(false);
     const [open, setOpen] = useState(false);
-    const [subtitle, setSubtitle] = useState(null);
+    // const [subtitle, setSubtitle] = useState(null);
     const [images,setImages] = useState([]);
-    try {
-      setSubtitle(props.route.params.subtitle);
-      if(subtitle) setReset(true);
-     }
-     catch {}
+    // try {
+    //   setSubtitle(props.route.params.subtitle);
+    //   if(subtitle) setReset(true);
+    //  }
+    //  catch {}
 
     const handleOpen = () => {
       setOpen(true);
@@ -25,24 +26,27 @@ export function ImageSelect(props) {
     const handleClose = () => {
       setOpen(false);
     };
-    useEffect(() => {
-      (async () => {
-        if (Constants.platform.ios) {
-          const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-          if (status !== 'granted') {
-            alert('Sorry, we need camera roll permissions to make this work!');
-          }
-        }
-      })();
-    }, []);
+    // useEffect(() => {
+    //   (async () => {
+    //     if (Constants.platform.ios) {
+    //       const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    //       if (status !== 'granted') {
+    //         alert('Sorry, we need camera roll permissions to make this work!');
+    //       }
+    //     }
+    //   })();
+    // }, []);
 
     
-    for (let i = 0; i < 10; i++) {
-      images.push({
-          name: "Hello",
-          country: "World"
-      });
-  }
+    try{
+      // images.push(props.route.params.subtitle);
+      // console.log(props.route.params.subtitle);
+console.log("test")
+    }
+    catch {
+
+    }
+      
 
 
     return (
@@ -51,12 +55,8 @@ export function ImageSelect(props) {
         <Text style={styles.title} >Capture</Text>
         <Text style={styles.subtitle} >{subtitle? subtitle : "Your fridge"}</Text>
         <Text style={styles.text} >Let's start by adding a picture of your fridge.</Text>
-        <View>
-        {images.map((image, index) => (
-        <Text>Hello, {image.name} from {image.country}!</Text>
-    ))}
-        </View>
-        <FloatingButton navigation={props.navigation} reset={reset} style={{bottom: 80, right: 60} }/>
+        
+        
       </View>
     </PaperProvider>
     );
