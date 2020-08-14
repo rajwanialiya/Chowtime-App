@@ -1,11 +1,11 @@
 import * as React from 'react';
 import  { useState, useEffect, useRef } from 'react';
 import { useIsFocused} from '@react-navigation/native';
-import { Button, Image, View , StyleSheet, Dimensions, Text, TouchableWithoutFeedback} from 'react-native';
+import { Button, Image, View , StyleSheet, Dimensions, Text, TouchableWithoutFeedback, FlatList} from 'react-native';
 import { Camera } from 'expo-camera';
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { global, view, title, subtitle, chip, coloredSection, text } from '../styles'
-import { green } from '../styles'
+import { green, grey, darkGrey } from '../styles'
 import FloatingButton from './FloatingButton';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { AsyncStorage } from 'react-native';
@@ -20,10 +20,29 @@ export  function PicturePage(props) {
        uri: "",
        id: "1"
      }
-   ]
+   ];
+
+   const DATA = [
+    {
+      id: 'bd7ac',
+      title: 'First Item',
+      quantity: 1
+    },
+    {
+      id: '3ac68',
+      title: 'Second Item',
+      quantity: 1
+    },
+    {
+      id: '58694',
+      title: 'Third Item',
+      quantity: 1
+    },
+  ];
     const [image,setImage] = useState("");
     const [pictureList, setPictureList] = useState(intialList);
     const [step, setStep] = useState("1");
+    const [ingredients, setIngredients] = useState(DATA);
     const [title, setTitle] = useState("Capture")
     useEffect( () => {
        _retrieveData()
@@ -55,6 +74,51 @@ export  function PicturePage(props) {
     }
 
     
+   const updateQuantity = async (id, increment) => {
+     const newList = []
+     for (var i = 0; i < ingredients.length; i++){
+      const newIngredient = {
+              
+        id: ingredients[i].id,
+        title: ingredients[i].title,
+        quantity: ingredients[i].quantity
+      }
+       if (ingredients[i].id == id) {
+         
+          if (increment) {
+            newIngredient.quantity +=1
+          }
+          else {
+            newIngredient.quantity -=1
+          }
+            
+          }
+          if(newIngredient.quantity > 0)
+            newList.push(newIngredient)
+       }
+       setIngredients(newList)
+     }
+   
+     const handleNext = async (step) => {
+       if (step == '1'){
+        props.navigation.push('PicturePage', {
+          step: '2'
+        });
+       }
+       else if (step == '2') {
+        props.navigation.push('PicturePage', {
+          step: '3'
+        });
+       }
+       else if (step == '3') {
+        props.navigation.push('PicturePage', {
+          step: '1'
+        });
+       }
+
+
+     }
+
    
    
 
@@ -126,10 +190,10 @@ export  function PicturePage(props) {
             
 
           </View>
-          <View style={{flex:1, paddingHorizontal:15}}>
+          <View style={{flex:1, paddingHorizontal:25}}>
             <View style={{flexDirection:'row', justifyContent:'space-between',alignItems:'center'}}>
               <Text style={styles.subtitle} >Images</Text>
-              <TouchableWithoutFeedback >
+              <TouchableWithoutFeedback onPress={() => handleNext(step) }>
                 <View style={styles.button}>
                   <Text style={{color:'white'}}>Next</Text>
                 </View>
@@ -140,19 +204,41 @@ export  function PicturePage(props) {
             <Text style={styles.text} >Let's start by adding a picture of your fridge.</Text>
             
 
-            <View style={styles.viewCenter}>
-            <ScrollView style={styles.scroll}>
-              <FlatList
+            <View style={[styles.viewCenter]}>
+            <ScrollView style={[styles.scroll]}>
+              {()=>{
+                if(step == '1'){
+                  <FlatList
                   style={styles.list}
-                  data={recipe.extendedIngredients}
-                  keyExtractor={(item, index) => index.toString()}
+                  data={ingredients}
+                  keyExtractor={(item, index) => item.id}
                   renderItem={({item, index}) => (
                     <View style={styles.ingredient}>
-                      <Text style={styles.ingredientName}>{item.name}</Text>
-                      <Text style={styles.ingredientAmount}>{item.measures.us.amount} {item.measures.us.unitShort}</Text>
+                      <Text style={styles.ingredientName}>{item.title}</Text>
+                      <View style={{width: '30%', paddingVertical: 4, flexDirection:"row",justifyContent:'flex-end',alignItems:'center', paddingRight:8}}>
+                      <TouchableWithoutFeedback onPress={() => updateQuantity(item.id, false)}>
+                        <View style={styles.add_subtract}>
+                            <AntDesign name="minus" size={20} color="#32CA81"  />
+                        </View>
+                      </TouchableWithoutFeedback >
+                        
+                        <Text style={[styles.ingredientName, {paddingLeft:0}]}>{item.quantity}</Text>
+                        
+                        <TouchableWithoutFeedback onPress={() => updateQuantity(item.id, true)} >
+                        <View style={styles.add_subtract}>
+                            <AntDesign name="plus" size={20} color="#32CA81"  />
+                        </View>
+                      </TouchableWithoutFeedback >
+                      </View>
+                      
+                      
+                      
                     </View>
                   )}
                 />
+                }
+              }}
+              
                 <View style={styles.viewCenter}>
                 {pictureList.map((person, index) => (<View key={person.id} style={styles.horizontalStack}>
                   
@@ -191,7 +277,8 @@ export  function PicturePage(props) {
       alignItems: "center"
     },
     text: {
-      ...text
+      ...text,
+      paddingHorizontal:0
     },
       view: {
         ...view,
@@ -204,7 +291,8 @@ export  function PicturePage(props) {
       }, 
       title: {
         ...title,
-        marginBottom:0
+        marginBottom:0,
+        paddingHorizontal:25
 
       }, 
       close: {
@@ -219,15 +307,25 @@ export  function PicturePage(props) {
         // alignSelf:'flex-end'
         
       },
+      add_subtract:{
+        backgroundColor: 'white',
+        height: 30,
+        width: 30,
+        borderRadius: 30/2,
+        marginHorizontal:10,
+        justifyContent:'center',
+        alignItems:'center'
+      },
       coloredSection: {
         ...coloredSection
       },
       subtitle: {
         ...subtitle,
+        paddingHorizontal: 0
       }, 
       scroll:{
-        margin:10,
-        width:'80%'
+        // margin:10,
+        width:'100%'
        
       },
       stepSection:{
@@ -352,6 +450,32 @@ export  function PicturePage(props) {
         paddingVertical:5,
         borderRadius: 15,
         marginBottom: 4
+      },
+      list: {
+        // marginHorizontal: 16,
+        marginTop: 12
+      },
+      ingredient: {
+        ...chip,
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        backgroundColor: grey, 
+        borderRadius: 10, 
+        marginBottom: 8,
+        alignItems: 'center',
+        paddingHorizontal: 0,
+        marginLeft:0
+      }, 
+      ingredientName: {
+        fontSize: 16,
+        color: darkGrey, 
+        paddingLeft: 15, 
+        paddingVertical: 4,
+      }, 
+      ingredientAmount: {
+        fontSize: 16,
+        color: green, 
+        paddingRight: 6, 
       }
       
     })

@@ -79,8 +79,7 @@ export function CameraScreen({navigation}) {
         
         // console.log(result);
         navigation.push('PicturePage', {
-            step:'2',
-            title: 'Process'
+            
             
           });
         

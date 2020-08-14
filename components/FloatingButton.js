@@ -111,7 +111,7 @@ export default class FloatingButton extends React.Component {
           
             console.log(result.uri);
             this.props.navigation.push('PicturePage', {
-                step: '1'
+               
               });
             
           }
