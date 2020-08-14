@@ -142,6 +142,17 @@ export  function PicturePage(props) {
 
             <View style={styles.viewCenter}>
             <ScrollView style={styles.scroll}>
+              <FlatList
+                  style={styles.list}
+                  data={recipe.extendedIngredients}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({item, index}) => (
+                    <View style={styles.ingredient}>
+                      <Text style={styles.ingredientName}>{item.name}</Text>
+                      <Text style={styles.ingredientAmount}>{item.measures.us.amount} {item.measures.us.unitShort}</Text>
+                    </View>
+                  )}
+                />
                 <View style={styles.viewCenter}>
                 {pictureList.map((person, index) => (<View key={person.id} style={styles.horizontalStack}>
                   
