@@ -66,6 +66,8 @@ export default class FloatingButton extends React.Component {
         }).start();
         this.toggleOffStyle();
     }
+    
+
     pickImage = async () => {
         try {
           let result = await ImagePicker.launchImageLibraryAsync({
@@ -74,46 +76,42 @@ export default class FloatingButton extends React.Component {
             aspect: [16, 9],
             quality: 1,
           });
-          var imageList;
+       
         //   console.log('here1')
           if (!result.cancelled) {
-            var existingImages = false;
+            var imageList = [];
+        var existingImages = false;
             try{
                 const value = await AsyncStorage.getItem('@Images');
-                if (value != null || value ){
-                existingImages = true;
-                imageList = value
+                console.log('this is value: ')
+                console.log(value);
+                console.log(value == "null")
+                const valueObject = JSON.parse(value)
+                console.log(valueObject.length )
+                if (valueObject && valueObject.length != 0 ){
+                    existingImages = true;
+                    for (var i = 0; i < valueObject.length ; i++) {
+                    imageList.push(valueObject[i])
+
+                    }
+                    
+                }
+                imageList.push({uri:result.uri, id:makeid(8)})
+                await AsyncStorage.setItem(
+                '@Images',
+                JSON.stringify(imageList)
+                );
             }
-            }
-            catch {
+            catch (error) {
+            // Error saving data
+            console.log(error)
 
             }
         }
-            try {
-                if (existingImages){
-                    imageList += "," + result.uri;
-                    await AsyncStorage.setItem(
-                        '@Images',
-                        imageList
-                      );
-                }
-                else{
-                    await AsyncStorage.setItem(
-                        '@Images',
-                        result.uri
-                      );
-                }
-                console.log("WE SET DATA")
-      
-              } catch (error) {
-                // Error saving data
-                console.log(error)
-      
-              }
-            console.log(result);
+          
+            console.log(result.uri);
             this.props.navigation.push('PicturePage', {
-                image: result.uri,
-                subtitle:"Images",
+                step: '1'
               });
             
           }
@@ -259,7 +257,15 @@ export default class FloatingButton extends React.Component {
     }
 
 }
-
+function makeid(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+ }
 const styles = StyleSheet.create({
     container: {
         alignItems: "center",

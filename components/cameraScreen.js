@@ -34,51 +34,54 @@ export function CameraScreen({navigation}) {
     const windowHeight = Dimensions.get('window').height;
     console.log(windowHeight/windowWidth);
 
-   
+    function makeid(length) {
+      var result           = '';
+      var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      var charactersLength = characters.length;
+      for ( var i = 0; i < length; i++ ) {
+         result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+      return result;
+   }
     onPictureSaved = async (photo) => {
       console.log(photo);
   
   
-        var imageList;
+        var imageList = [];
         var existingImages = false;
         try{
             const value = await AsyncStorage.getItem('@Images');
+            console.log('this is value: ')
             console.log(value);
             console.log(value == "null")
-            if (value != null || value ){
+            const valueObject = JSON.parse(value)
+            // console.log(valueObject.length )
+            if (valueObject && valueObject.length != 0 ){
                 existingImages = true;
-                imageList = value
+                for (var i = 0; i < valueObject.length ; i++) {
+                  imageList.push(valueObject[i])
+
+                }
+                
             }
+            imageList.push({uri:photo.uri, id:makeid(8)})
+            await AsyncStorage.setItem(
+              '@Images',
+              JSON.stringify(imageList)
+            );
         }
-        catch {
+        catch (error) {
+          // Error saving data
+          console.log(error)
 
         }
     
-        try {
-            if (existingImages){
-                imageList += "," + photo.uri;
-                await AsyncStorage.setItem(
-                    '@Images',
-                    imageList
-                  );
-            }
-            else{
-                await AsyncStorage.setItem(
-                    '@Images',
-                    photo.uri
-                  );
-            }
-            console.log("WE SET DATA")
-  
-          } catch (error) {
-            // Error saving data
-            console.log(error)
-  
-          }
+        
         // console.log(result);
         navigation.push('PicturePage', {
-            image: photo.uri,
-            subtitle:"Images",
+            step:'2',
+            title: 'Process'
+            
           });
         
      
