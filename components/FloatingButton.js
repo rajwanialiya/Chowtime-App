@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, Animated, TouchableWithoutFeedback, TouchableOpacity} from "react-native";
+import { View, Text, StyleSheet, Animated, TouchableWithoutFeedback, TouchableOpacity, Dimensions} from "react-native";
 import { AntDesign, Entypo, Feather} from "@expo/vector-icons";
 import { global, view, title, subtitle, chip, coloredSection } from '../styles'
 import Touchable from 'react-native-touchable-safe'
@@ -7,6 +7,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { AsyncStorage } from 'react-native';
 
 export default class FloatingButton extends React.Component {
+    
     constructor(props) {
         super(props);
         this.state = {
@@ -66,14 +67,14 @@ export default class FloatingButton extends React.Component {
         }).start();
         this.toggleOffStyle();
     }
-    
+     
 
     pickImage = async () => {
         try {
           let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [16, 9],
+            allowsEditing: false,
+            aspect: [1, 1],
             quality: 1,
           });
        
@@ -96,7 +97,7 @@ export default class FloatingButton extends React.Component {
                     }
                     
                 }
-                imageList.push({uri:result.uri, id:makeid(8)})
+                imageList.unshift({uri:result.uri, id:makeid(8)})
                 await AsyncStorage.setItem(
                 '@Images',
                 JSON.stringify(imageList)
@@ -110,9 +111,13 @@ export default class FloatingButton extends React.Component {
         }
           
             console.log(result.uri);
-            this.props.navigation.push('PicturePage', {
+            this.props.navigation.reset({
+                index: 0,
+                routes: [{ name: 'PicturePage' }],
+              })
+            // this.props.navigation.push('PicturePage', {
                
-              });
+            //   });
             
           }
     

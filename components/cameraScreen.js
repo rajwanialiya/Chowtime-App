@@ -13,6 +13,9 @@ export function CameraScreen({navigation}) {
     const [hasPermission, setHasPermission] = useState(null);
     const [type, setType] = useState(Camera.Constants.Type.back);
     const isFocused = useIsFocused();
+
+  
+
     React.useLayoutEffect(() => {
       navigation.setOptions({ tabBarVisible:false });
     }, [navigation]);
@@ -21,14 +24,17 @@ export function CameraScreen({navigation}) {
       (async () => {
         const { status } = await Camera.requestPermissionsAsync();
         setHasPermission(status === 'granted');
+        
       })();
     }, []);
     takePicture = async () => {
+      // const sizes = await this.camera.getSupportedRatiosAsync();
+      // console.log('LOOK HERE HELLO')
+      // console.log(sizes);
       if (this.camera) {
           await this.camera.takePictureAsync({ onPictureSaved: this.onPictureSaved });
       }
-      // const sizes = await this.camera.getSupportedRatiosAsync();
-      console.log(sizes);
+      
     };
     const windowWidth = Dimensions.get('window').width;
     const windowHeight = Dimensions.get('window').height;
@@ -64,7 +70,7 @@ export function CameraScreen({navigation}) {
                 }
                 
             }
-            imageList.push({uri:photo.uri, id:makeid(8)})
+            imageList.unshift({uri:photo.uri, id:makeid(8)})
             await AsyncStorage.setItem(
               '@Images',
               JSON.stringify(imageList)
@@ -78,10 +84,10 @@ export function CameraScreen({navigation}) {
     
         
         // console.log(result);
-        navigation.push('PicturePage', {
-            
-            
-          });
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'PicturePage' }],
+        })
         
      
 
@@ -99,36 +105,39 @@ export function CameraScreen({navigation}) {
     }
     return (
       <View style={styles.view}>
-      { isFocused && <Camera ratio="16:9" style={{ flex: 1 }} type={type} ref={ref => {
+        
+      { isFocused && <Camera ratio='2:1'  style={{ width:windowWidth, height: windowWidth*2}} type={type} ref={ref => {
       this.camera = ref;
     }}>
-          <View
+          {/* <View
             style={{
-              flex: 1,
-              backgroundColor: 'transparent',
-              flexDirection: 'row',
-              justifyContent: "center",
+              flex:1,
+              backgroundColor: 'red',
+              paddingBottom: 0,
+              justifyContent: "flex-end",
               alignItems: "center",
-            }}>
-            <TouchableOpacity
-              style={{
-                flex: 0.1,
-                alignSelf: 'flex-end',
-                alignItems: 'center',
-              }}
-              onPress={() => {takePicture(); 
-                // setType(
-                //   type === Camera.Constants.Type.back
-                //     ? Camera.Constants.Type.front
-                //     : Camera.Constants.Type.back
-                // );
-  
-              }}>
-                
-                <SimpleLineIcons name="camera" size={42} color="white" />
-            </TouchableOpacity>
-          </View>
+              // width: windowWidth,
+              //   height:100
+            }}> */}
+              
+            
+          {/* </View> */}
         </Camera>}
+        <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'flex-end', alignItems: 'center', paddingBottom:30}}>
+          <TouchableOpacity
+                
+                onPress={() => {takePicture(); 
+                  // setType(
+                  //   type === Camera.Constants.Type.back
+                  //     ? Camera.Constants.Type.front
+                  //     : Camera.Constants.Type.back
+                  // );
+    
+                }}>
+                  
+                  <SimpleLineIcons name="camera" size={42} color="white" />
+              </TouchableOpacity>
+              </View>
       </View>
     );
   }
