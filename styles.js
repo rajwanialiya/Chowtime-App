@@ -85,5 +85,8 @@ export const flexView = {
   justifyContent: 'space-between'
 }
 
+export const lastItem = {
+  marginBottom: 20
+}
 //Small button icons are size={26}
 //Large button icons are size={36}

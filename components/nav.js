@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, StatusBar } from 'react-native';
 
 //Tab Navigation
 import { MaterialIcons } from '@expo/vector-icons'
@@ -9,7 +9,7 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 //Components
 import CameraScreen from './camera'; 
 import { RecipesTab } from './recipes';
-import { savedRecipes as SavedRecipes } from './savedRecipes'
+import { SavedTab } from './savedRecipes'
 
 //Style
 import { view } from '../styles';
@@ -81,7 +81,7 @@ function RecipesScreen(props) {
 
 function SavedScreen() {
   return ( 
-    <SavedRecipes style={styles.view}></SavedRecipes>
+    <SavedTab style={styles.view}></SavedTab>
   ); 
 }
 

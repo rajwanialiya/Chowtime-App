@@ -19,6 +19,7 @@ export function oneRecipe({route, navigation}) {
 
   const base='https://api.spoonacular.com/recipes/'
   const { item } = route.params
+  const fromSavedPage = route.params.fromSavedPage 
 
   const url = base 
     + item.id
@@ -49,9 +50,8 @@ export function oneRecipe({route, navigation}) {
     }
   }
 
-  async function saveRecipe(recipe, navigation) {
+  async function saveRecipe(recipe) {
     if (!allFavs.includes(recipe)) {
-      // let editedRecipe = Object.assign({navigate: navigation.navigate }, recipe);
       allFavs.push(recipe)
     } else {
       setSnackBarText("This recipe is already a favourite!")
@@ -90,13 +90,13 @@ export function oneRecipe({route, navigation}) {
           <View style={styles.view}>
             <ScrollView showsVerticalScrollIndicator={false}>
               <View style={[styles.row, {backgroundColor: green}]}>
-                <Text style={[styles.title, item.title.length > 24 ? styles.smaller : styles.none]} >{item.title}</Text>
+                <Text style={[styles.title, item.title.length > 24 ? styles.smaller : styles.none]} >{recipe.title}</Text>
                 <IconButton onPress={() => navigation.goBack()} icon='keyboard-backspace' color='white' size={36} style={styles.icon} /> 
               </View>
               <View style={styles.imageContainer}>
                 <ImageBackground
                   style={styles.imageBackground}
-                  source={{uri: item.image}}
+                  source={{uri: recipe.image}}
                   resizeMode='cover'
                 >
                   <View style={styles.overlay}></View>
@@ -115,6 +115,8 @@ export function oneRecipe({route, navigation}) {
                   </View>
                 </ImageBackground>
               </View>
+              {/* <Text style={styles.subtitle}>Description</Text>
+              <Text style={styles.instructions}>{recipe.summary}</Text> */}
               <Text style={styles.subtitle}>Ingredients</Text>
               <FlatList
                 style={styles.list}
@@ -129,17 +131,20 @@ export function oneRecipe({route, navigation}) {
               />
               { (() => {
                 if (recipe.analyzedInstructions.length > 0) {
-                  return <FlatList
-                    style={styles.list}
-                    data={recipe.analyzedInstructions[0].steps}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({item, index}) => (
-                      <View>
-                        <Text style={styles.stepName}>Step {item.number}</Text>
-                        <Text style={styles.instructions}>{item.step}</Text>
-                      </View>
-                    )}
-                  />
+                  return <View>
+                      <Text style={styles.subtitle}>Recipe</Text>
+                      <FlatList
+                        style={styles.list}
+                        data={recipe.analyzedInstructions[0].steps}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({item, index}) => (
+                          <View style={styles.recipeStep}>
+                            <Text style={styles.stepNumber}>{item.number}</Text>
+                            <Text style={styles.instructions}>{item.step}</Text>
+                          </View>
+                        )}
+                      />
+                    </View>
                 } else {
                   const url = recipe.sourceUrl
                   return (
@@ -151,9 +156,13 @@ export function oneRecipe({route, navigation}) {
                   )
                 }
               })() }
-              <View style={styles.buttonContainer}>
-                <SolidButton color={green} flex={1} text="Add to Favourites" onPress={() => {saveRecipe(recipe, navigation)}}></SolidButton>
-              </View>
+              { (() => {
+                if (!fromSavedPage) {
+                  return <View style={styles.buttonContainer}>
+                  <SolidButton color={green} flex={1} text="Add to Favourites" onPress={() => {saveRecipe(recipe)}}></SolidButton>
+                  </View>
+                } 
+              })() }
             </ScrollView>
             <View style={styles.snackbarView}>
               <Snackbar
@@ -243,7 +252,7 @@ const styles = StyleSheet.create({
   },
   list: {
     marginHorizontal: 16,
-    marginTop: 12
+    marginVertical: 12
   },
   ingredient: {
     ...chip,
@@ -264,16 +273,28 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: green, 
     paddingRight: 6, 
-  }, 
-  stepName: {
-    ...subtitle, 
-    fontSize: 22,
-    marginVertical: 12, 
-    paddingHorizontal: 0
-  }, 
+  },
+  recipeStep: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    marginBottom: 12
+  },
+  stepNumber: {
+    ...chip,
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    marginRight: 15,
+    fontSize: 14,
+    borderRadius: 50,
+  },
+  instructions: {
+    flex: 1,
+    flexWrap: 'wrap',
+    fontSize: 15
+  },
   buttonContainer: {
     justifyContent: 'center',
-    marginVertical: 40,
     flexDirection: 'row',
   },
   snackbarView: {

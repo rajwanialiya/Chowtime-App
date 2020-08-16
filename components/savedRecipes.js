@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
-import { Provider as PaperProvider, Text, Button } from 'react-native-paper';
+import { Provider as PaperProvider, Text, Button} from 'react-native-paper';
+import { createStackNavigator } from '@react-navigation/stack';
+import { TransitionPresets } from '@react-navigation/stack';
+import { oneRecipe } from './oneRecipe.js';
 
 //Components
 import { StyleSheet, View, FlatList, Dimensions, ImageBackground } from 'react-native';
@@ -11,7 +14,37 @@ import { MaterialIcons } from '@expo/vector-icons';
 //Styles & Theme
 import { global, view, title, subtitle, green, padding, flexView } from '../styles';
 
-export function savedRecipes() {
+const Stack = createStackNavigator();
+export function SavedTab() {
+  return (
+      <Stack.Navigator
+        mode='card'
+        initialRouteName="savedRecipes"
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen
+          name="oneRecipe" 
+          component={oneRecipe}
+          options={{
+            gestureDirection: 'horizontal',
+            ...TransitionPresets.SlideFromRightIOS
+          }}
+        />
+        <Stack.Screen
+          name="savedRecipes" 
+          component={savedRecipes}
+          options={{
+            gestureDirection: 'horizontal',
+            ...TransitionPresets.SlideFromRightIOS
+          }}
+        />
+      </Stack.Navigator>
+  );
+}
+
+function savedRecipes({navigation}) {
   const [empty, setEmpty] = useState(true)
   const [isSet, set] = useState(false)
   const [favs, setFavs] = useState([]);
@@ -36,7 +69,7 @@ export function savedRecipes() {
     }
   }
 
-  function _renderItem({item}) {
+  function _renderItem({item}, navigation) {
     return (
       <View style={[styles.recipesItem, styles.flexView]}>
         <ImageBackground
@@ -47,7 +80,7 @@ export function savedRecipes() {
             <View style={styles.overlay} />
             <Text style={styles.name}>{item.title}</Text>
             <View>
-                <SolidButton color={green} text="Explore" onPress={() => console.log(item.navigate)}></SolidButton>
+                <SolidButton color={green} text="Explore" onPress={() => navigation.navigate('oneRecipe', {item:item, fromSavedPage: true})}></SolidButton>
                 <Button mode="text" color="white" onPress={() => removeItem(item.title)}>Remove</Button>
             </View>
         </ImageBackground>
@@ -97,7 +130,7 @@ export function savedRecipes() {
             scrollEnabled={true}
             data={favs}
             // keyExtractor={item => item.id.toString()}
-            renderItem={(item) => _renderItem(item)}
+            renderItem={(item) => _renderItem(item, navigation)}
           />
         </View>
       </PaperProvider>

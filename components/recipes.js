@@ -8,7 +8,6 @@ import { TransitionPresets } from '@react-navigation/stack';
 import { StyleSheet, View, FlatList, Dimensions, ImageBackground, TouchableWithoutFeedback } from 'react-native';
 import { Text, ActivityIndicator } from 'react-native-paper';
 import { oneRecipe } from './oneRecipe.js';
-import { savedRecipes } from './savedRecipes.js';
 
 //Styles & Theme
 import { global, view, title, subtitle, chip, flexView } from '../styles'
@@ -40,14 +39,6 @@ export function RecipesTab() {
             ...TransitionPresets.SlideFromRightIOS
           }}
         />
-        {/* <Stack.Screen
-          name="savedRecipes" 
-          component={savedRecipes}
-          options={{
-            gestureDirection: 'horizontal',
-            ...TransitionPresets.SlideFromRightIOS
-          }}
-        /> */}
       </Stack.Navigator>
   );
 }
