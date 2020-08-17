@@ -9,6 +9,7 @@ import { Camera } from 'expo-camera';
 import { Ionicons } from '@expo/vector-icons';
 import { useIsFocused} from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import EmptyIcon from '../empty'
 
 const CameraNavigator = createStackNavigator();
 
@@ -109,13 +110,17 @@ export function ImageSelect({navigation}) {
     }
   };
   return (
-<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-    <Text>Menu Screen</Text>
+<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor:'white' , paddingHorizontal:25}}>
+    {/* <Text>Menu Screen</Text>
     <Button
       title="Take Picture"
       onPress={() => navigation.push('Camera')}
     />
-    <Button title="Pick Image" onPress={pickImage} />
+    <Button title="Pick Image" onPress={pickImage} /> */}
+    <View style={{width:'100%', height:'70%'}}>
+    <EmptyIcon title="Get your recipes." text={['1. Take Pictures of your fridge', '2. Confirm the ingredients','3. Get your suggestions!']}/>
+
+    </View>
     {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
   </View>
   );
