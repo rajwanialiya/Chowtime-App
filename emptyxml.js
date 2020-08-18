@@ -1,10 +1,4 @@
-import * as React from 'react';
-import { Button, Image, View, Text,StyleSheet } from 'react-native';
-
-import { global, view, title, subtitle, chip, coloredSection, text } from './styles'
-import { green, grey, darkGrey } from './styles'
-
-const xml = `<svg width="136" height="136" viewBox="0 0 136 136" fill="none" xmlns="http://www.w3.org/2000/svg">
+export  const EmptyXml = `<svg width="136" height="136" viewBox="0 0 136 136" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M56.6703 20.4011C53.0955 18.8512 49.2322 18.0786 45.3362 18.1343C41.4403 18.0786 37.577 18.8512 34.0022 20.4011C34.0022 14.1415 39.0766 9.06711 45.3362 9.06711C47.7902 9.05733 50.1794 9.85374 52.1367 11.3339C53.6622 12.4928 54.8771 14.0114 55.6729 15.7542C56.3283 17.2158 56.6682 18.7993 56.6703 20.4011Z" fill="#F2F2F2"/>
 <path d="M45.3363 11.334C47.6508 13.0566 49.2089 15.6082 49.6841 18.454C52.0939 18.7657 54.4467 19.4215 56.6704 20.4012C56.6683 18.7993 56.3284 17.2159 55.673 15.7542C54.8772 14.0115 53.6623 12.4929 52.1367 11.334C49.2539 9.12226 45.4633 8.4806 42.0132 9.62025C43.2098 9.9996 44.3334 10.579 45.3363 11.334Z" fill="#B8B8B8"/>
 <path d="M56.6703 20.4C56.6667 23.9664 54.9878 27.324 52.1367 29.4666C50.1794 30.9467 47.7902 31.7431 45.3362 31.7333C44.5215 31.7312 43.7089 31.6477 42.9108 31.484C37.7081 30.3373 34.0028 25.7272 34.0022 20.4C37.577 18.8502 41.4403 18.0775 45.3362 18.1333C49.2322 18.0775 53.0955 18.8502 56.6703 20.4Z" fill="#F2F2F2"/>
@@ -35,63 +29,3 @@ const xml = `<svg width="136" height="136" viewBox="0 0 136 136" fill="none" xml
 </svg>
 `;
 
-export default function EmptyPage (props){
-  let width = '100%'
-  let height = '40%'
-  if (props.setWidth) {
-    width = props.setWidth
-  }
-  if (props.setHeight) {
-    height = props.setHeight
-  }
-  
-    return(
-    <View style={{flex:1 , backgroundColor: '#F0F3F4', width:'100%', padding:35, borderRadius:20}}>
-        <View style={{width:width, height:height}}>
-          {props.image}
-        </View>
-        <View style={{flex:1, justifyContent:'center', alignItems:'center', paddingTop:'15%'}}>
-            <Text style={[styles.subtitle,{ marginBottom:20}]}>{props.title}</Text>
-            <View style={{}}>
-              {props.text && props.text.map((line,index) => (
-                <Text style={styles.text} key={index}>{line}</Text>
-              ))}
-            </View>     
-        </View>
-    </View>
-    
-    )
-} 
-
-const styles = StyleSheet.create({
-    
-    text: {
-      ...text,
-      fontSize:16,
-      paddingHorizontal:0,
-      
-    },
-      view: {
-        ...view,
-      }, 
-      viewCenter: {
-        ...view,
-        justifyContent: 'center',
-        alignItems:'center',
-        flex:1
-        // backgroundColor:'blue'
-      }, 
-      title: {
-        ...title,
-        marginBottom:0,
-        paddingHorizontal:25
-
-      }, 
-      
-      subtitle: {
-        ...subtitle,
-        paddingHorizontal: 0,
-
-        marginBottom:0
-      }, 
-  })
