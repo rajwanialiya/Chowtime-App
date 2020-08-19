@@ -95,8 +95,9 @@ export  function PicturePage(props) {
     // console.log(response.outputs[0].data.concepts[0]);
     const fullList = response.outputs[0].data.concepts
     const ingredients = []
+    const whiteList =['vegetable', 'pasture', 'sweet']
     for (var i = 0 ; i < 7; i++){
-      if (fullList[i].value > 0.9 && fullList[i].name != 'vegetable' && fullList[i].name != 'pasture' ){
+      if (fullList[i].value > 0.9 && !whiteList.includes(fullList[i].name) ){
         ingredients.push(fullList[i].name)
       }
     }
@@ -273,25 +274,24 @@ export  function PicturePage(props) {
                   ingredientList.push(ingredients)
                 }
                 console.log('Starting to wait')
-               Promise.all(ingredientList)
-               console.log(ingredientList[0])
+               await Promise.all(ingredientList)
+              //  console.log(ingredientList[1]._55)
                for(var i = 0; i < listOfPictures.length; i++) {
-                const ingredients =  ingredientList[i]
+                const ingredients =  ingredientList[i]._55
                 // ingredientList.push(ingredients)
 
                 newAnnotatedList.push({id:listOfPictures[i].id ,uri:listOfPictures[i].uri, ingredients: ingredients})
               }
-                console.log('Done Waiting')
                
                 // console.log('Done finding image"')
-                //  setAnnotatedImages(newAnnotatedList);
+                 setAnnotatedImages(newAnnotatedList);
                 
-                //  setSubtitle('Ingredients Found')
-                //  setDescription("Sweet! Now just review your ingredients and click 'Next'")
-                // setShowNext(true)
-                // console.log('PRINTING PICTURE LIST URI')
+                 setSubtitle('Ingredients Found')
+                 setDescription("Sweet! Now just review your ingredients and click 'Next'")
+                setShowNext(true)
+                console.log('PRINTING PICTURE LIST URI')
     
-                // console.log(newAnnotatedList)
+                console.log(newAnnotatedList)
                 
               }
               else if (step == '3') {
@@ -408,8 +408,8 @@ export  function PicturePage(props) {
                     return (                  
                       <View style={[styles.viewCenter]}>
                         {!showNext && 
-                        <View style={{flex:1, width: '100%', height: '100%', alignItems: 'center', justifyContent:'center', padding:45}}>
-                          <LottieView style={{width: '100%', height: '100%' }} source={require('./loading.json')} autoPlay loop />
+                        <View style={{flex:1, width: '100%', height: '100%', alignItems: 'center', justifyContent:'center', padding:25, paddingTop:40, }}>
+                          <LottieView style={{width: '100%', height: '100%', }} resizeMode='cover' source={require('./loading3.json')} autoPlay loop />
                          </View>
                         }
                   {annotatedImages.map((person, index) => (<View key={person.id} style={{flex:1}}>
@@ -482,7 +482,7 @@ export  function PicturePage(props) {
                   
               
               </View>
-              <View style={{alignItems:'center', paddingBottom:15}}>
+              <View style={{alignItems:'center', paddingBottom:25}}>
                 {showNext &&
                   <TouchableOpacity onPress={() => handleNext(step) }>
                     <View style={styles.button}>
