@@ -62,7 +62,6 @@ export const text = {
   paddingHorizontal: 18,
 
 }
-
 //Other
 export const chip = {
   fontSize: 16,

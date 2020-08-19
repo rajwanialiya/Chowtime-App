@@ -31,6 +31,8 @@ import { ImageSelect } from './imageSelect';
 import { CameraScreen } from './cameraScreen';
 import { PicturePage } from './picturePage';
 import { Test } from './test';
+import EmptyIcon from '../empty'
+
 
 const CameraNavigator = createStackNavigator();
 

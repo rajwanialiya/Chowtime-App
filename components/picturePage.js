@@ -13,6 +13,10 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { AntDesign, Entypo, Feather} from "@expo/vector-icons";
 import * as FileSystem from 'expo-file-system';
 import { set } from 'react-native-reanimated';
+import EmptyIcon from '../empty'
+import { EmptyXml } from '../emptyxml'
+import { SvgXml } from 'react-native-svg';
+import LottieView from 'lottie-react-native';
 const Clarifai = require('clarifai');
 
 export  function PicturePage(props) {
@@ -42,23 +46,40 @@ export  function PicturePage(props) {
   ];
     const [image,setImage] = useState("");
     const [pictureList, setPictureList] = useState(intialList);
-    const [step, setStep] = useState("1");
+    // const [step, setStep] = useState("1");
     const [ingredients, setIngredients] = useState(DATA);
-    const [title, setTitle] = useState("Capture")
+    // const [title, setTitle] = useState("Capture")
     const [subtitle, setSubtitle] = useState("Images")
     const [description, setDescription] = useState("Let's start by adding pictures of food")
     const [showNext, setShowNext] = useState(false)
+   
+    let step = '1'
+    let title = "Capture"
+    // let subtitle = "Images"
+    // let description = "Let's start by adding pictures of food"
+
+    if (props.route && props.route.params && props.route.params.step){
+      step = props.route.params.step
+      // setStep(newStep)
+      if (step == '2') {
+          title = 'Analyze'
+          // subtitle = 'Finding Ingredients'
+          // description = "Hold tight! We're finding ingredients in your pictures!"
+      }
+      else if (step == '3') {
+        title = 'Review'
+          // subtitle = 'Review Ingredients'
+          // description = "One last step before we can get your recipes!"
+          
+    }
+    }
 
     const [annotatedImages, setAnnotatedImages] = useState([])
     useEffect( () => {
        _retrieveData()
     }, []);
 
-    console.log(pictureList);
-    if (props.route.params) {
-        // setImage(props.route.params.image);
-        // console.log(props.route.params.image);
-    }
+  
     // const navigation = props.route.params.navigation;
     // console.log(props.route.params.navigation)
     const Nav = () => {
@@ -79,9 +100,16 @@ export  function PicturePage(props) {
         ingredients.push(fullList[i].name)
       }
     }
-    console.log(ingredients);
+    // console.log(ingredients);
     return ingredients;
    }
+   const callClarifai =  async (arr, img) => {
+      // const ingredients =  await runClarifai(img.uri)
+      
+      
+      // arr.push({id: img.id ,uri: img.uri, ingredients: ingredients})
+   }
+
    const removeImage = async (id) => {
 
       console.log("hEY" + id)
@@ -191,36 +219,26 @@ export  function PicturePage(props) {
       }
       return result;
    }
-   
 
     _retrieveData = async () => {
       
         try {
-          let newStep = step
-          try{
-
-         
-          if (props.route.params.step){
-            newStep = props.route.params.step
-            setStep(newStep)
-            if (newStep == '2') {
-                setTitle('Analyze')
-                setSubtitle('Finding Ingredients')
-                setDescription("Hold tight! We're finding ingredients in your pictures!")
-            }
-            else if (newStep == '3') {
-                setTitle('Review')
-                setSubtitle('Review Ingredients')
-                setDescription("One last step before we can get your recipes!")
-          }
-          }
+          // let newStep = step
+          if (step == '2') {
+            // setTitle('Analyze')
+            setSubtitle('Finding Ingredients')
+            setDescription("Hold tight! We're finding ingredients in your pictures!")
         }
-        catch {}
+        else if (step == '3') {
+            // setTitle('Review')
+            setSubtitle('Review Ingredients')
+            setDescription("One last step before we can get your recipes!")
+        }
           
           try {
             
             let listOfPictures;
-              if (newStep =='1' || newStep == '2') {
+              if (step =='1' || step == '2') {
                 const value = await AsyncStorage.getItem('@Images');
                 
                 
@@ -235,7 +253,7 @@ export  function PicturePage(props) {
                   // for (var i = 0; i < listOfPictures.length; i++){
                   //   pictureListObject.push({uri: listOfPictures[i], id: makeid(8)})
                   // }
-                  if (listOfPictures.length > 0 && newStep != '2') setShowNext(true)
+                  if (listOfPictures.length > 0 && step != '2') setShowNext(true)
                   else setShowNext(false)
                   setPictureList(listOfPictures);
                   // console.log(pictureListObject)
@@ -245,26 +263,38 @@ export  function PicturePage(props) {
                   console.log("We Have NO Data")
                 }
               }
-               if (newStep == '2') {
+               if (step == '2') {
                 
                 const newAnnotatedList = []
+                const ingredientList = []
+              
                 for(var i = 0; i < listOfPictures.length; i++) {
-                  const ingredients = await runClarifai(listOfPictures[i].uri)
-                  // console.log(listOfPictures[i].uri)
-                  newAnnotatedList.push({id:listOfPictures[i].id ,uri:listOfPictures[i].uri, ingredients: ingredients})
-                  
+                  const ingredients =  runClarifai(listOfPictures[i].uri)
+                  ingredientList.push(ingredients)
                 }
-                await setAnnotatedImages(newAnnotatedList);
+                console.log('Starting to wait')
+               Promise.all(ingredientList)
+               console.log(ingredientList[0])
+               for(var i = 0; i < listOfPictures.length; i++) {
+                const ingredients =  ingredientList[i]
+                // ingredientList.push(ingredients)
+
+                newAnnotatedList.push({id:listOfPictures[i].id ,uri:listOfPictures[i].uri, ingredients: ingredients})
+              }
+                console.log('Done Waiting')
+               
+                // console.log('Done finding image"')
+                //  setAnnotatedImages(newAnnotatedList);
                 
-                await setSubtitle('Ingredients Found')
-                await setDescription("Sweet! Now just review your ingredients and click 'Next'")
-                setShowNext(true)
-                console.log('PRINTING PICTURE LIST URI')
+                //  setSubtitle('Ingredients Found')
+                //  setDescription("Sweet! Now just review your ingredients and click 'Next'")
+                // setShowNext(true)
+                // console.log('PRINTING PICTURE LIST URI')
     
                 // console.log(newAnnotatedList)
                 
               }
-              else if (newStep == '3') {
+              else if (step == '3') {
                 
                 console.log('hey  josh look at me')
                 console.log(props.route.params.ingredientList)
@@ -335,128 +365,139 @@ export  function PicturePage(props) {
             
 
           </View>
-          <View style={{flex:1, paddingHorizontal:25, }}>
-          <ScrollView style={[styles.scroll]}>
-            <View style={{flexDirection:'row', justifyContent:'space-between',alignItems:'center', }}>
-              <Text style={styles.subtitle} >{subtitle}</Text>
-            
+          <View style={{flex:1, paddingHorizontal:25,  alignItems:'center' }}>
+            { ( step == '1' && pictureList.length > 0) || (step == '2') || (step == '3' && ingredients.length > 0) ?
+              <ScrollView  style={[styles.scroll]}>
+              <View style={{flexDirection:'row', justifyContent:'space-between',alignItems:'center', }}>
+                <Text style={styles.subtitle} >{subtitle}</Text>
               
-            </View>
-            
-            <Text style={styles.text} >{description}</Text>
-            
+                
+              </View>
+              
+              <Text style={styles.text} >{description}</Text>
+              
 
-            <View style={[styles.viewCenter, {paddingHorizontal: 10,  flex:1}]}>
-            
-             
+              <View style={[styles.viewCenter, {paddingHorizontal: 10,  flex:1,}]}>
               
-              { (() => {
-                if (step == '1') {
-                  return (
-                    <View style={[styles.viewCenter, {alignItems:'center'}]}>
-                {pictureList.map((person, index) => (<View key={person.id} style={[styles.horizontalStack]}>
+              
+                
+                { (() => {
+                  if (step == '1') {
+                    return (
+                      <View style={[styles.viewCenter, {alignItems:'center'}]}>
+                  {pictureList.map((person, index) => (<View key={person.id} style={[styles.horizontalStack]}>
+                    
+                    <Image
+                    style={styles.image}
+                    source={{
+                      uri: person.uri
+                    }}
+                  />
+                  <TouchableWithoutFeedback onPress={async () => await removeImage(person.id)} >
+                      <View style={styles.close}>
+                          <AntDesign name="close" size={24} color="#FFF"  />
+                      </View>
+                  </TouchableWithoutFeedback>
+                    </View>
+                  ))}
+              </View>
+                    )
+                  }
+                  else if (step == '2') {
+                    
+                    return (                  
+                      <View style={[styles.viewCenter]}>
+                        {!showNext && 
+                        <View style={{flex:1, width: '100%', height: '100%', alignItems: 'center', justifyContent:'center', padding:45}}>
+                          <LottieView style={{width: '100%', height: '100%' }} source={require('./loading.json')} autoPlay loop />
+                         </View>
+                        }
+                  {annotatedImages.map((person, index) => (<View key={person.id} style={{flex:1}}>
+                    
+                    <Image
+                    style={[styles.image,{marginBottom:0, right:0}]}
+                    source={{
+                      uri: person.uri
+                    }}
+                  />
                   
-                  <Image
-                  style={styles.image}
-                  source={{
-                    uri: person.uri
-                  }}
-                />
-                <TouchableWithoutFeedback onPress={async () => await removeImage(person.id)} >
-                    <View style={styles.close}>
-                        <AntDesign name="close" size={24} color="#FFF"  />
+                  <View style={{ width: Dimensions.get('window').width*0.75,backgroundColor: '#F0F3F4', position:'relative',top:-20, borderRadius: 10, padding: 5,  flexWrap:'wrap', flexDirection:'row'}}> 
+                  {person.ingredients.map((ingredient,index) => (
+                    <View key={index} style={{flexDirection:'row', marginRight:-9}}>
+                    <View style={{backgroundColor:'white', padding: 10, margin: 5, borderRadius: 7}}>
+                      <Text style={{fontSize: 16,color: darkGrey, }}>{ingredient}</Text>
+                    </View>
+                    <TouchableWithoutFeedback onPress={async () => await removeIngredient(person.id, ingredient)} >
+                    <View style={[styles.close, {width: 22, height: 22, borderRadius: 22/2, position:'relative', right: 10}]}>
+                        <AntDesign name="close" size={15} color="#FFF"  />
                     </View>
                 </TouchableWithoutFeedback>
-                  </View>
-                ))}
-            </View>
-                  )
-                }
-                else if (step == '2') {
-                  
-                  return (                  
-                    <View style={styles.viewCenter}>
-                {annotatedImages.map((person, index) => (<View key={person.id} style={{flex:1}}>
-                  
-                  <Image
-                  style={[styles.image,{marginBottom:0, right:0}]}
-                  source={{
-                    uri: person.uri
-                  }}
-                />
-                
-                <View style={{ width: Dimensions.get('window').width*0.75,backgroundColor: '#F0F3F4', position:'relative',top:-20, borderRadius: 10, padding: 5,  flexWrap:'wrap', flexDirection:'row'}}> 
-                {person.ingredients.map((ingredient,index) => (
-                  <View key={index} style={{flexDirection:'row', marginRight:-9}}>
-                  <View style={{backgroundColor:'white', padding: 10, margin: 5, borderRadius: 7}}>
-                    <Text style={{fontSize: 16,color: darkGrey, }}>{ingredient}</Text>
-                  </View>
-                  <TouchableWithoutFeedback onPress={async () => await removeIngredient(person.id, ingredient)} >
-                  <View style={[styles.close, {width: 22, height: 22, borderRadius: 22/2, position:'relative', right: 10}]}>
-                      <AntDesign name="close" size={15} color="#FFF"  />
-                  </View>
-              </TouchableWithoutFeedback>
-                  </View>
-                ))}
-                
-                </View>
-                {/* <TouchableWithoutFeedback onPress={async () => await removeImage(person.id)} >
-                    <View style={styles.close}>
-                        <AntDesign name="close" size={24} color="#FFF"  />
                     </View>
-                </TouchableWithoutFeedback> */}
-                  </View>
-                ))}
-            </View>)
-                }
-                
-                else if (step == '3') {
+                  ))}
                   
-                  return (                  
-                    <FlatList
-                      style={styles.list}
-                      data={ingredients}
-                      keyExtractor={(item, index) => item.id}
-                      renderItem={({item, index}) => (
-                        <View style={styles.ingredient}>
-                          <Text style={styles.ingredientName}>{item.title}</Text>
-                          <View style={{width: '30%', paddingVertical: 4, flexDirection:"row",justifyContent:'flex-end',alignItems:'center', paddingRight:8}}>
-                          <TouchableWithoutFeedback onPress={() => updateQuantity(item.id, false)}>
-                            <View style={styles.add_subtract}>
-                                <AntDesign name="minus" size={20} color="#32CA81"  />
-                            </View>
-                          </TouchableWithoutFeedback >
-                            
-                            <Text style={[styles.ingredientName, {paddingLeft:0}]}>{item.quantity}</Text>
-                            
-                            <TouchableWithoutFeedback onPress={() => updateQuantity(item.id, true)} >
-                            <View style={styles.add_subtract}>
-                                <AntDesign name="plus" size={20} color="#32CA81"  />
-                            </View>
-                          </TouchableWithoutFeedback >
-                          </View>
-                          
-                          
-                          
-                        </View>
-                      )}
-                    />)
-                }
-              })() }
-                
-            
-            </View>
-            <View style={{alignItems:'center', paddingBottom:15}}>
-              {showNext &&
-                <TouchableOpacity onPress={() => handleNext(step) }>
-                  <View style={styles.button}>
-                    <Text style={[{color:'white', fontSize:20}]}>Next</Text>
                   </View>
-                      
-                  </TouchableOpacity> }
-            </View>
-            
-            </ScrollView>
+                  {/* <TouchableWithoutFeedback onPress={async () => await removeImage(person.id)} >
+                      <View style={styles.close}>
+                          <AntDesign name="close" size={24} color="#FFF"  />
+                      </View>
+                  </TouchableWithoutFeedback> */}
+                    </View>
+                  ))}
+              </View>)
+                  }
+                  
+                  else if (step == '3') {
+                    
+                    return (                  
+                      <FlatList
+                        style={styles.list}
+                        data={ingredients}
+                        keyExtractor={(item, index) => item.id}
+                        renderItem={({item, index}) => (
+                          <View style={styles.ingredient}>
+                            <Text style={styles.ingredientName}>{item.title}</Text>
+                            <View style={{width: '30%', paddingVertical: 4, flexDirection:"row",justifyContent:'flex-end',alignItems:'center', paddingRight:8}}>
+                            <TouchableWithoutFeedback onPress={() => updateQuantity(item.id, false)}>
+                              <View style={styles.add_subtract}>
+                                  <AntDesign name="minus" size={20} color="#32CA81"  />
+                              </View>
+                            </TouchableWithoutFeedback >
+                              
+                              <Text style={[styles.ingredientName, {paddingLeft:0}]}>{item.quantity}</Text>
+                              
+                              <TouchableWithoutFeedback onPress={() => updateQuantity(item.id, true)} >
+                              <View style={styles.add_subtract}>
+                                  <AntDesign name="plus" size={20} color="#32CA81"  />
+                              </View>
+                            </TouchableWithoutFeedback >
+                            </View>
+                            
+                            
+                            
+                          </View>
+                        )}
+                      />)
+                  }
+                })() }
+                  
+              
+              </View>
+              <View style={{alignItems:'center', paddingBottom:15}}>
+                {showNext &&
+                  <TouchableOpacity onPress={() => handleNext(step) }>
+                    <View style={styles.button}>
+                      <Text style={[{color:'white', fontSize:20}]}>Next</Text>
+                    </View>
+                        
+                    </TouchableOpacity> }
+              </View>
+              
+              </ScrollView>
+              :
+              <View style={{   alignItems:'center', paddingTop:'10%', justifyContent:'center', width:'90%', height:'75%'}}>
+                <EmptyIcon setWidth='100%' setHeight='40%' image={<SvgXml xml={EmptyXml} width="100%" height="100%" />} title="Get your recipes." text={['1. Take Pictures of your fridge', '2. Confirm the ingredients','3. Get your suggestions!']}/>
+              </View>
+            }
             <FloatingButton navigation={props.navigation} step={step}  style={{bottom: 80, right: 60} }/>
           </View>
         </View>
@@ -525,6 +566,7 @@ export  function PicturePage(props) {
       scroll:{
         // margin:10,
         width:'100%',
+        paddingTop:10
         
        
       },
@@ -569,7 +611,7 @@ export  function PicturePage(props) {
         flexDirection:'row',
         justifyContent: 'space-between',
         backgroundColor: '#32CA81',
-        marginBottom: 20
+        // marginBottom: 20
         
       },
       horizontalStack:{
