@@ -5,6 +5,10 @@
     "name": "Chowtime",
     "slug": "Chowtime",
     "version": "1.0.0",
+    "android": {
+      "package": "com.yourcompany.chowtime",
+      "versionCode": 1
+    },
     "platforms": [
       "ios",
       "android",

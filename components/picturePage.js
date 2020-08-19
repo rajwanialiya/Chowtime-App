@@ -90,6 +90,7 @@ export  function PicturePage(props) {
 
     }
    const runClarifai =  async (img) => {
+     console.log('starting clarifai')
     const base64Img = await FileSystem.readAsStringAsync(img, {encoding:FileSystem.EncodingType.Base64})
     const response = await app.models.predict(Clarifai.FOOD_MODEL, {base64: base64Img})
     // console.log(response.outputs[0].data.concepts[0]);
@@ -101,7 +102,7 @@ export  function PicturePage(props) {
         ingredients.push(fullList[i].name)
       }
     }
-    // console.log(ingredients);
+    console.log(ingredients);
     return ingredients;
    }
    const callClarifai =  async (arr, img) => {
@@ -275,11 +276,12 @@ export  function PicturePage(props) {
                 }
                 console.log('Starting to wait')
                await Promise.all(ingredientList)
+               console.log('done waiting')
               //  console.log(ingredientList[1]._55)
                for(var i = 0; i < listOfPictures.length; i++) {
                 const ingredients =  ingredientList[i]._55
                 // ingredientList.push(ingredients)
-
+                if (ingredients.length > 0)
                 newAnnotatedList.push({id:listOfPictures[i].id ,uri:listOfPictures[i].uri, ingredients: ingredients})
               }
                
@@ -406,10 +408,11 @@ export  function PicturePage(props) {
                   else if (step == '2') {
                     
                     return (                  
-                      <View style={[styles.viewCenter]}>
+                      <View style={[styles.viewCenter, ]}>
                         {!showNext && 
-                        <View style={{flex:1, width: '100%', height: '100%', alignItems: 'center', justifyContent:'center', padding:25, paddingTop:40, }}>
-                          <LottieView style={{width: '100%', height: '100%', }} resizeMode='cover' source={require('./loading3.json')} autoPlay loop />
+                        <View style={{flex:1, width: '100%', height: windowHeight*0.5, alignItems: 'center', justifyContent:'center', padding:25, paddingTop:40, }}>
+                          <LottieView style={{width: '100%', height: '100%', }} resizeMode='cover' source={require('./loading2.json')} autoPlay loop />
+                          {/* <Image style={{width: '100%', height: '100%', }}  source={require('./loading3.json')} autoPlay loop /> */}
                          </View>
                         }
                   {annotatedImages.map((person, index) => (<View key={person.id} style={{flex:1}}>
