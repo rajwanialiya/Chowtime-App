@@ -56,6 +56,14 @@ export const subtitle = {
   paddingHorizontal: 18
 }
 
+export const text = {
+  color: '#6b8ba9',
+  fontSize: 14,
+  fontFamily: 'Poppins-Regular',
+  justifyContent: 'flex-start',
+  paddingHorizontal: 18,
+
+}
 //Other
 export const chip = {
   fontSize: 16,
