@@ -1,12 +1,13 @@
 import { DefaultTheme } from 'react-native-paper'
 
 //App Colours
-export const green='#32CA81'
+export const green='#27B671'
 export const red= '#EC5454'
 export const white= '#FFFFFF'
 export const black='#000000'
 export const grey='#F0F3F4'
 export const darkGrey='#949494'
+export const medGrey = '#b9bcbd'
 
 //Theme
 export const global = {
@@ -57,7 +58,7 @@ export const subtitle = {
 }
 
 export const text = {
-  color: '#6b8ba9',
+  color: darkGrey,
   fontSize: 14,
   fontFamily: 'Poppins-Regular',
   justifyContent: 'flex-start',
@@ -71,7 +72,7 @@ export const chip = {
   color: darkGrey, 
   borderRadius: 10, 
   paddingHorizontal: 12, 
-  paddingVertical: 8,
+  paddingVertical: 5,
   marginBottom: 8,
   justifyContent: 'center', 
   alignItems: 'center'

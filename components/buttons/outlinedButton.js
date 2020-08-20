@@ -15,7 +15,7 @@ export function OutlinedButton(props) {
         fontFamily: 'Poppins-Medium',
         fontSize: 20,
         margin: 0,
-        padding: 4
+        padding: 0
       }}
       style={[styles.button, styles.padding, {borderColor:props.color}, {flex:props.flex}]}
     >

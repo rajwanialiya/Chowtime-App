@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Image, View } from 'react-native';
+import { Button, Image, View, StyleSheet } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
@@ -9,9 +9,11 @@ import { Camera } from 'expo-camera';
 import { Ionicons } from '@expo/vector-icons';
 import { useIsFocused} from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import EmptyIcon from '../empty'
-import { EmptyXml } from '../emptyxml'
+import EmptyIcon from './empty'
+import { EmptyXml } from '../assets/emptyxml'
 import { SvgXml } from 'react-native-svg';
+import { view } from '../styles'
+
 
 const CameraNavigator = createStackNavigator();
 
@@ -57,18 +59,12 @@ export function ImageSelect({navigation}) {
     }
   };
   return (
-<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor:'white' , paddingHorizontal:25}}>
-
-    <View style={{width:'100%', height:'70%'}}>
-    
-    <EmptyIcon setWidth='100%' setHeight='40%' image={<SvgXml xml={EmptyXml} width="100%" height="100%" />} title="Get your recipes." text={['1. Take Pictures of your fridge', '2. Confirm the ingredients','3. Get your suggestions!']}/>
-
+    <View style={styles.view}>
+      <EmptyIcon setWidth='100%' setHeight='40%' image={<SvgXml xml={EmptyXml} width="100%" height="100%" />} title="Get your recipes." text={['1. Take Pictures of your fridge', '2. Confirm the ingredients','3. Get your suggestions!']}/>
+      {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
     </View>
-    {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-  </View>
   );
 }
-
 
 function CameraScreen({navigation}) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -116,3 +112,9 @@ function CameraScreen({navigation}) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  view: {
+    ...view
+  }
+})

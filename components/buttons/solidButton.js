@@ -16,7 +16,7 @@ export function SolidButton(props) {
         fontSize: 20,
         color: 'white',
         margin: 0,
-        padding: 4
+        padding: 0
       }}
       style={[styles.button, styles.padding, {flex:props.flex}]}
     >

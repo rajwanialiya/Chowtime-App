@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { useIsFocused } from '@react-navigation/native';
-import AsyncStorage from '@react-native-community/async-storage';
-import { Provider as PaperProvider, Text, Button} from 'react-native-paper';
-import { createStackNavigator } from '@react-navigation/stack';
-import { TransitionPresets } from '@react-navigation/stack';
-import { oneRecipe } from './oneRecipe.js';
-
-//Components
 import { StyleSheet, View, FlatList, Dimensions, ImageBackground } from 'react-native';
-import { SolidButton } from './buttons/solidButton'
+import { Provider as PaperProvider, Text, Button} from 'react-native-paper';
+import AsyncStorage from '@react-native-community/async-storage';
+import { useIsFocused } from '@react-navigation/native';
+import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import { MaterialIcons } from '@expo/vector-icons'; 
 
-//Styles & Theme
+import { oneRecipe } from './oneRecipe.js';
+import EmptyPage  from './empty'; 
+import { SolidButton } from './buttons/solidButton'
+
 import { global, view, title, subtitle, green, padding, flexView } from '../styles';
 
 const Stack = createStackNavigator();
@@ -102,16 +100,17 @@ function savedRecipes({navigation}) {
   if (empty && isSet) { 
     return (
       <PaperProvider theme={global}>
-        <View style={styles.view}>
+        <View style={styles.viewSpaceBetween}>
+          <View>
             <Text style={styles.title}>Saved</Text>
-            <View style={[styles.viewCenter, styles.padding]}>
-              <View style={styles.viewCenter}>
-                <MaterialIcons style={styles.emptyIcon} name='favorite-border' color={green} size={60} /> 
-                <Text style={styles.emptySub}>ADD RECIPES TO YOUR FAVOURITES</Text>
-                <Text style={styles.emptyText}>You haven't added any recipes to your favourites yet. Get started by snapping some pics of the items in your fridge!</Text>
-              </View>
-              <SolidButton color={green} text="Get Recipes" onPress={() => navigation.navigate('oneRecipe', {item:item})} />
-            </View>
+            <EmptyPage 
+              image={<MaterialIcons style={styles.emptyIcon} name='favorite-border' color={green} size={100} />} 
+              title="Save your Favs." 
+              text={[
+                "You haven't added any recipes to your favourites yet. Get started by snapping some pics of the items in your fridge!"
+              ]}/>
+          </View>
+          <SolidButton color={green} text="Get Recipes" onPress={() => navigation.navigate('oneRecipe', {item:item})} />
         </View>
       </PaperProvider>
     )
@@ -144,17 +143,18 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     fontSize: 16
   },
-  emptyIcon: {
-    paddingTop: 20,
-  },
   view: {
-    ...view
+    ...view,
   }, 
   viewCenter: {
     ...view,
     alignItems: 'center', 
     flexGrow: 1
   }, 
+  viewSpaceBetween: {
+    ...view, 
+    justifyContent: 'space-between'
+  },
   flexView: {
     ...flexView
   },
@@ -166,6 +166,7 @@ const styles = StyleSheet.create({
   }, 
   recipesItem: {
     paddingRight:18, 
+    marginBottom: 20
   },
   imageBackground: {
     ...flexView,

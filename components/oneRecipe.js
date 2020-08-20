@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, ScrollView, View, ImageBackground, Dimensions, FlatList, Linking } from 'react-native';
-import { Provider as PaperProvider, Text, ActivityIndicator, IconButton, Snackbar, Button } from 'react-native-paper';
+import { StyleSheet, ScrollView, View, ImageBackground, Dimensions, FlatList, Linking, Button } from 'react-native';
+import { Provider as PaperProvider, Text, ActivityIndicator, IconButton, Snackbar } from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
 import { apiKey } from '../constants';
 import { MaterialIcons } from '@expo/vector-icons'; 
@@ -8,7 +8,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { global, view, title, subtitle, chip, padding, grey, darkGrey, green } from '../styles';
 import { SolidButton } from './buttons/solidButton';
 
-let allFavs = []
+let allFavs = ['chicken']
 export function oneRecipe({route, navigation}) {
   const [isLoading, setLoading] = useState(true);
   const [isError, setError] = useState(false);
@@ -88,11 +88,11 @@ export function oneRecipe({route, navigation}) {
       return (
         <PaperProvider theme={global}>
           <View style={styles.view}>
+            <View style={[styles.row, {backgroundColor: green}]}>
+              <Text style={[styles.title, item.title.length > 24 ? styles.smaller : styles.none]} >{recipe.title}</Text>
+              <IconButton onPress={() => navigation.goBack()} icon='keyboard-backspace' color='white' size={36} style={styles.icon} /> 
+            </View>
             <ScrollView showsVerticalScrollIndicator={false}>
-              <View style={[styles.row, {backgroundColor: green}]}>
-                <Text style={[styles.title, item.title.length > 24 ? styles.smaller : styles.none]} >{recipe.title}</Text>
-                <IconButton onPress={() => navigation.goBack()} icon='keyboard-backspace' color='white' size={36} style={styles.icon} /> 
-              </View>
               <View style={styles.imageContainer}>
                 <ImageBackground
                   style={styles.imageBackground}
@@ -129,10 +129,10 @@ export function oneRecipe({route, navigation}) {
                   </View>
                 )}
               />
+              <Text style={styles.subtitle}>Recipe</Text>
               { (() => {
                 if (recipe.analyzedInstructions.length > 0) {
                   return <View>
-                      <Text style={styles.subtitle}>Recipe</Text>
                       <FlatList
                         style={styles.list}
                         data={recipe.analyzedInstructions[0].steps}
@@ -149,9 +149,11 @@ export function oneRecipe({route, navigation}) {
                   const url = recipe.sourceUrl
                   return (
                     <View style={styles.padding}>
-                      <Text style={styles.stepName}>Step 1</Text>
-                      <Text> Click the link below to get cooking: </Text>
-                      <Button mode="text" style={{color: green}} onPress={() => {Linking.openURL(url)}}>View Recipe</Button>
+                      <View style={styles.recipeStep}>
+                        <Text style={styles.stepNumber}>1</Text>
+                        <Text>Please visit the following site to view the full list of steps. Click the link below to get cooking: </Text>
+                      </View>
+                      <Text style={styles.link} onPress={() => {Linking.openURL(url)}}>View full recipe &#8250;</Text>
                     </View>
                   )
                 }
@@ -292,6 +294,11 @@ const styles = StyleSheet.create({
     flex: 1,
     flexWrap: 'wrap',
     fontSize: 15
+  },
+  link: {
+    color: green, 
+    marginTop: 10,
+    marginBottom: 20
   },
   buttonContainer: {
     justifyContent: 'center',

@@ -1,17 +1,13 @@
-import React, { useState } from 'react';
-import { Provider as PaperProvider } from 'react-native-paper';
-import { apiKey } from '../constants'
-
-//Components
-import { createStackNavigator } from '@react-navigation/stack';
-import { TransitionPresets } from '@react-navigation/stack';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, FlatList, Dimensions, ImageBackground, TouchableWithoutFeedback } from 'react-native';
-import { Text, ActivityIndicator } from 'react-native-paper';
+import { Provider as PaperProvider, Text, ActivityIndicator } from 'react-native-paper';
+import { createStackNavigator, TransitionPresets  } from '@react-navigation/stack';
+import { apiKey } from '../constants'
+import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 import { oneRecipe } from './oneRecipe.js';
-
-//Styles & Theme
-import { global, view, title, subtitle, chip, flexView } from '../styles'
-import { green } from '../styles'
+import { SolidButton } from './buttons/solidButton.js';
+import EmptyPage from './empty.js';
+import { global, view, title, subtitle, chip, flexView, green } from '../styles'
 
 const Stack = createStackNavigator();
 export function RecipesTab() {
@@ -51,21 +47,44 @@ function Recipes({navigation}) {
     navigation.setOptions({ tabBarVisible:false });
   }, [navigation]);
 
-  const foodItems = ['chicken', 'tomato', 'apple']
+  const foodItems = ['chicken', 'apple', 'tomato']
   const base='https://api.spoonacular.com/recipes/findByIngredients'
 
   const url = base 
     + '?ingredients=' + foodItems.join(", ") 
     + '&apiKey=' + apiKey 
 
-  if (isLoading) {
-    fetch(url)
+  if (foodItems.length === 0) {
+    useEffect(() => {
+      setLoading(false)
+    } , [])
+    return (
+      <PaperProvider theme={global}>
+        <View style={styles.viewSpaceBetween}>
+          <View>
+            <Text style={styles.title}>Recipes</Text>
+            <EmptyPage 
+              image={<MaterialCommunityIcons style={styles.emptyIcon} name='camera-outline' color={green} size={90} />} 
+              title="Snap pics of your fridge." 
+              text={[
+                '1. Click the camera icon in the navigation bar.', 
+                '2. Upload pics of your fridge.',
+                '3. Get cooking!'
+              ]}/>
+          </View>
+          <SolidButton color={green} text="Start Cooking" onPress={() => navigation.navigate('oneRecipe', {item:item})} />
+        </View>
+      </PaperProvider>
+    )
+  } else {
+    if (isLoading) {
+      fetch(url)
       .then((response) => response.json())
       .then((json) => setRecipes(json))
       .catch((error) => console.error('oh no')) //figure out how to display error 
       .finally(() => setLoading(false));
 
-    return (
+      return (
         <View style={styles.viewCenter}>
           <ActivityIndicator 
             color={green}
@@ -73,47 +92,48 @@ function Recipes({navigation}) {
           />
         </View>
       )
-  } else {
-    return (
-      <PaperProvider theme={global}>
-        <View style={styles.view}>
-          {/* <ScrollView showsVerticalScrollIndicator={false}> */}
-            <Text style={styles.title}>Recipes</Text>
-            
-            {/* Your Ingredients */}
-            <Text style={styles.subtitle}>Your Ingredients</Text>
-            <FlatList
-              contentContainerStyle={{flexWrap:'wrap', flex: 0}}
-              style={styles.row}
-              horizontal={true}
-              scrollEnabled={false}
-              data={foodItems}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({item, index}) => (
-                <Text style={styles.chip}>{item}</Text>
-              )}
-            />
-
-            {/* Recipes */}
-            <Text style={styles.subtitle}>Recipes</Text>
-            <View style={styles.flexView}>
+    } else {
+      return (
+        <PaperProvider theme={global}>
+          <View style={styles.view}>
+            {/* <ScrollView showsVerticalScrollIndicator={false}> */}
+              <Text style={styles.title}>Recipes</Text>
+              
+              {/* Your Ingredients */}
+              <Text style={styles.subtitle}>Your Ingredients</Text>
               <FlatList
-                contentContainerStyle={styles.recipesContainer}
-                showsHorizontalScrollIndicator={false}
-                decelerationRate={0}
-                snapToInterval={Dimensions.get('window').width - 52 + 18}
-                snapToAlignment={"center"}
+                contentContainerStyle={{flexWrap:'wrap', flex: 0}}
+                style={styles.row}
                 horizontal={true}
-                scrollEnabled={true}
-                data={recipes}
-                keyExtractor={item => item.id.toString()}
-                renderItem={(item) => _renderItem(item, navigation)}
+                scrollEnabled={false}
+                data={foodItems}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({item, index}) => (
+                  <Text style={styles.chip}>{item}</Text>
+                )}
               />
-            </View>
-          {/* </ScrollView> */}
-        </View>
-      </PaperProvider>
-    )
+
+              {/* Recipes */}
+              <Text style={styles.subtitle}>Recipes</Text>
+              <View style={styles.flexView}>
+                <FlatList
+                  contentContainerStyle={styles.recipesContainer}
+                  showsHorizontalScrollIndicator={false}
+                  decelerationRate={0}
+                  snapToInterval={Dimensions.get('window').width - 52 + 18}
+                  snapToAlignment={"center"}
+                  horizontal={true}
+                  scrollEnabled={true}
+                  data={recipes}
+                  keyExtractor={item => item.id.toString()}
+                  renderItem={(item) => _renderItem(item, navigation)}
+                />
+              </View>
+            {/* </ScrollView> */}
+          </View>
+        </PaperProvider>
+      )
+    }
   }
 }
 
@@ -147,6 +167,10 @@ const styles = StyleSheet.create({
   flexView: {
     ...flexView
   },
+  viewSpaceBetween: {
+    ...view, 
+    justifyContent: 'space-between'
+  },
   title: {
     ...title,
   }, 
@@ -174,6 +198,7 @@ const styles = StyleSheet.create({
   },
   recipesItem: {
     paddingRight:18, 
+    marginBottom: 20
   },
   imageBackground: {
     ...flexView,
