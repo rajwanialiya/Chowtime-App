@@ -1,8 +1,5 @@
 import React from 'react';
 import { StyleSheet, StatusBar } from 'react-native';
-
-//Tab Navigation
-import { MaterialIcons } from '@expo/vector-icons'
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
@@ -12,8 +9,9 @@ import { RecipesTab } from './recipes';
 import { SavedTab } from './savedRecipes'
 
 //Style
-import { view } from '../styles';
-import { red } from '../styles'
+import { view, red } from '../styles';
+import { MaterialIcons } from '@expo/vector-icons'
+
 
 const Tab = createMaterialBottomTabNavigator();
 
