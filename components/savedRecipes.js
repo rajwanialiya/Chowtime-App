@@ -63,7 +63,7 @@ function savedRecipes({navigation}) {
       }
       set(true)
     } catch(e) {
-      // error reading value
+      setError(true)
     }
   }
 
@@ -75,12 +75,12 @@ function savedRecipes({navigation}) {
           source={{uri: item.image}}
           resizeMode='cover'
         >
-            <View style={styles.overlay} />
-            <Text style={styles.name}>{item.title}</Text>
-            <View>
-                <SolidButton color={green} text="Explore" onPress={() => navigation.navigate('oneRecipe', {item:item, fromSavedPage: true})}></SolidButton>
-                <Button mode="text" color="white" onPress={() => removeItem(item.title)}>Remove</Button>
-            </View>
+          <View style={styles.overlay} />
+          <Text style={styles.name}>{item.title}</Text>
+          <View>
+              <SolidButton color={green} text="Explore" onPress={() => navigation.navigate('oneRecipe', {item:item, fromSavedPage: true})}></SolidButton>
+              <Button mode="text" color="white" onPress={() => removeItem(item.title)}>Remove</Button>
+          </View>
         </ImageBackground>
       </View>
     )

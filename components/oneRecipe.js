@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, ScrollView, View, ImageBackground, Dimensions, FlatList, Linking, Button } from 'react-native';
+import { StyleSheet, ScrollView, View, ImageBackground, Dimensions, FlatList, Linking } from 'react-native';
 import { Provider as PaperProvider, Text, ActivityIndicator, IconButton, Snackbar } from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
-import { apiKey } from '../constants';
-import { MaterialIcons } from '@expo/vector-icons'; 
+import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons'; 
 
-import { global, view, title, subtitle, chip, padding, grey, darkGrey, green } from '../styles';
+import { apiKey } from '../constants';
+import { global, view, title, subtitle, chip, padding, grey, darkGrey, green, red, spaceBetweenView } from '../styles';
 import { SolidButton } from './buttons/solidButton';
+import EmptyPage from './empty';
 
 let allFavs = ['chicken']
 export function oneRecipe({route, navigation}) {
@@ -19,7 +20,7 @@ export function oneRecipe({route, navigation}) {
 
   const base='https://api.spoonacular.com/recipes/'
   const { item } = route.params
-  const fromSavedPage = route.params.fromSavedPage 
+  let fromSavedPage = route.params.fromSavedPage 
 
   const url = base 
     + item.id
@@ -46,7 +47,7 @@ export function oneRecipe({route, navigation}) {
         allFavs.push(prevFavs)
       }
     } catch(e) {
-        // PUT ERROR HERE     
+      fromSavedPage = true
     }
   }
 
@@ -61,17 +62,24 @@ export function oneRecipe({route, navigation}) {
       await AsyncStorage.setItem('favRecipes', JSON.stringify(allFavs));
       setVisible(true);
     } catch (e) {
-        // PUT ERROR HERE
+      setSnackBarText("Oh no! Something went wrong.")
+      setVisible(true);
     }
     getFavs()
   }
 
   if (isLoading) {
     fetch(url)
-    .then((response) => response.json())
-    .then((json) => setRecipe(json))
-    .catch((error) => setError(true))
-    .finally(() => setLoading(false));   
+    .then(async (response) => {
+      if (response.ok) {
+        const json = await response.json()
+        setRecipe(json)
+      } else {
+        setError(true)
+      }
+    })
+    .finally(() => setLoading(false));
+
     return (
       <View style={styles.viewCenter}>
         <ActivityIndicator 
@@ -82,8 +90,24 @@ export function oneRecipe({route, navigation}) {
     )
   } else {
     if (isError) {
-      <Text> OH NO</Text>
-      console.log('error')
+      return (
+        <PaperProvider theme={global}>
+          <View style={styles.spaceBetweenView}>
+            <View>
+              <View style={[styles.row, {backgroundColor: green}]}>
+                <Text style={styles.title} >Recipe</Text>
+                <IconButton onPress={() => navigation.goBack()} icon='keyboard-backspace' color='white' size={36} style={styles.icon} /> 
+              </View>
+              <EmptyPage 
+                image={<MaterialCommunityIcons style={styles.emptyIcon} name='camera-outline' color={red} size={90} />} 
+                title="OH NO" 
+                text={[
+                  ':(('
+                ]}/>
+            </View>
+          </View>
+        </PaperProvider>
+      )
     } else {
       return (
         <PaperProvider theme={global}>
@@ -115,8 +139,6 @@ export function oneRecipe({route, navigation}) {
                   </View>
                 </ImageBackground>
               </View>
-              {/* <Text style={styles.subtitle}>Description</Text>
-              <Text style={styles.instructions}>{recipe.summary}</Text> */}
               <Text style={styles.subtitle}>Ingredients</Text>
               <FlatList
                 style={styles.list}
@@ -197,6 +219,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   }, 
+  spaceBetweenView : {
+    ...spaceBetweenView
+  },
   title: {
     ...title,
     flexWrap: 'wrap',

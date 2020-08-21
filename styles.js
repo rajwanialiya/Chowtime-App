@@ -76,7 +76,7 @@ export const chip = {
   marginBottom: 8,
   justifyContent: 'center', 
   alignItems: 'center'
-}
+};
 
 export const view = {
   paddingBottom: 0,
@@ -85,17 +85,23 @@ export const view = {
   backgroundColor: white
 };
 
-export const padding = {
-  paddingHorizontal: 18
-};
 
 export const flexView = {
   flexGrow: 1,
   justifyContent: 'space-between'
-}
+};
+
+export const spaceBetweenView = {
+  ...view, 
+  justifyContent: 'space-between'
+};
+
+export const padding = {
+  paddingHorizontal: 18
+};
 
 export const lastItem = {
   marginBottom: 20
-}
+};
 //Small button icons are size={26}
 //Large button icons are size={36}

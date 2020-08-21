@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, FlatList, Dimensions, ImageBackground, TouchableWithoutFeedback } from 'react-native';
 import { Provider as PaperProvider, Text, ActivityIndicator } from 'react-native-paper';
 import { createStackNavigator, TransitionPresets  } from '@react-navigation/stack';
-import { apiKey } from '../constants'
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
+
 import { oneRecipe } from './oneRecipe.js';
 import { SolidButton } from './buttons/solidButton.js';
 import EmptyPage from './empty.js';
-import { global, view, title, subtitle, chip, flexView, green } from '../styles'
+
+import { apiKey } from '../constants'
+import { global, view, title, subtitle, chip, flexView, green, red, spaceBetweenView } from '../styles'
 
 const Stack = createStackNavigator();
 export function RecipesTab() {
@@ -42,6 +44,7 @@ export function RecipesTab() {
 function Recipes({navigation}) {
   const [isLoading, setLoading] = useState(true);
   const [recipes, setRecipes] = useState([]);
+  const [isError, setError] = useState(false);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({ tabBarVisible:false });
@@ -60,7 +63,7 @@ function Recipes({navigation}) {
     } , [])
     return (
       <PaperProvider theme={global}>
-        <View style={styles.viewSpaceBetween}>
+        <View style={styles.spaceBetweenView}>
           <View>
             <Text style={styles.title}>Recipes</Text>
             <EmptyPage 
@@ -79,9 +82,14 @@ function Recipes({navigation}) {
   } else {
     if (isLoading) {
       fetch(url)
-      .then((response) => response.json())
-      .then((json) => setRecipes(json))
-      .catch((error) => console.error('oh no')) //figure out how to display error 
+      .then(async (response) => {
+        if (response.ok) {
+          let json = await response.json()
+          setRecipes(json)
+        } else {
+          setError(true)
+        }
+      })
       .finally(() => setLoading(false));
 
       return (
@@ -92,44 +100,58 @@ function Recipes({navigation}) {
           />
         </View>
       )
+    } else if (isError) {
+        return (
+          <PaperProvider theme={global}>
+            <View style={styles.spaceBetweenView}>
+              <View>
+                <Text style={styles.title}>Recipes</Text>
+                <EmptyPage 
+                  image={<MaterialCommunityIcons style={styles.emptyIcon} name='camera-outline' color={red} size={90} />} 
+                  title="OH NO" 
+                  text={[
+                    ':(('
+                  ]}/>
+              </View>
+            </View>
+          </PaperProvider>
+        )
     } else {
       return (
         <PaperProvider theme={global}>
           <View style={styles.view}>
-            {/* <ScrollView showsVerticalScrollIndicator={false}> */}
-              <Text style={styles.title}>Recipes</Text>
-              
-              {/* Your Ingredients */}
-              <Text style={styles.subtitle}>Your Ingredients</Text>
-              <FlatList
-                contentContainerStyle={{flexWrap:'wrap', flex: 0}}
-                style={styles.row}
-                horizontal={true}
-                scrollEnabled={false}
-                data={foodItems}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({item, index}) => (
-                  <Text style={styles.chip}>{item}</Text>
-                )}
-              />
+            <Text style={styles.title}>Recipes</Text>
+        
+            {/* Your Ingredients */}
+            <Text style={styles.subtitle}>Your Ingredients</Text>
+            <FlatList
+              contentContainerStyle={{flexWrap:'wrap', flex: 0}}
+              style={styles.row}
+              horizontal={true}
+              scrollEnabled={false}
+              data={foodItems}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({item, index}) => (
+                <Text style={styles.chip}>{item}</Text>
+              )}
+            />
 
-              {/* Recipes */}
-              <Text style={styles.subtitle}>Recipes</Text>
-              <View style={styles.flexView}>
-                <FlatList
-                  contentContainerStyle={styles.recipesContainer}
-                  showsHorizontalScrollIndicator={false}
-                  decelerationRate={0}
-                  snapToInterval={Dimensions.get('window').width - 52 + 18}
-                  snapToAlignment={"center"}
-                  horizontal={true}
-                  scrollEnabled={true}
-                  data={recipes}
-                  keyExtractor={item => item.id.toString()}
-                  renderItem={(item) => _renderItem(item, navigation)}
-                />
-              </View>
-            {/* </ScrollView> */}
+            {/* Recipes */}
+            <Text style={styles.subtitle}>Recipes</Text>
+            <View style={styles.flexView}>
+              <FlatList
+                contentContainerStyle={styles.recipesContainer}
+                showsHorizontalScrollIndicator={false}
+                decelerationRate={0}
+                snapToInterval={Dimensions.get('window').width - 52 + 18}
+                snapToAlignment={"center"}
+                horizontal={true}
+                scrollEnabled={true}
+                data={recipes}
+                keyExtractor={item => item.id.toString()}
+                renderItem={(item) => _renderItem(item, navigation)}
+              />
+            </View>
           </View>
         </PaperProvider>
       )
@@ -167,9 +189,8 @@ const styles = StyleSheet.create({
   flexView: {
     ...flexView
   },
-  viewSpaceBetween: {
-    ...view, 
-    justifyContent: 'space-between'
+  spaceBetweenView: {
+    ...spaceBetweenView
   },
   title: {
     ...title,
