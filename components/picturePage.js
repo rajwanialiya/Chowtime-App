@@ -31,11 +31,12 @@ import { EmptyXml } from "../assets/emptyxml";
 import { SvgXml } from "react-native-svg";
 import LottieView from "lottie-react-native";
 const Clarifai = require("clarifai");
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 export function PicturePage(props) {
   const app = new Clarifai.App({ apiKey: "e6e934d8af0c4b42ae3b67827cf5fc15" });
-  const windowWidth = Dimensions.get("window").width;
-  const windowHeight = Dimensions.get("window").height;
+
   const intialList = [];
 
   const DATA = [
@@ -271,11 +272,7 @@ export function PicturePage(props) {
             "Sweet! Now just review your ingredients and click 'Next'"
           );
           setShowNext(true);
-          console.log("PRINTING PICTURE LIST URI");
-
-          console.log(newAnnotatedList);
         } else if (step == "3") {
-          console.log("hey  josh look at me");
           console.log(props.route.params.ingredientList);
           if (props.route.params.ingredientList) {
             const newIngredientList = [];
@@ -305,14 +302,7 @@ export function PicturePage(props) {
       <View style={styles.view}>
         <View style={styles.header}>
           <Text style={styles.title}>{title}</Text>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "flex-end",
-              paddingBottom: 20,
-              paddingRight: 20,
-            }}
-          >
+          <View style={styles.stepView}>
             <View style={styles.stepSection}>
               {step == "1" ? <Text style={styles.steptext}>Step 1</Text> : null}
               <View
@@ -362,45 +352,35 @@ export function PicturePage(props) {
             </View>
           </View>
         </View>
-        <View style={{ flex: 1, paddingHorizontal: 25, alignItems: "center" }}>
+        <View style={styles.mainContent}>
           {(step == "1" && pictureList.length > 0) ||
           step == "2" ||
           (step == "3" && ingredients.length > 0) ? (
             <ScrollView style={[styles.scroll]}>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <Text style={styles.subtitle}>{subtitle}</Text>
-              </View>
+              <Text style={styles.subtitle}>{subtitle}</Text>
 
               <Text style={styles.text}>{description}</Text>
 
-              <View
-                style={[styles.viewCenter, { paddingHorizontal: 10, flex: 1 }]}
-              >
+              <View style={styles.scrollableContent}>
                 {(() => {
                   if (step == "1") {
                     return (
-                      <View
-                        style={[styles.viewCenter, { alignItems: "center" }]}
-                      >
-                        {pictureList.map((person, index) => (
+                      <View style={styles.viewCenter}>
+                        {pictureList.map((picture, index) => (
                           <View
-                            key={person.id}
+                            key={picture.id}
                             style={[styles.horizontalStack]}
                           >
                             <Image
                               style={styles.image}
                               source={{
-                                uri: person.uri,
+                                uri: picture.uri,
                               }}
                             />
                             <TouchableWithoutFeedback
-                              onPress={async () => await removeImage(person.id)}
+                              onPress={async () =>
+                                await removeImage(picture.id)
+                              }
                             >
                               <View style={styles.close}>
                                 <AntDesign
@@ -418,17 +398,7 @@ export function PicturePage(props) {
                     return (
                       <View style={[styles.viewCenter]}>
                         {!showNext && (
-                          <View
-                            style={{
-                              flex: 1,
-                              width: "100%",
-                              height: windowHeight * 0.5,
-                              alignItems: "center",
-                              justifyContent: "center",
-                              padding: 25,
-                              paddingTop: 40,
-                            }}
-                          >
+                          <View style={styles.lottieContainer}>
                             <LottieView
                               style={{ width: "100%", height: "100%" }}
                               resizeMode="cover"
@@ -438,84 +408,54 @@ export function PicturePage(props) {
                             />
                           </View>
                         )}
-                        {annotatedImages.map((person, index) => (
-                          <View key={person.id} style={{ flex: 1 }}>
+                        {annotatedImages.map((annotatedImage, index) => (
+                          <View key={annotatedImage.id} style={{ flex: 1 }}>
                             <Image
                               style={[
                                 styles.image,
                                 { marginBottom: 0, right: 0 },
                               ]}
                               source={{
-                                uri: person.uri,
+                                uri: annotatedImage.uri,
                               }}
                             />
 
-                            <View
-                              style={{
-                                width: Dimensions.get("window").width * 0.75,
-                                backgroundColor: "#F0F3F4",
-                                position: "relative",
-                                top: -20,
-                                borderRadius: 10,
-                                padding: 5,
-                                flexWrap: "wrap",
-                                flexDirection: "row",
-                              }}
-                            >
-                              {person.ingredients.map((ingredient, index) => (
-                                <View
-                                  key={index}
-                                  style={{
-                                    flexDirection: "row",
-                                    marginRight: -9,
-                                  }}
-                                >
+                            <View style={styles.annotatedIngredients}>
+                              {annotatedImage.ingredients.map(
+                                (ingredient, index) => (
                                   <View
-                                    style={{
-                                      backgroundColor: "white",
-                                      padding: 10,
-                                      margin: 5,
-                                      borderRadius: 7,
-                                    }}
+                                    key={index}
+                                    style={styles.ingredientTabContainer}
                                   >
-                                    <Text
-                                      style={{
-                                        fontSize: 16,
-                                        color: darkGrey,
-                                      }}
-                                    >
-                                      {ingredient}
-                                    </Text>
-                                  </View>
-                                  <TouchableWithoutFeedback
-                                    onPress={async () =>
-                                      await removeIngredient(
-                                        person.id,
-                                        ingredient
-                                      )
-                                    }
-                                  >
-                                    <View
-                                      style={[
-                                        styles.close,
-                                        {
-                                          width: 22,
-                                          height: 22,
-                                          borderRadius: 22 / 2,
-                                          position: "relative",
-                                          right: 10,
-                                        },
-                                      ]}
-                                    >
-                                      <AntDesign
-                                        name="close"
-                                        size={15}
-                                        color="#FFF"
-                                      />
+                                    <View style={styles.ingredientTab}>
+                                      <Text
+                                        style={{
+                                          fontSize: 16,
+                                          color: darkGrey,
+                                        }}
+                                      >
+                                        {ingredient}
+                                      </Text>
                                     </View>
-                                  </TouchableWithoutFeedback>
-                                </View>
-                              ))}
+                                    <TouchableWithoutFeedback
+                                      onPress={async () =>
+                                        await removeIngredient(
+                                          annotatedImage.id,
+                                          ingredient
+                                        )
+                                      }
+                                    >
+                                      <View style={styles.ingredientClose}>
+                                        <AntDesign
+                                          name="close"
+                                          size={15}
+                                          color="#FFF"
+                                        />
+                                      </View>
+                                    </TouchableWithoutFeedback>
+                                  </View>
+                                )
+                              )}
                             </View>
                           </View>
                         ))}
@@ -532,16 +472,7 @@ export function PicturePage(props) {
                             <Text style={styles.ingredientName}>
                               {item.title}
                             </Text>
-                            <View
-                              style={{
-                                width: "30%",
-                                paddingVertical: 4,
-                                flexDirection: "row",
-                                justifyContent: "flex-end",
-                                alignItems: "center",
-                                paddingRight: 8,
-                              }}
-                            >
+                            <View style={styles.quantityView}>
                               <TouchableWithoutFeedback
                                 onPress={() => updateQuantity(item.id, false)}
                               >
@@ -595,25 +526,15 @@ export function PicturePage(props) {
               </View>
             </ScrollView>
           ) : (
-            <View
-              style={{
-                alignItems: "center",
-                paddingTop: "10%",
-                justifyContent: "center",
-                width: "90%",
-                height: "75%",
-              }}
-            >
-              <EmptyIcon
-                image={<SvgXml xml={EmptyXml} width="100%" height="100%" />}
-                title="Get your recipes."
-                text={[
-                  "1. Take Pictures of your fridge",
-                  "2. Confirm the ingredients",
-                  "3. Get your suggestions!",
-                ]}
-              />
-            </View>
+            <EmptyIcon
+              image={<SvgXml xml={EmptyXml} width="100%" height="100%" />}
+              title="Get your recipes."
+              text={[
+                "1. Take Pictures of your fridge",
+                "2. Confirm the ingredients",
+                "3. Get your suggestions!",
+              ]}
+            />
           )}
           <FloatingButton
             navigation={props.navigation}
@@ -643,7 +564,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flex: 1,
-    // backgroundColor:'blue'
   },
   title: {
     ...title,
@@ -655,11 +575,8 @@ const styles = StyleSheet.create({
     height: 30,
     width: 30,
     borderRadius: 30 / 2,
-    // position:'relative',
-    // right:'10%',
     justifyContent: "center",
     alignItems: "center",
-    // alignSelf:'flex-end'
   },
   add_subtract: {
     backgroundColor: "white",
@@ -678,13 +595,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
   },
   scroll: {
-    // margin:10,
     width: "100%",
     paddingTop: 10,
   },
   stepSection: {
     alignItems: "center",
-    // backgroundColor:'white',
     width: 50,
     paddingHorizontal: 5,
   },
@@ -693,20 +608,16 @@ const styles = StyleSheet.create({
     height: 35,
     width: 35,
     borderRadius: 35 / 2,
-    // marginRight:15,
     justifyContent: "center",
     alignItems: "center",
-    // alignSelf:'center'
   },
   stepsOff: {
     backgroundColor: "white",
     height: 35,
     width: 35,
     borderRadius: 35 / 2,
-    // marginRight:15,
     justifyContent: "center",
     alignItems: "center",
-    // alignSelf:'center'
   },
   steptext: {
     color: "black",
@@ -720,7 +631,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     backgroundColor: "#32CA81",
-    // marginBottom: 20
   },
   horizontalStack: {
     flexDirection: "row",
@@ -775,7 +685,6 @@ const styles = StyleSheet.create({
   image: {
     width: Dimensions.get("window").width * 0.75,
     height: Dimensions.get("window").width * 0.75,
-    // backgroundColor:'blue',
     position: "relative",
     right: -15,
     paddingHorizontal: 25,
@@ -807,7 +716,6 @@ const styles = StyleSheet.create({
     height: 50,
   },
   list: {
-    // marginHorizontal: 16,
     width: "100%",
     marginTop: 12,
   },
@@ -818,9 +726,7 @@ const styles = StyleSheet.create({
     backgroundColor: grey,
     borderRadius: 10,
     marginBottom: 8,
-    // width: '100%',
     alignItems: "center",
-    // justifyContent:'center',
     paddingHorizontal: 0,
     marginLeft: 0,
   },
@@ -834,5 +740,70 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: green,
     paddingRight: 6,
+  },
+  mainContent: {
+    flex: 1,
+    paddingHorizontal: 25,
+    alignItems: "center",
+  },
+  stepView: {
+    flexDirection: "row",
+    alignItems: "flex-end",
+    paddingBottom: 20,
+    paddingRight: 20,
+  },
+  scrollableContent: {
+    ...view,
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+    paddingHorizontal: 10,
+  },
+  annotatedIngredients: {
+    width: Dimensions.get("window").width * 0.75,
+    backgroundColor: "#F0F3F4",
+    position: "relative",
+    top: -20,
+    borderRadius: 10,
+    padding: 5,
+    flexWrap: "wrap",
+    flexDirection: "row",
+  },
+  quantityView: {
+    width: "30%",
+    paddingVertical: 4,
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    paddingRight: 8,
+  },
+  lottieContainer: {
+    flex: 1,
+    width: "100%",
+    height: windowHeight * 0.5,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 25,
+    paddingTop: 40,
+  },
+  ingredientTabContainer: {
+    flexDirection: "row",
+    marginRight: -9,
+  },
+  ingredientTab: {
+    backgroundColor: "white",
+    padding: 10,
+    margin: 5,
+    borderRadius: 7,
+  },
+  ingredientClose: {
+    width: 22,
+    height: 22,
+    borderRadius: 22 / 2,
+    position: "relative",
+    right: 10,
+    backgroundColor: "grey",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
