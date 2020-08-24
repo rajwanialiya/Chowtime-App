@@ -138,7 +138,6 @@ function Recipes({navigation}) {
               <FlatList
                 contentContainerStyle={styles.recipesContainer}
                 showsHorizontalScrollIndicator={false}
-                decelerationRate={0}
                 snapToInterval={Dimensions.get('window').width - 52 + 18}
                 snapToAlignment={"center"}
                 horizontal={true}
