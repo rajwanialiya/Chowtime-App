@@ -35,10 +35,11 @@ const styles = StyleSheet.create({
     backgroundColor: grey, 
     paddingVertical: 50, 
     paddingHorizontal: 25,
-    margin: 25, 
+    marginVertical: 25,
+    marginHorizontal: 18,
     borderRadius: 20,
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'flex-start'
   },
   textSection: {
     flex:1, 

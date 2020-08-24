@@ -85,7 +85,6 @@ export const view = {
   backgroundColor: white
 };
 
-
 export const flexView = {
   flexGrow: 1,
   justifyContent: 'space-between'
