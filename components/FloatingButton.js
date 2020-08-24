@@ -203,13 +203,7 @@ export default class FloatingButton extends React.Component {
                   color={this.state.cameraColorScheme.color}
                   size={30}
                 />
-                <Text
-                  style={[
-                    styles.chip,
-                    styles.subtitle,
-                    this.state.cameraColorScheme,
-                  ]}
-                >
+                <Text style={[styles.subtitle, this.state.cameraColorScheme]}>
                   Camera
                 </Text>
               </View>
@@ -231,13 +225,7 @@ export default class FloatingButton extends React.Component {
                   size={32}
                   color={this.state.pictureColorScheme.color}
                 />
-                <Text
-                  style={[
-                    styles.chip,
-                    styles.subtitle,
-                    this.state.pictureColorScheme,
-                  ]}
-                >
+                <Text style={[styles.subtitle, this.state.pictureColorScheme]}>
                   Pictures
                 </Text>
               </View>
@@ -273,6 +261,9 @@ const styles = StyleSheet.create({
   subtitle: {
     ...subtitle,
     fontSize: 20,
+    marginBottom: 0,
+    justifyContent: "center",
+    paddingTop: 5,
   },
   leftShifted: {
     flex: 1,

@@ -334,9 +334,9 @@ export function PictureScreen(props) {
             </View>
           </View>
         </View>
-        <View style={styles.mainContent}>
+        <View style={styles.view}>
           {(step == "1" && pictureList.length > 0) ||
-          step == "2" ||
+          (step == "2" && (annotatedImages.length > 0 || loading)) ||
           (step == "3" && ingredients.length > 0) ? (
             <ScrollView
               showsVerticalScrollIndicator={false}
@@ -512,13 +512,9 @@ export function PictureScreen(props) {
             </ScrollView>
           ) : (
             <EmptyIcon
-              image={
-                <SvgXml
-                  xml={EmptyXml}
-                  width="200"
-                  height={windowHeight * 0.13}
-                />
-              }
+              setWidth="100%"
+              setHeight="40%"
+              image={<SvgXml xml={EmptyXml} width="100%" height="100%" />}
               title="Get your recipes."
               text={[
                 "1. Take Pictures of your fridge",
@@ -545,7 +541,7 @@ const styles = StyleSheet.create({
   },
   text: {
     ...text,
-    paddingHorizontal: 0,
+    // paddingHorizontal: 0,
   },
   view: {
     ...view,
@@ -581,7 +577,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     ...subtitle,
-    paddingHorizontal: 0,
+    // paddingHorizontal: 0,
   },
   scroll: {
     width: "100%",
@@ -632,8 +628,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   image: {
-    width: Dimensions.get("window").width * 0.75,
-    height: Dimensions.get("window").width * 0.75,
+    width: Dimensions.get("window").width - 18 * 2,
+    height: Dimensions.get("window").width - 18 * 2,
     position: "relative",
     right: -15,
     paddingHorizontal: 25,
@@ -690,11 +686,6 @@ const styles = StyleSheet.create({
     color: green,
     paddingRight: 6,
   },
-  mainContent: {
-    flex: 1,
-    paddingHorizontal: 25,
-    alignItems: "center",
-  },
   stepView: {
     flexDirection: "row",
     alignItems: "flex-end",
@@ -706,10 +697,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flex: 1,
-    paddingHorizontal: 10,
+    marginHorizontal: 18,
   },
   annotatedIngredients: {
-    width: Dimensions.get("window").width * 0.75,
+    width: Dimensions.get("window").width - 18 * 2,
     backgroundColor: "#F0F3F4",
     position: "relative",
     top: -20,
