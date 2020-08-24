@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, FlatList, Dimensions, ImageBackground } from 'react-native';
-import { Provider as PaperProvider, Text, Button} from 'react-native-paper';
-import AsyncStorage from '@react-native-community/async-storage';
+import { StyleSheet, View, FlatList, Dimensions, ImageBackground, AsyncStorage } from 'react-native';
+import { Provider as PaperProvider, Text, Button, ActivityIndicator } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import { MaterialIcons } from '@expo/vector-icons'; 
@@ -44,6 +43,7 @@ export function SavedTab() {
 
 function savedRecipes({navigation}) {
   const [empty, setEmpty] = useState(true)
+  const [isLoading, setLoading] = useState(true)
   const [isSet, set] = useState(false)
   const [favs, setFavs] = useState([]);
   const isFocused = useIsFocused()
@@ -55,8 +55,9 @@ function savedRecipes({navigation}) {
   async function getFavs() {
     try {
       const value = await AsyncStorage.getItem('favRecipes');
-      if (JSON.parse(value) && JSON.parse(value).length > 0) {
-        await setFavs(JSON.parse(value))
+      const parsedValue = JSON.parse(value)
+      if (parsedValue && parsedValue.length > 0) {
+        await setFavs(parsedValue)
         setEmpty(false)
       } else {
         setEmpty(true)
@@ -65,6 +66,8 @@ function savedRecipes({navigation}) {
     } catch(e) {
       setError(true)
     }
+    setLoading(false)
+    console.log(favs)
   }
 
   function _renderItem({item}, navigation) {
@@ -86,54 +89,67 @@ function savedRecipes({navigation}) {
     )
   }
   
-  async function removeItem(title) {
+  async function removeItem (title) {
+    setLoading(true)
     let updatedFavs = []
     favs.forEach((recipe) => {
-      if (recipe.title !== title) {
+      if (recipe.title !== title && !updatedFavs.includes(title)) {
         updatedFavs.push(recipe)
       }
     }) 
     await AsyncStorage.setItem('favRecipes', JSON.stringify(updatedFavs))
+    console.log(updatedFavs)
     getFavs()
   }
 
-  if (empty && isSet) { 
+  if (isLoading) {
     return (
-      <PaperProvider theme={global}>
-        <View style={styles.viewSpaceBetween}>
-          <View>
-            <Text style={styles.title}>Saved</Text>
-            <EmptyPage 
-              image={<MaterialIcons style={styles.emptyIcon} name='favorite-border' color={green} size={100} />} 
-              title="Save your Favs." 
-              text={[
-                "You haven't added any recipes to your favourites yet. Get started by snapping some pics of the items in your fridge!"
-              ]}/>
-          </View>
-          <SolidButton color={green} text="Get Recipes" onPress={() => navigation.navigate('oneRecipe', {item:item})} />
-        </View>
-      </PaperProvider>
+      <View style={styles.viewCenter}>
+        <ActivityIndicator 
+          color={green}
+          size='large'
+        />
+      </View>
     )
   } else {
-    return (
-      <PaperProvider theme={global}>
-        <View style={styles.view}>
-          <Text style={styles.title}>Saved</Text>
-          <FlatList
-            contentContainerStyle={styles.recipesContainer}
-            showsHorizontalScrollIndicator={false}
-            decelerationRate={0}
-            snapToInterval={Dimensions.get('window').width - 52 + 18}
-            snapToAlignment={"center"}
-            horizontal={true}
-            scrollEnabled={true}
-            data={favs}
-            // keyExtractor={item => item.id.toString()}
-            renderItem={(item) => _renderItem(item, navigation)}
-          />
-        </View>
-      </PaperProvider>
-    )
+    if (empty && isSet) { 
+      return (
+        <PaperProvider theme={global}>
+          <View style={styles.viewSpaceBetween}>
+            <View>
+              <Text style={styles.title}>Saved</Text>
+              <EmptyPage 
+                image={<MaterialIcons style={styles.emptyIcon} name='favorite-border' color={green} size={100} />} 
+                title="Save your Favs." 
+                text={[
+                  "You haven't added any recipes to your favourites yet. Get started by snapping some pics of the items in your fridge!"
+                ]}/>
+            </View>
+            <SolidButton color={green} text="Get Recipes" onPress={() => navigation.navigate('oneRecipe', {item:item})} />
+          </View>
+        </PaperProvider>
+      )
+    } else {
+      return (
+        <PaperProvider theme={global}>
+          <View style={styles.view}>
+            <Text style={styles.title}>Saved</Text>
+            <FlatList
+              contentContainerStyle={styles.recipesContainer}
+              showsHorizontalScrollIndicator={false}
+              decelerationRate={0}
+              snapToInterval={Dimensions.get('window').width - 52 + 18}
+              snapToAlignment={"center"}
+              horizontal={true}
+              scrollEnabled={true}
+              data={favs}
+              // keyExtractor={item => item.id.toString()}
+              renderItem={(item) => _renderItem(item, navigation)}
+            />
+          </View>
+        </PaperProvider>
+      )
+    }
   }
 }
 
@@ -149,6 +165,7 @@ const styles = StyleSheet.create({
   viewCenter: {
     ...view,
     alignItems: 'center', 
+    justifyContent: 'center',
     flexGrow: 1
   }, 
   viewSpaceBetween: {

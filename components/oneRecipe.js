@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, ScrollView, View, ImageBackground, Dimensions, FlatList, Linking } from 'react-native';
+import { StyleSheet, ScrollView, View, ImageBackground, Dimensions, FlatList, Linking, AsyncStorage } from 'react-native';
 import { Provider as PaperProvider, Text, ActivityIndicator, IconButton, Snackbar } from 'react-native-paper';
-import AsyncStorage from '@react-native-community/async-storage';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons'; 
 
 import { apiKey } from '../constants';
@@ -9,7 +8,7 @@ import { global, view, title, subtitle, chip, padding, grey, darkGrey, green, re
 import { SolidButton } from './buttons/solidButton';
 import EmptyPage from './empty';
 
-let allFavs = ['chicken']
+let allFavs = []
 export function oneRecipe({route, navigation}) {
   const [isLoading, setLoading] = useState(true);
   const [isError, setError] = useState(false);
@@ -42,17 +41,19 @@ export function oneRecipe({route, navigation}) {
   async function getFavs() {
     try {
       const value = await AsyncStorage.getItem('favRecipes');
-      setPrevFavs(JSON.parse(value))
+      await setPrevFavs(JSON.parse(value))
       if (allFavs.length === 0 && prevFavs.length > 0) {
         allFavs.push(prevFavs)
       }
-    } catch(e) {
+    } catch (e) {
+      Promise.reject(e)
       fromSavedPage = true
     }
   }
 
   async function saveRecipe(recipe) {
-    if (!allFavs.includes(recipe)) {
+    let added = await allFavs.includes(recipe)
+    if (!added) {
       allFavs.push(recipe)
     } else {
       setSnackBarText("This recipe is already a favourite!")
@@ -62,6 +63,7 @@ export function oneRecipe({route, navigation}) {
       await AsyncStorage.setItem('favRecipes', JSON.stringify(allFavs));
       setVisible(true);
     } catch (e) {
+      Promise.reject(e)
       setSnackBarText("Oh no! Something went wrong.")
       setVisible(true);
     }
@@ -196,8 +198,8 @@ export function oneRecipe({route, navigation}) {
                 wrapperStyle={styles.snackbarContainer}
                 style={styles.snackbar}
                 action={{
-                  label: 'Undo',
-                  onPress: () => {}
+                  // label: 'Undo',
+                  // onPress: () => {}
                 }}
               >
                 {snackBarText}

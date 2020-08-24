@@ -46,10 +46,6 @@ function Recipes({navigation}) {
   const [recipes, setRecipes] = useState([]);
   const [isError, setError] = useState(false);
 
-  React.useLayoutEffect(() => {
-    navigation.setOptions({ tabBarVisible:false });
-  }, [navigation]);
-
   const foodItems = ['chicken', 'apple', 'tomato']
   const base='https://api.spoonacular.com/recipes/findByIngredients'
 
