@@ -61,8 +61,7 @@ export function CameraScreen({ navigation }) {
       console.log(value);
       console.log(value == "null");
       const valueObject = JSON.parse(value);
-      // console.log(valueObject.length )
-      if (valueObject && valueObject.length != 0) {
+      if (valueObject && valueObject.length > 0) {
         existingImages = true;
         for (var i = 0; i < valueObject.length; i++) {
           imageList.push(valueObject[i]);
@@ -74,14 +73,10 @@ export function CameraScreen({ navigation }) {
       // Error saving data
       console.log(error);
     }
-
-    // console.log(result);
     navigation.reset({
       index: 0,
-      routes: [{ name: "PicturePage" }],
+      routes: [{ name: "PictureScreen" }],
     });
-
-    //   console.log(result);
   };
 
   if (hasPermission === null) {
@@ -101,18 +96,7 @@ export function CameraScreen({ navigation }) {
           }}
         ></Camera>
       )}
-      <View
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          justifyContent: "flex-end",
-          alignItems: "center",
-          paddingBottom: 30,
-        }}
-      >
+      <View style={styles.captureButtonContainer}>
         <TouchableOpacity
           onPress={() => {
             takePicture();
@@ -129,71 +113,14 @@ const styles = StyleSheet.create({
   view: {
     ...view,
   },
-  viewCenter: {
-    ...view,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  title: {
-    ...title,
-  },
-  coloredSection: {
-    ...coloredSection,
-  },
-  subtitle: {
-    ...subtitle,
-  },
-  name: {
-    ...subtitle,
-    color: "white",
-    margin: 20,
-  },
-  chip: {
-    ...chip,
-    marginRight: 8,
-  },
-  row: {
-    flexDirection: "column",
-    flexGrow: 0,
-    marginVertical: 8,
-    marginHorizontal: 16,
-  },
-  recipesContainer: {
-    overflow: "scroll",
-    paddingHorizontal: 16,
-  },
-  recipesItem: {
-    paddingRight: 18,
-    height: 380,
-  },
-  imageBackground: {
-    height: 360,
-    width: Dimensions.get("window").width - 52,
-    borderRadius: 10,
-    overflow: "hidden",
-    shadowColor: "black",
-    shadowOpacity: 0.5,
-    shadowRadius: 10,
-    elevation: 6,
-    justifyContent: "space-between",
-    paddingBottom: 10,
-  },
-  overlay: {
-    height: 360,
+  captureButtonContainer: {
     position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "rgba(0,0,0,0.4)",
-  },
-  ingredientCount: {
-    fontSize: 18,
-  },
-  touchableOpacity: {
+    justifyContent: "flex-end",
     alignItems: "center",
-    margin: 18,
-    backgroundColor: green,
-    borderRadius: 10,
+    paddingBottom: 30,
   },
 });

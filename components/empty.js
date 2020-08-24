@@ -16,7 +16,15 @@ export default function EmptyPage(props) {
 
   return (
     <View style={styles.card}>
-      <View style={{ width: width, height: height, alignItems: "center" }}>
+      <View
+        style={{
+          width: width,
+          height: height,
+          alignItems: "center",
+          // justifyContent: "center",
+          flex: 1,
+        }}
+      >
         {props.image}
       </View>
       <View style={styles.textSection}>
@@ -37,10 +45,11 @@ export default function EmptyPage(props) {
 const styles = StyleSheet.create({
   card: {
     height: 0.5 * Dimensions.get("window").height,
+    width: "100%",
     backgroundColor: grey,
     paddingVertical: 50,
-    paddingHorizontal: 25,
-    margin: 25,
+    // paddingHorizontal: 25,
+    // margin: 25,
     borderRadius: 20,
     justifyContent: "space-between",
     alignItems: "center",

@@ -103,7 +103,7 @@ export default class FloatingButton extends React.Component {
 
       this.props.navigation.reset({
         index: 0,
-        routes: [{ name: "PicturePage" }],
+        routes: [{ name: "PictureScreen" }],
       });
     } catch (E) {
       console.log(E);

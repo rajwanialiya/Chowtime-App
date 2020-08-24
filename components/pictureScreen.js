@@ -34,7 +34,7 @@ const Clarifai = require("clarifai");
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export function PicturePage(props) {
+export function PictureScreen(props) {
   const app = new Clarifai.App({ apiKey: "e6e934d8af0c4b42ae3b67827cf5fc15" });
 
   const intialList = [];
@@ -58,31 +58,23 @@ export function PicturePage(props) {
   ];
   const [image, setImage] = useState("");
   const [pictureList, setPictureList] = useState([]);
-  // const [step, setStep] = useState("1");
   const [ingredients, setIngredients] = useState([]);
-  // const [title, setTitle] = useState("Capture")
   const [subtitle, setSubtitle] = useState("Images");
   const [description, setDescription] = useState(
     "Let's start by adding pictures of food"
   );
   const [showNext, setShowNext] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   let step = "1";
   let title = "Capture";
-  // let subtitle = "Images"
-  // let description = "Let's start by adding pictures of food"
 
   if (props.route && props.route.params && props.route.params.step) {
     step = props.route.params.step;
-    // setStep(newStep)
     if (step == "2") {
       title = "Analyze";
-      // subtitle = 'Finding Ingredients'
-      // description = "Hold tight! We're finding ingredients in your pictures!"
     } else if (step == "3") {
       title = "Review";
-      // subtitle = 'Review Ingredients'
-      // description = "One last step before we can get your recipes!"
     }
   }
 
@@ -91,13 +83,6 @@ export function PicturePage(props) {
     _retrieveData();
   }, []);
 
-  // const navigation = props.route.params.navigation;
-  // console.log(props.route.params.navigation)
-  const Nav = () => {
-    // navigation.push('Upload', {
-    //     navigation:navigation
-    //   });
-  };
   const runClarifai = async (img) => {
     console.log("starting clarifai");
     const base64Img = await FileSystem.readAsStringAsync(img, {
@@ -106,7 +91,6 @@ export function PicturePage(props) {
     const response = await app.models.predict(Clarifai.FOOD_MODEL, {
       base64: base64Img,
     });
-    // console.log(response.outputs[0].data.concepts[0]);
     const fullList = response.outputs[0].data.concepts;
     const ingredients = [];
     const whiteList = ["vegetable", "pasture", "sweet"];
@@ -118,14 +102,8 @@ export function PicturePage(props) {
     console.log(ingredients);
     return ingredients;
   };
-  const callClarifai = async (arr, img) => {
-    // const ingredients =  await runClarifai(img.uri)
-    // arr.push({id: img.id ,uri: img.uri, ingredients: ingredients})
-  };
 
   const removeImage = async (id) => {
-    // pictureList.splice(index, 1)
-
     const newList = pictureList.filter((picture) => picture.id != id);
     console.log(newList);
     if (newList.length > 0) setShowNext(true);
@@ -135,27 +113,24 @@ export function PicturePage(props) {
   };
 
   const removeIngredient = async (imageId, ingredientName) => {
-    // pictureList.splice(index, 1)
-
     const newAnnotatedImages = [];
 
-    for (var i = 0; i < annotatedImages.length; i++) {
-      const newImage = annotatedImages[i];
-      if (annotatedImages[i].id == imageId) {
-        const ingredients = annotatedImages[i].ingredients;
+    annotatedImages.forEach((img) => {
+      const newImage = img;
+      if (img.id == imageId) {
+        const ingredients = img.ingredients;
         const newIngredientList = [];
-        for (var j = 0; j < ingredients.length; j++) {
-          if (ingredients[j] != ingredientName) {
-            newIngredientList.push(ingredients[j]);
+        ingredients.forEach((ingredient) => {
+          if (ingredient != ingredientName) {
+            newIngredientList.push(ingredient);
           }
-        }
+        });
         newImage.ingredients = newIngredientList;
       }
       if (newImage.ingredients.length > 0) newAnnotatedImages.push(newImage);
-    }
+    });
     if (!newAnnotatedImages.length > 0) setShowNext(false);
     setAnnotatedImages(newAnnotatedImages);
-    console.log("look her josh");
     console.log(newAnnotatedImages);
   };
 
@@ -181,7 +156,7 @@ export function PicturePage(props) {
 
   const handleNext = async (step) => {
     if (step == "1") {
-      props.navigation.push("PicturePage", {
+      props.navigation.push("PictureScreen", {
         step: "2",
       });
     } else if (step == "2") {
@@ -195,12 +170,12 @@ export function PicturePage(props) {
       }
       console.log("COMBINE LIST LOOK");
       console.log(ingredientList);
-      props.navigation.push("PicturePage", {
+      props.navigation.push("PictureScreen", {
         step: "3",
         ingredientList: ingredientList,
       });
     } else if (step == "3") {
-      props.navigation.push("PicturePage", {
+      props.navigation.push("PictureScreen", {
         step: "1",
       });
     }
@@ -258,20 +233,27 @@ export function PicturePage(props) {
           console.log("done waiting");
           for (var i = 0; i < listOfPictures.length; i++) {
             const ingredients = ingredientList[i]._55;
-            if (ingredients.length > 0)
+            if (ingredients.length > 0) {
               newAnnotatedList.push({
                 id: listOfPictures[i].id,
                 uri: listOfPictures[i].uri,
                 ingredients: ingredients,
               });
+              setSubtitle("Ingredients Found");
+              setDescription(
+                "Sweet! Now just review your ingredients and click 'Next'"
+              );
+              setShowNext(true);
+            } else {
+              setSubtitle("No Ingredients Found");
+              setDescription(
+                "Aweh, we didn't have any luck. Try adding so more pics"
+              );
+              setShowNext(false);
+            }
           }
+          setLoading(false);
           setAnnotatedImages(newAnnotatedList);
-
-          setSubtitle("Ingredients Found");
-          setDescription(
-            "Sweet! Now just review your ingredients and click 'Next'"
-          );
-          setShowNext(true);
         } else if (step == "3") {
           console.log(props.route.params.ingredientList);
           if (props.route.params.ingredientList) {
@@ -356,7 +338,10 @@ export function PicturePage(props) {
           {(step == "1" && pictureList.length > 0) ||
           step == "2" ||
           (step == "3" && ingredients.length > 0) ? (
-            <ScrollView style={[styles.scroll]}>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              style={[styles.scroll]}
+            >
               <Text style={styles.subtitle}>{subtitle}</Text>
 
               <Text style={styles.text}>{description}</Text>
@@ -397,7 +382,7 @@ export function PicturePage(props) {
                   } else if (step == "2") {
                     return (
                       <View style={[styles.viewCenter]}>
-                        {!showNext && (
+                        {loading && (
                           <View style={styles.lottieContainer}>
                             <LottieView
                               style={{ width: "100%", height: "100%" }}
@@ -527,7 +512,13 @@ export function PicturePage(props) {
             </ScrollView>
           ) : (
             <EmptyIcon
-              image={<SvgXml xml={EmptyXml} width="100%" height="100%" />}
+              image={
+                <SvgXml
+                  xml={EmptyXml}
+                  width="200"
+                  height={windowHeight * 0.13}
+                />
+              }
               title="Get your recipes."
               text={[
                 "1. Take Pictures of your fridge",
@@ -567,8 +558,6 @@ const styles = StyleSheet.create({
   },
   title: {
     ...title,
-    marginBottom: 0,
-    paddingHorizontal: 25,
   },
   close: {
     backgroundColor: "grey",
@@ -611,26 +600,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  stepsOff: {
-    backgroundColor: "white",
-    height: 35,
-    width: 35,
-    borderRadius: 35 / 2,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   steptext: {
     color: "black",
     fontSize: 12,
     fontFamily: "Poppins-Regular",
     fontWeight: "700",
-
     paddingVertical: 5,
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     backgroundColor: "#32CA81",
+    alignItems: "flex-end",
   },
   horizontalStack: {
     flexDirection: "row",
@@ -649,38 +630,6 @@ const styles = StyleSheet.create({
     flexGrow: 0,
     marginVertical: 8,
     marginHorizontal: 16,
-  },
-  recipesContainer: {
-    overflow: "scroll",
-    paddingHorizontal: 16,
-  },
-  recipesItem: {
-    paddingRight: 18,
-    height: 380,
-  },
-  imageBackground: {
-    height: 360,
-    width: Dimensions.get("window").width - 52,
-    borderRadius: 10,
-    overflow: "hidden",
-    shadowColor: "black",
-    shadowOpacity: 0.5,
-    shadowRadius: 10,
-    elevation: 6,
-    justifyContent: "space-between",
-    paddingBottom: 10,
-  },
-  overlay: {
-    height: 360,
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "rgba(0,0,0,0.4)",
-  },
-  ingredientCount: {
-    fontSize: 18,
   },
   image: {
     width: Dimensions.get("window").width * 0.75,
@@ -749,7 +698,7 @@ const styles = StyleSheet.create({
   stepView: {
     flexDirection: "row",
     alignItems: "flex-end",
-    paddingBottom: 20,
+    paddingBottom: 30,
     paddingRight: 20,
   },
   scrollableContent: {
