@@ -1,19 +1,17 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View} from 'react-native';
-
-//Tab Navigation
-import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { StyleSheet, StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 //Components
-import  CameraScreen  from './camera'; 
-
-import { Recipes } from './recipes';
+import CameraScreen from './camera'; 
+import { RecipesTab } from './recipes';
+import { SavedTab } from './savedRecipes'
 
 //Style
-import { view } from '../styles';
-import { font } from '../styles'
+import { view, red } from '../styles';
+import { MaterialIcons } from '@expo/vector-icons'
+
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -23,37 +21,40 @@ export function TabNav() {
       <Tab.Navigator
         shifting={true}
         initialRouteName="Camera"
-        activeColor="#e91e63"
+        activeColor={red}
         barStyle={styles.navContainer}
+        screenOptions={{
+          headerShown: false
+        }}
       >
         <Tab.Screen
-          name="Camera"
+          name='Camera'
           component={CameraScreen}
           options={{
-            tabBarLabel: "Camera", 
+            tabBarLabel: 'Camera', 
             tabBarIcon: ({color}) => (
-              <Ionicons name="ios-camera" color={color} size={26} /> //REPLACE ICON
+              <MaterialIcons name='camera-alt' color={color} size={26} /> 
             ),
           }}
         />
         <Tab.Screen
-          name="Recipes"
+          name='Recipes'
           component={RecipesScreen}
           options= {{
-            tabBarLabel: "Recipes",
+            tabBarLabel: 'Recipes',
             tabBarIcon: ({color}) => (
-              <Ionicons name="ios-copy" color={color} size={26} /> //REPLACE ICON
+              <MaterialIcons name='restaurant-menu' color={color} size={26} />
             ),
           }}
         />
         <Tab.Screen
-          name="Profile"
+          name='Saved'
           component={SavedScreen}
           options={{
             shifting: true,
-            tabBarLabel: "Profile",
+            tabBarLabel: 'Saved',
             tabBarIcon: ({color}) => (
-              <Ionicons name="ios-copy" color={color} size={26} /> //REPLACE ICON
+              <MaterialIcons name='favorite' color={color} size={26} />
             ),
           }}
         />
@@ -70,19 +71,15 @@ export function TabNav() {
 //   );
 // }
 
-function RecipesScreen() {
+function RecipesScreen(props) {
   return (
-    <View style={styles.view}>
-      <Recipes></Recipes>
-    </View>
+    <RecipesTab style={styles.view}></RecipesTab>
   );
 }
 
 function SavedScreen() {
   return ( 
-    <View style={styles.view}>
-      <Text style={styles.text}>Settings!</Text>
-    </View >
+    <SavedTab style={styles.view}></SavedTab>
   ); 
 }
 
@@ -92,8 +89,8 @@ const styles = StyleSheet.create({
   },
   navContainer: {
     backgroundColor: 'white',
-    paddingTop: 5,
-    paddingBottom: 5
+    paddingTop: 10,
+    paddingBottom: 10
   },
   container: {
     flex: 1,
