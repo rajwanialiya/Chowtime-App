@@ -23,6 +23,11 @@ import {
   coloredSection,
   text,
 } from "../styles";
+import {
+  CommonActions,
+  StackActions,
+  NavigationActions,
+} from "@react-navigation/native";
 import { green, grey, darkGrey } from "../styles";
 import FloatingButton from "./FloatingButton";
 import { Provider as PaperProvider } from "react-native-paper";
@@ -68,6 +73,7 @@ export function PictureScreen(props) {
   );
   const [showNext, setShowNext] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [rawIngredients, setRawIngredents] = useState([]);
 
   let step = "1";
   let title = "Capture";
@@ -182,8 +188,14 @@ export function PictureScreen(props) {
         ingredientList: ingredientList,
       });
     } else if (step == "3") {
-      props.navigation.push("PictureScreen", {
-        step: "1",
+      await AsyncStorage.setItem("@Images", "");
+
+      props.navigation.reset({
+        index: 0,
+        routes: [{ name: "PictureScreen" }],
+      });
+      props.navigation.navigate("Recipes", {
+        params: { foodItems: rawIngredients },
       });
     }
   };
@@ -239,8 +251,16 @@ export function PictureScreen(props) {
           await Promise.all(ingredientList);
           console.log("done waiting");
           for (var i = 0; i < listOfPictures.length; i++) {
-            const ingredients = ingredientList[i]._55;
-            console.log("this is ingredient length" + ingredients.length);
+            // const ingredients = ingredientList[i]._55;
+            const ingredients = [
+              "pineapple",
+              "egg",
+              "milk",
+              "bell pepper",
+              "apple",
+              "banana",
+              "cherry",
+            ];
             if (ingredients.length > 0) {
               newAnnotatedList.push({
                 id: listOfPictures[i].id,
@@ -265,10 +285,11 @@ export function PictureScreen(props) {
           setLoading(false);
           setAnnotatedImages(newAnnotatedList);
         } else if (step == "3") {
-          console.log(props.route.params.ingredientList);
           if (props.route.params.ingredientList) {
             const newIngredientList = [];
             const ingredientList = props.route.params.ingredientList;
+            setRawIngredents(ingredientList);
+
             for (var i = 0; i < ingredientList.length; i++) {
               const newIngredient = {
                 id: makeid(7),

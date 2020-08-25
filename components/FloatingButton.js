@@ -71,6 +71,7 @@ export default class FloatingButton extends React.Component {
   //Select an image from device
   pickImage = async () => {
     // try {
+    console.log("OPENING GALLERY");
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: false,

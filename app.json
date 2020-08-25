@@ -1,21 +1,16 @@
 {
-  "name": "Chowtime",
-  "displayName": "Chowtime",
+  "name": "ChowTime",
+  "displayName": "ChowTime",
   "expo": {
-    "name": "Chowtime",
-    "slug": "Chowtime",
+    "name": "ChowTime",
+    "slug": "ChowTime",
     "version": "1.0.0",
+    "icon": "./assets/largeicon.png",
     "android": {
       "package": "com.yourcompany.chowtime",
       "versionCode": 1
     },
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
-    "assetBundlePatterns": [
-      "**/*"
-    ]
+    "platforms": ["ios", "android", "web"],
+    "assetBundlePatterns": ["**/*"]
   }
 }
