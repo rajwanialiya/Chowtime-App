@@ -76,7 +76,7 @@ export default class FloatingButton extends React.Component {
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: false,
       aspect: [1, 1],
-      quality: 1,
+      quality: 0.2,
     });
 
     if (!result.cancelled) {

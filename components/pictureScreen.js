@@ -251,16 +251,8 @@ export function PictureScreen(props) {
           await Promise.all(ingredientList);
           console.log("done waiting");
           for (var i = 0; i < listOfPictures.length; i++) {
-            // const ingredients = ingredientList[i]._55;
-            const ingredients = [
-              "pineapple",
-              "egg",
-              "milk",
-              "bell pepper",
-              "apple",
-              "banana",
-              "cherry",
-            ];
+            const ingredients = ingredientList[i]._55;
+
             if (ingredients.length > 0) {
               newAnnotatedList.push({
                 id: listOfPictures[i].id,

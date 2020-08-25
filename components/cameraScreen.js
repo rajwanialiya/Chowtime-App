@@ -33,6 +33,7 @@ export function CameraScreen({ navigation }) {
     if (this.camera) {
       await this.camera.takePictureAsync({
         onPictureSaved: this.onPictureSaved,
+        quality: 0.2,
       });
     }
   };
