@@ -240,24 +240,27 @@ export function PictureScreen(props) {
           console.log("done waiting");
           for (var i = 0; i < listOfPictures.length; i++) {
             const ingredients = ingredientList[i]._55;
+            console.log("this is ingredient length" + ingredients.length);
             if (ingredients.length > 0) {
               newAnnotatedList.push({
                 id: listOfPictures[i].id,
                 uri: listOfPictures[i].uri,
                 ingredients: ingredients,
               });
-              setSubtitle("Ingredients Found");
-              setDescription(
-                "Sweet! Now just review your ingredients and click 'Next'"
-              );
-              setShowNext(true);
-            } else {
-              setSubtitle("No Ingredients Found");
-              setDescription(
-                "Aweh, we didn't have any luck. Try adding so more pics"
-              );
-              setShowNext(false);
             }
+          }
+          if (listOfPictures.length > 0) {
+            setSubtitle("Ingredients Found");
+            setDescription(
+              "Sweet! Now just review your ingredients and click 'Next'"
+            );
+            setShowNext(true);
+          } else {
+            setSubtitle("No Ingredients Found");
+            setDescription(
+              "Aweh, we didn't have any luck. Try adding so more pics"
+            );
+            setShowNext(false);
           }
           setLoading(false);
           setAnnotatedImages(newAnnotatedList);
