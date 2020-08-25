@@ -13,7 +13,7 @@ PODS:
     - UMCore
   - EXErrorRecovery (1.1.0):
     - UMCore
-  - EXFileSystem (8.1.0):
+  - EXFileSystem (9.1.0):
     - UMCore
     - UMFileSystemInterface
   - EXFont (8.1.1):
@@ -64,6 +64,10 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
+  - lottie-ios (3.1.8)
+  - lottie-react-native (3.5.0):
+    - lottie-ios (~> 3.1.8)
+    - React
   - RCTRequired (0.61.5)
   - RCTTypeSafety (0.61.5):
     - FBLazyVector (= 0.61.5)
@@ -227,7 +231,7 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
   - React-jsinspector (0.61.5)
-  - react-native-image-picker (0.28.0):
+  - react-native-image-picker (2.3.3):
     - React
   - react-native-safe-area-context (0.7.3):
     - React
@@ -274,11 +278,13 @@ PODS:
     - React
   - RNScreens (2.7.0):
     - React
-  - UMAppLoader (1.0.1)
+  - RNSVG (12.1.0):
+    - React
+  - UMAppLoader (1.0.2)
   - UMBarCodeScannerInterface (5.1.0)
   - UMCameraInterface (5.1.0)
   - UMConstantsInterface (5.1.0)
-  - UMCore (5.1.0)
+  - UMCore (5.1.2)
   - UMFaceDetectorInterface (5.1.0)
   - UMFileSystemInterface (5.1.0)
   - UMFontInterface (5.1.0)
@@ -313,6 +319,7 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - lottie-react-native (from `../node_modules/lottie-react-native`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
@@ -341,6 +348,7 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNSVG (from `../node_modules/react-native-svg`)
   - UMAppLoader (from `../node_modules/unimodules-app-loader/ios`)
   - UMBarCodeScannerInterface (from `../node_modules/unimodules-barcode-scanner-interface/ios`)
   - UMCameraInterface (from `../node_modules/unimodules-camera-interface/ios`)
@@ -359,6 +367,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - boost-for-react-native
+    - lottie-ios
 
 EXTERNAL SOURCES:
   DoubleConversion:
@@ -399,6 +408,8 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/Folly.podspec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+  lottie-react-native:
+    :path: "../node_modules/lottie-react-native"
   RCTRequired:
     :path: "../node_modules/react-native/Libraries/RCTRequired"
   RCTTypeSafety:
@@ -449,6 +460,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNSVG:
+    :path: "../node_modules/react-native-svg"
   UMAppLoader:
     :path: "../node_modules/unimodules-app-loader/ios"
   UMBarCodeScannerInterface:
@@ -484,7 +497,7 @@ SPEC CHECKSUMS:
   EXCamera: e7e250c78f26468028c3866bb5c27e046f2b7b49
   EXConstants: 9f18e9ef229706394f41735d9c7f309d479b36c0
   EXErrorRecovery: 88541714d9bbf8a823f4ee0b7078a92d3e0e42d2
-  EXFileSystem: b82693d78de152efe10a77d4aac781f782e10916
+  EXFileSystem: 2fb82ce009e2f2e6e501afdfb4611fec8ff328b8
   EXFont: af4c3281cac0bf6ccd8b8a534e9bce6437cc2e17
   EXImageLoader: 5c9d1bf408443ac4d4f44463eaf3b0d03bc70425
   EXImagePicker: 578529114ac96351296daccd493c419bbb347d33
@@ -499,6 +512,8 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 118d0d177724c2d67f08a59136eb29ef5943ec75
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
+  lottie-ios: 48fac6be217c76937e36e340e2d09cf7b10b7f5f
+  lottie-react-native: 1fb4ce21d6ad37dab8343eaff8719df76035bd93
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
   RCTTypeSafety: 9aa1b91d7f9310fc6eadc3cf95126ffe818af320
   React: b6a59ef847b2b40bb6e0180a97d0ca716969ac78
@@ -508,7 +523,7 @@ SPEC CHECKSUMS:
   React-jsi: cb2cd74d7ccf4cffb071a46833613edc79cdf8f7
   React-jsiexecutor: d5525f9ed5f782fdbacb64b9b01a43a9323d2386
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
-  react-native-image-picker: e6e06d4315e3c85bad17e4b2002cd29f11d202c8
+  react-native-image-picker: a6c3d644751a388b0fc8b56822ff7cbd398a3008
   react-native-safe-area-context: 8260e5157617df4b72865f44006797f895b2ada7
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
@@ -524,11 +539,12 @@ SPEC CHECKSUMS:
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNReanimated: 955cf4068714003d2f1a6e2bae3fb1118f359aff
   RNScreens: cf198f915f8a2bf163de94ca9f5bfc8d326c3706
-  UMAppLoader: 83885655be9ce3e5b3684d20f9973da67b78b3a9
+  RNSVG: ce9d996113475209013317e48b05c21ee988d42e
+  UMAppLoader: ae5eaee9f3c8cc847c631a579fed20d217de5913
   UMBarCodeScannerInterface: aa3409ab9d108866e55c09ad0292e4a6c08a7775
   UMCameraInterface: 9d5da92c521e0af7815afbf77ea19bd0312b4928
   UMConstantsInterface: 4a1d3062a89421d3290bbe8f75efabd849935bea
-  UMCore: db7c5b08deef44d881b9524e5ab39fd14bdc24fe
+  UMCore: cb544737bc72ecfccae9dd476e4d647468b4ebd0
   UMFaceDetectorInterface: c6d69c914426fc29f5a2442411a575e887adb823
   UMFileSystemInterface: bee6c9ca4f3d70da5f7c9752efc8b3f3a7f47b61
   UMFontInterface: 884955c5fd329095e2072d16de9b5bf1bce93005

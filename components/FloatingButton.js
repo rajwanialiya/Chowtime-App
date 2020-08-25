@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { AntDesign, Feather } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
+// import ImagePicker from "react-native-image-picker";
 import { global, subtitle } from "../styles";
 
 export default class FloatingButton extends React.Component {
@@ -69,45 +70,45 @@ export default class FloatingButton extends React.Component {
 
   //Select an image from device
   pickImage = async () => {
-    try {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: false,
-        aspect: [1, 1],
-        quality: 1,
-      });
+    // try {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: false,
+      aspect: [1, 1],
+      quality: 1,
+    });
 
-      if (!result.cancelled) {
-        var imageList = [];
-        var existingImages = false;
-        try {
-          const value = await AsyncStorage.getItem("@Images");
-          const valueObject = JSON.parse(value);
+    if (!result.cancelled) {
+      var imageList = [];
+      var existingImages = false;
+      try {
+        const value = await AsyncStorage.getItem("@Images");
+        const valueObject = JSON.parse(value);
 
-          //push exisiting images to list
-          if (valueObject && valueObject.length != 0) {
-            existingImages = true;
-            for (var i = 0; i < valueObject.length; i++) {
-              imageList.push(valueObject[i]);
-            }
+        //push exisiting images to list
+        if (valueObject && valueObject.length != 0) {
+          existingImages = true;
+          for (var i = 0; i < valueObject.length; i++) {
+            imageList.push(valueObject[i]);
           }
-
-          //Adding new image to the front of the list, assign random 8-digit ID
-          imageList.unshift({ uri: result.uri, id: makeid(8) });
-          await AsyncStorage.setItem("@Images", JSON.stringify(imageList));
-        } catch (error) {
-          // Error saving data
-          console.log(error);
         }
-      }
 
-      this.props.navigation.reset({
-        index: 0,
-        routes: [{ name: "PictureScreen" }],
-      });
-    } catch (E) {
-      console.log(E);
+        //Adding new image to the front of the list, assign random 8-digit ID
+        imageList.unshift({ uri: result.uri, id: makeid(8) });
+        await AsyncStorage.setItem("@Images", JSON.stringify(imageList));
+      } catch (error) {
+        // Error saving data
+        console.log(error);
+      }
     }
+
+    this.props.navigation.reset({
+      index: 0,
+      routes: [{ name: "PictureScreen" }],
+    });
+    // } catch (E) {
+    //   console.log(E);
+    // }
   };
 
   render() {

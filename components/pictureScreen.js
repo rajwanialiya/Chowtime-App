@@ -12,6 +12,7 @@ import {
   BackHandler,
   ToastAndroid,
   AsyncStorage,
+  setParams,
 } from "react-native";
 import {
   global,
@@ -84,7 +85,7 @@ export function PictureScreen(props) {
   useEffect(() => {
     _retrieveData();
     BackHandler.addEventListener("hardwareBackPress", () => {
-      //disable android back when return true;
+      props.navigation.goBack();
       return true;
     });
   }, []);
