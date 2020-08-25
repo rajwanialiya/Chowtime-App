@@ -9,6 +9,9 @@ import {
   TouchableWithoutFeedback,
   FlatList,
   TouchableOpacity,
+  BackHandler,
+  ToastAndroid,
+  AsyncStorage,
 } from "react-native";
 import {
   global,
@@ -22,7 +25,6 @@ import {
 import { green, grey, darkGrey } from "../styles";
 import FloatingButton from "./FloatingButton";
 import { Provider as PaperProvider } from "react-native-paper";
-import { AsyncStorage } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { AntDesign, Feather } from "@expo/vector-icons";
 import * as FileSystem from "expo-file-system";
@@ -81,6 +83,10 @@ export function PictureScreen(props) {
   const [annotatedImages, setAnnotatedImages] = useState([]);
   useEffect(() => {
     _retrieveData();
+    BackHandler.addEventListener("hardwareBackPress", () => {
+      //disable android back when return true;
+      return true;
+    });
   }, []);
 
   const runClarifai = async (img) => {

@@ -38,7 +38,6 @@ export function CameraScreen({ navigation }) {
   };
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
-  console.log(windowHeight / windowWidth);
 
   function makeid(length) {
     var result = "";
