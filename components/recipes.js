@@ -1,22 +1,7 @@
 import React, { useState, useEffect } from "react";
-import {
-  StyleSheet,
-  View,
-  FlatList,
-  Dimensions,
-  ImageBackground,
-  TouchableWithoutFeedback,
-} from "react-native";
-import {
-  Provider as PaperProvider,
-  Text,
-  ActivityIndicator,
-} from "react-native-paper";
-import {
-  createStackNavigator,
-  TransitionPresets,
-} from "@react-navigation/stack";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import {StyleSheet, View, FlatList, Dimensions, ImageBackground, TouchableWithoutFeedback, Image } from "react-native";
+import { Provider as PaperProvider, Text, ActivityIndicator } from "react-native-paper";
+import { createStackNavigator, TransitionPresets } from "@react-navigation/stack";
 
 import { oneRecipe } from "./oneRecipe.js";
 import { SolidButton } from "./buttons/solidButton.js";
@@ -90,14 +75,7 @@ function Recipes({ route, navigation }) {
           <View>
             <Text style={styles.title}>Recipes</Text>
             <EmptyPage
-              image={
-                <MaterialCommunityIcons
-                  style={styles.emptyIcon}
-                  name="camera-outline"
-                  color={green}
-                  size={90}
-                />
-              }
+              image={<Image style={styles.emptyIcon} source={require("../assets/empty-recipes.png")} />}
               title="Snap pics of your fridge."
               text={[
                 "1. Click the camera icon in the navigation bar.",
@@ -139,16 +117,9 @@ function Recipes({ route, navigation }) {
             <View>
               <Text style={styles.title}>Recipes</Text>
               <EmptyPage
-                image={
-                  <MaterialCommunityIcons
-                    style={styles.emptyIcon}
-                    name="camera-outline"
-                    color={red}
-                    size={90}
-                  />
-                }
+                image={<Image style={styles.emptyIcon} source="../assets/error.png" />}
                 title="OH NO"
-                text={[":(("]}
+                text={['Something went wrong. Please try again.']}
               />
             </View>
           </View>
@@ -182,6 +153,7 @@ function Recipes({ route, navigation }) {
                 showsHorizontalScrollIndicator={false}
                 snapToInterval={Dimensions.get("window").width - 52 + 18}
                 snapToAlignment={"center"}
+                decelerationRate={0.8}
                 horizontal={true}
                 scrollEnabled={true}
                 data={recipes}

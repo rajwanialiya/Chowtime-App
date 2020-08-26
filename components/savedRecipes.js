@@ -119,7 +119,7 @@ function savedRecipes({navigation}) {
             <View>
               <Text style={styles.title}>Saved</Text>
               <EmptyPage 
-                image={<MaterialIcons style={styles.emptyIcon} name='favorite-border' color={green} size={100} />} 
+                image={<Image style={styles.emptyIcon} source={require("../assets/empty-faves.png")} />} 
                 title="Save your Favs." 
                 text={[
                   "You haven't added any recipes to your favourites yet. Get started by snapping some pics of the items in your fridge!"
@@ -139,6 +139,7 @@ function savedRecipes({navigation}) {
               showsHorizontalScrollIndicator={false}
               snapToInterval={Dimensions.get('window').width - 52 + 18}
               snapToAlignment={"center"}
+              decelerationRate={0.8}
               horizontal={true}
               scrollEnabled={true}
               data={favs}
