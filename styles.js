@@ -1,12 +1,13 @@
 import { DefaultTheme } from 'react-native-paper'
 
 //App Colours
-export const green='#32CA81'
+export const green='#27B671'
 export const red= '#EC5454'
 export const white= '#FFFFFF'
 export const black='#000000'
 export const grey='#F0F3F4'
 export const darkGrey='#949494'
+export const medGrey = '#b9bcbd'
 
 //Theme
 export const global = {
@@ -14,7 +15,9 @@ export const global = {
   roundness: 10,
   colors: {
     primary: green,
-    background: red,
+    background: white,
+    surface: white,
+    backdrop: white,
     text: black
   },
   fonts: {
@@ -55,7 +58,7 @@ export const subtitle = {
 }
 
 export const text = {
-  color: '#6b8ba9',
+  color: darkGrey,
   fontSize: 14,
   fontFamily: 'Poppins-Regular',
   justifyContent: 'flex-start',
@@ -69,37 +72,35 @@ export const chip = {
   color: darkGrey, 
   borderRadius: 10, 
   paddingHorizontal: 12, 
-  paddingVertical: 8,
-  marginLeft: 8,
+  paddingVertical: 5,
   marginBottom: 8,
   justifyContent: 'center', 
   alignItems: 'center'
-}
+};
 
 export const view = {
   paddingBottom: 0,
   fontFamily: 'Poppins-Regular',
   flex: 1,
-  backgroundColor: white,
+  backgroundColor: white
+};
+
+export const flexView = {
+  flexGrow: 1,
+  justifyContent: 'space-between'
+};
+
+export const spaceBetweenView = {
+  ...view, 
+  justifyContent: 'space-between'
 };
 
 export const padding = {
   paddingHorizontal: 18
 };
 
-export const coloredSection = {
-  backgroundColor: green,
-  color: white,
-  paddingVertical:10, 
-  borderRadius:10,
-  margin:20,
-  fontFamily: 'Poppins-SemiBold',
-  fontSize: 35,
-  justifyContent: 'center',
-  alignItems: 'center',
-  marginBottom: 20,
-  paddingHorizontal: 18
-}
-
+export const lastItem = {
+  marginBottom: 20
+};
 //Small button icons are size={26}
 //Large button icons are size={36}

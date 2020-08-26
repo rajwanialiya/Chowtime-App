@@ -629,7 +629,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
-    backgroundColor: "#32CA81",
+    backgroundColor: green,
     alignItems: "flex-end",
   },
   horizontalStack: {

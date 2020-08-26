@@ -1,72 +1,122 @@
-import React, { useState } from "react";
-import { Provider as PaperProvider } from "react-native-paper";
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, FlatList, Dimensions, ImageBackground, TouchableWithoutFeedback } from 'react-native';
+import { Provider as PaperProvider, Text, ActivityIndicator } from 'react-native-paper';
+import { createStackNavigator, TransitionPresets  } from '@react-navigation/stack';
+import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 
-//Components
-import { createStackNavigator } from "@react-navigation/stack";
-import {
-  StyleSheet,
-  View,
-  FlatList,
-  ScrollView,
-  Dimensions,
-  ImageBackground,
-  TouchableWithoutFeedback,
-} from "react-native";
-import { Text, ActivityIndicator } from "react-native-paper";
-import { oneRecipe } from "../components/oneRecipe";
-import { AsyncStorage } from "react-native";
+import { oneRecipe } from './oneRecipe.js';
+import { SolidButton } from './buttons/solidButton.js';
+import EmptyPage from './empty.js';
 
-//Styles & Theme
-import { global, view, title, subtitle, chip } from "../styles";
+import { apiKey } from '../constants'
+import { global, view, title, subtitle, chip, flexView, green, red, spaceBetweenView } from '../styles'
 
-const apiKey = "b556ab3c2afc492591f1fefb19578bb4";
-
+const Stack = createStackNavigator();
 export function RecipesTab() {
-  const Stack = createStackNavigator();
-
   return (
-    <Stack.Navigator
-      initialRouteName="Recipes"
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Stack.Screen name="Recipes" component={Recipes} />
-      <Stack.Screen name="oneRecipe" component={oneRecipe} />
-    </Stack.Navigator>
+      <Stack.Navigator
+        mode='card'
+        initialRouteName="Recipes"
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen
+          name="Recipes" 
+          component={Recipes}
+          options={{
+            gestureDirection: 'horizontal',
+            ...TransitionPresets.SlideFromRightIOS
+          }}
+        />
+        <Stack.Screen
+          name="oneRecipe" 
+          component={oneRecipe}
+          options={{
+            gestureDirection: 'horizontal',
+            ...TransitionPresets.SlideFromRightIOS
+          }}
+        />
+      </Stack.Navigator>
   );
 }
 
-function Recipes(props) {
-  console.log(props);
+function Recipes({navigation}) {
   const [isLoading, setLoading] = useState(true);
   const [recipes, setRecipes] = useState([]);
+  const [isError, setError] = useState(false);
 
-  const foodItems = ["chicken", "tomato", "apple", "tomato", "apple"]; // REPLACE AFTER
-  const base = "https://api.spoonacular.com/recipes/findByIngredients";
+  const foodItems = ['chicken', 'apple', 'tomato']
+  const base='https://api.spoonacular.com/recipes/findByIngredients'
 
   const url =
     base + "?ingredients=" + foodItems.join(", ") + "&apiKey=" + apiKey;
 
-  if (isLoading) {
-    fetch(url)
-      .then((response) => response.json())
-      .then((json) => setRecipes(json))
-      .catch((error) => console.error("oh no")) //figure out how to display error
-      .finally(() => setLoading(false));
-
-    return (
-      <View style={styles.viewCenter}>
-        <ActivityIndicator color="#32CA81" size="large" />
-      </View>
-    );
-  } else {
+  if (foodItems.length === 0) {
+    useEffect(() => {
+      setLoading(false)
+    } , [])
     return (
       <PaperProvider theme={global}>
-        <View style={styles.view}>
-          <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.spaceBetweenView}>
+          <View>
             <Text style={styles.title}>Recipes</Text>
+            <EmptyPage 
+              image={<MaterialCommunityIcons style={styles.emptyIcon} name='camera-outline' color={green} size={90} />} 
+              title="Snap pics of your fridge." 
+              text={[
+                '1. Click the camera icon in the navigation bar.', 
+                '2. Upload pics of your fridge.',
+                '3. Get cooking!'
+              ]}/>
+          </View>
+          <SolidButton color={green} text="Start Cooking" onPress={() => navigation.navigate('oneRecipe', {item:item})} />
+        </View>
+      </PaperProvider>
+    )
+  } else {
+    if (isLoading) {
+      fetch(url)
+      .then(async (response) => {
+        if (response.ok) {
+          let json = await response.json()
+          setRecipes(json)
+        } else {
+          setError(true)
+        }
+      })
+      .finally(() => setLoading(false));
 
+      return (
+        <View style={styles.viewCenter}>
+          <ActivityIndicator 
+            color={green}
+            size='large'
+          />
+        </View>
+      )
+    } else if (isError) {
+        return (
+          <PaperProvider theme={global}>
+            <View style={styles.spaceBetweenView}>
+              <View>
+                <Text style={styles.title}>Recipes</Text>
+                <EmptyPage 
+                  image={<MaterialCommunityIcons style={styles.emptyIcon} name='camera-outline' color={red} size={90} />} 
+                  title="OH NO" 
+                  text={[
+                    ':(('
+                  ]}/>
+              </View>
+            </View>
+          </PaperProvider>
+        )
+    } else {
+      return (
+        <PaperProvider theme={global}>
+          <View style={styles.view}>
+            <Text style={styles.title}>Recipes</Text>
+        
             {/* Your Ingredients */}
             <Text style={styles.subtitle}>Your Ingredients</Text>
             <FlatList
@@ -75,50 +125,46 @@ function Recipes(props) {
               horizontal={true}
               scrollEnabled={false}
               data={foodItems}
-              renderItem={({ item }) => <Text style={styles.chip}>{item}</Text>}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({item, index}) => (
+                <Text style={styles.chip}>{item}</Text>
+              )}
             />
 
             {/* Recipes */}
             <Text style={styles.subtitle}>Recipes</Text>
-            <View>
+            <View style={styles.flexView}>
               <FlatList
                 contentContainerStyle={styles.recipesContainer}
                 showsHorizontalScrollIndicator={false}
-                decelerationRate={0}
-                snapToInterval={Dimensions.get("window").width - 52 + 18} //el width
+                snapToInterval={Dimensions.get('window').width - 52 + 18}
                 snapToAlignment={"center"}
                 horizontal={true}
                 scrollEnabled={true}
                 data={recipes}
-                keyExtractor={(item, index) => item.id}
-                renderItem={_renderItem}
+                keyExtractor={item => item.id.toString()}
+                renderItem={(item) => _renderItem(item, navigation)}
               />
             </View>
-          </ScrollView>
-        </View>
-      </PaperProvider>
-    );
+          </View>
+        </PaperProvider>
+      )
+    }
   }
 }
 
-function _renderItem({ item, navigation }) {
+function _renderItem({item}, navigation) {
   return (
-    <TouchableWithoutFeedback
-      onPress={() =>
-        navigation.navigate("oneRecipe", { itemId: item.id, apiKey: apiKey })
-      }
-    >
+    <TouchableWithoutFeedback onPress={() => navigation.navigate('oneRecipe', {item:item})}>
       <View style={styles.recipesItem}>
         <ImageBackground
           style={styles.imageBackground}
           source={{ uri: item.image }}
           resizeMode="cover"
         >
-          <View style={styles.overlay} />
-          <Text style={styles.name}>{item.title}</Text>
-          <Text style={[styles.name, styles.ingredientCount]}>
-            Your Ingredients: {item.usedIngredientCount}
-          </Text>
+            <View style={styles.overlay} />
+            <Text style={styles.name}>{item.title}</Text>
+            <Text style={[styles.name, styles.ingredientCount]}>Your Ingredients: {item.usedIngredientCount}</Text>
         </ImageBackground>
       </View>
     </TouchableWithoutFeedback>
@@ -128,24 +174,29 @@ function _renderItem({ item, navigation }) {
 const styles = StyleSheet.create({
   view: {
     ...view,
-  },
+  }, 
   viewCenter: {
     ...view,
-    justifyContent: "center",
+    justifyContent: 'center',
+    alignItems: 'center'
+  }, 
+  flexView: {
+    ...flexView
+  },
+  spaceBetweenView: {
+    ...spaceBetweenView
   },
   title: {
     ...title,
-    marginHorizontal: 16,
-  },
+  }, 
   subtitle: {
     ...subtitle,
-    marginHorizontal: 16,
-  },
+  }, 
   name: {
     ...subtitle,
-    color: "white",
-    margin: 20,
-  },
+    color: 'white',
+    marginVertical: 20
+  }, 
   chip: {
     ...chip,
     marginRight: 8,
@@ -161,15 +212,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   recipesItem: {
-    paddingRight: 18,
-    height: 380,
+    paddingRight:18, 
+    marginBottom: 20
   },
   imageBackground: {
-    height: 360,
-    width: Dimensions.get("window").width - 52,
-    borderRadius: 10,
-    overflow: "hidden",
-    shadowColor: "black",
+    ...flexView,
+    width:Dimensions.get('window').width - 52, 
+    borderRadius: 10, 
+    overflow:'hidden',
+    shadowColor: 'black',
     shadowOpacity: 0.5,
     shadowRadius: 10,
     elevation: 6,
@@ -177,8 +228,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   overlay: {
-    height: 360,
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,

@@ -9,14 +9,15 @@ export function OutlinedButton(props) {
     <Button 
       mode='text'
       color={props.color}
+      onPress={props.onPress}
       uppercase={false}
       labelStyle={{
         fontFamily: 'Poppins-Medium',
         fontSize: 20,
         margin: 0,
-        padding: 4
+        padding: 0
       }}
-      style={[styles.button, styles.padding, {borderColor:props.color}]}
+      style={[styles.button, styles.padding, {borderColor:props.color}, {flex:props.flex}]}
     >
       {props.text}
     </Button>
@@ -31,7 +32,7 @@ const styles = StyleSheet.create({
     minHeight: 36,
     margin: 12,
     marginHorizontal: 18,
-    borderWidth: 2
+    borderWidth: 2,
   },
   padding: {
     ...padding

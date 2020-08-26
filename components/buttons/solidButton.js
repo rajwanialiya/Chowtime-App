@@ -16,9 +16,9 @@ export function SolidButton(props) {
         fontSize: 20,
         color: 'white',
         margin: 0,
-        padding: 4
+        padding: 0
       }}
-      style={[styles.button, styles.padding]}
+      style={[styles.button, styles.padding, {flex:props.flex}]}
     >
       {props.text}
     </Button>
@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     minHeight: 36,
     margin: 12,
     marginHorizontal: 18,
+    borderWidth: 2,
   },
   padding: {
     ...padding
