@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, ScrollView, View, ImageBackground, Dimensions, FlatList, Linking, AsyncStorage, Image } from 'react-native';
 import { Provider as PaperProvider, Text, ActivityIndicator, IconButton, Snackbar } from 'react-native-paper';
-import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons'; 
+import { MaterialIcons } from '@expo/vector-icons'; 
 
 import { apiKey } from '../constants';
 import { global, view, title, subtitle, chip, padding, grey, darkGrey, green, red, spaceBetweenView } from '../styles';
@@ -15,7 +15,7 @@ export function oneRecipe({route, navigation}) {
   const [visible, setVisible] = useState(false);
   const [snackBarText, setSnackBarText] = useState("Added to Favourites");
   const [recipe, setRecipe] = useState([]);
-  const [prevFavs, setPrevFavs] = useState([]);
+  // const [prevFavs, setPrevFavs] = useState([]);
 
   const base='https://api.spoonacular.com/recipes/'
   const { item } = route.params
@@ -41,10 +41,11 @@ export function oneRecipe({route, navigation}) {
   async function getFavs() {
     try {
       const value = await AsyncStorage.getItem('favRecipes');
-      await setPrevFavs(JSON.parse(value))
-      if (allFavs.length === 0 && prevFavs.length > 0) {
+      const prevFavs = await JSON.parse(value)
+      if (allFavs.length === 0 && prevFavs && prevFavs.length > 0) {
         allFavs.push(prevFavs)
       }
+      console.log(allFavs)
     } catch (e) {
       Promise.reject(e)
       fromSavedPage = true
@@ -59,15 +60,16 @@ export function oneRecipe({route, navigation}) {
       setSnackBarText("This recipe is already a favourite!")
     }
 
-    try {
-      await AsyncStorage.setItem('favRecipes', JSON.stringify(allFavs));
-      setVisible(true);
-    } catch (e) {
-      Promise.reject(e)
-      setSnackBarText("Oh no! Something went wrong.")
-      setVisible(true);
-    }
-    getFavs()
+    AsyncStorage.clear('favRecipes')
+    // try {
+    //   await AsyncStorage.setItem('favRecipes', JSON.stringify(allFavs));
+    //   setVisible(true);
+    // } catch (e) {
+    //   Promise.reject(e)
+    //   setSnackBarText("Oh no! Something went wrong.")
+    //   setVisible(true);
+    // }
+    // getFavs()
   }
 
   if (isLoading) {
@@ -101,7 +103,7 @@ export function oneRecipe({route, navigation}) {
                 <IconButton onPress={() => navigation.goBack()} icon='keyboard-backspace' color='white' size={36} style={styles.icon} /> 
               </View>
               <EmptyPage 
-                image={<Image style={styles.emptyIcon} source="../assets/error.png" />} 
+                image={<Image style={styles.emptyImage} source={require("../assets/error.png") }/>} 
                 title="OH NO" 
                 text={[
                   'Something went wrong. Please try again.'
@@ -240,6 +242,11 @@ const styles = StyleSheet.create({
   },
   padding: {
     ...padding
+  },
+  emptyImage: {
+    marginTop: 30,
+    width: 120,
+    height: 120
   },
   row: {
     flexDirection: 'row'

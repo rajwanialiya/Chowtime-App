@@ -55,7 +55,7 @@ function Recipes({ route, navigation }) {
   const [recipes, setRecipes] = useState([]);
   const [isError, setError] = useState(false);
 
-  let foodItems = ["chicken", "apple", "tomato"];
+  let foodItems = ['chicken', 'apple', 'tomato'];
 
   if (route.params && route.params.foodItems) {
     foodItems = route.params.foodItems;
@@ -117,7 +117,7 @@ function Recipes({ route, navigation }) {
             <View>
               <Text style={styles.title}>Recipes</Text>
               <EmptyPage
-                image={<Image style={styles.emptyIcon} source="../assets/error.png" />}
+                image={<Image style={styles.emptyImage} source={require("../assets/error.png" )}/>}
                 title="OH NO"
                 text={['Something went wrong. Please try again.']}
               />
@@ -191,6 +191,11 @@ function _renderItem({ item }, navigation) {
 }
 
 const styles = StyleSheet.create({
+  emptyImage: {
+    marginTop: 30,
+    width: 120,
+    height: 120
+  },
   view: {
     ...view,
   },
