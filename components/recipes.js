@@ -49,9 +49,8 @@ function Recipes({navigation}) {
   const foodItems = ['chicken', 'apple', 'tomato']
   const base='https://api.spoonacular.com/recipes/findByIngredients'
 
-  const url = base 
-    + '?ingredients=' + foodItems.join(", ") 
-    + '&apiKey=' + apiKey 
+  const url =
+    base + "?ingredients=" + foodItems.join(", ") + "&apiKey=" + apiKey;
 
   if (foodItems.length === 0) {
     useEffect(() => {
@@ -121,7 +120,7 @@ function Recipes({navigation}) {
             {/* Your Ingredients */}
             <Text style={styles.subtitle}>Your Ingredients</Text>
             <FlatList
-              contentContainerStyle={{flexWrap:'wrap', flex: 0}}
+              contentContainerStyle={{ flexWrap: "wrap", flex: 0 }}
               style={styles.row}
               horizontal={true}
               scrollEnabled={false}
@@ -160,8 +159,8 @@ function _renderItem({item}, navigation) {
       <View style={styles.recipesItem}>
         <ImageBackground
           style={styles.imageBackground}
-          source={{uri: item.image}}
-          resizeMode='cover'
+          source={{ uri: item.image }}
+          resizeMode="cover"
         >
             <View style={styles.overlay} />
             <Text style={styles.name}>{item.title}</Text>
@@ -169,7 +168,7 @@ function _renderItem({item}, navigation) {
         </ImageBackground>
       </View>
     </TouchableWithoutFeedback>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -200,17 +199,17 @@ const styles = StyleSheet.create({
   }, 
   chip: {
     ...chip,
-    marginRight: 8
-  }, 
+    marginRight: 8,
+  },
   row: {
-    flexDirection: 'column',
+    flexDirection: "column",
     flexGrow: 0,
     marginVertical: 8,
-    marginHorizontal: 16
+    marginHorizontal: 16,
   },
   recipesContainer: {
-    overflow:'scroll',
-    paddingHorizontal:16
+    overflow: "scroll",
+    paddingHorizontal: 16,
   },
   recipesItem: {
     paddingRight:18, 
@@ -225,18 +224,18 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 10,
     elevation: 6,
-    justifyContent:'space-between',
-    paddingBottom: 10
-  }, 
+    justifyContent: "space-between",
+    paddingBottom: 10,
+  },
   overlay: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0,0,0,0.4)'
-  }, 
+    backgroundColor: "rgba(0,0,0,0.4)",
+  },
   ingredientCount: {
-    fontSize: 18
-  }
-})
+    fontSize: 18,
+  },
+});
