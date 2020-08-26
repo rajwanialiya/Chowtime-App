@@ -195,6 +195,7 @@ export function PictureScreen(props) {
         routes: [{ name: "PictureScreen" }],
       });
       props.navigation.navigate("Recipes", {
+        screen: "Recipes",
         params: { foodItems: rawIngredients },
       });
     }
