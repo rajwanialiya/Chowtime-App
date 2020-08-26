@@ -3,7 +3,6 @@ import { StyleSheet, View, FlatList, Dimensions, ImageBackground, AsyncStorage, 
 import { Provider as PaperProvider, Text, Button, ActivityIndicator } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
-import { MaterialIcons } from '@expo/vector-icons'; 
 
 import { oneRecipe } from './oneRecipe.js';
 import EmptyPage  from './empty'; 
@@ -50,24 +49,35 @@ function savedRecipes({navigation}) {
 
   useEffect(() => {
     getFavs()
-  } , [isFocused])
+  }, [isFocused])
+
+  // useEffect(() => { 
+  //   setLoading(false) 
+  //   console.log("local")
+  //   console.log(favs)
+  //   // if (favs.length >= 0) {
+  //   //   setEmpty(true)
+  //   // }
+  // }, [favs]) 
+
 
   async function getFavs() {
+    // setLoading(true)
     try {
       const value = await AsyncStorage.getItem('favRecipes');
-      const parsedValue = JSON.parse(value)
+      const parsedValue = await JSON.parse(value)
       if (parsedValue && parsedValue.length > 0) {
-        await setFavs(parsedValue)
+        setFavs(parsedValue)
         setEmpty(false)
       } else {
         setEmpty(true)
       }
       set(true)
     } catch(e) {
-      setError(true)
+      console.log(e)
+      // setError(true)
     }
     setLoading(false)
-    console.log(favs)
   }
 
   function _renderItem({item}, navigation) {
@@ -93,13 +103,12 @@ function savedRecipes({navigation}) {
     setLoading(true)
     let updatedFavs = []
     favs.forEach((recipe) => {
-      if (recipe.title !== title && !updatedFavs.includes(title)) {
+      if (recipe.title !== title) {
         updatedFavs.push(recipe)
       }
     }) 
     await AsyncStorage.setItem('favRecipes', JSON.stringify(updatedFavs))
-    console.log(updatedFavs)
-    getFavs()
+    setFavs(updatedFavs)
   }
 
   if (isLoading) {
