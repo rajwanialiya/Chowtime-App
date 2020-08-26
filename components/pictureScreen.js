@@ -578,6 +578,7 @@ const styles = StyleSheet.create({
   },
   title: {
     ...title,
+    marginBottom: 0,
   },
   close: {
     backgroundColor: "grey",
@@ -713,7 +714,7 @@ const styles = StyleSheet.create({
   stepView: {
     flexDirection: "row",
     alignItems: "flex-end",
-    paddingBottom: 30,
+    paddingBottom: 15,
     paddingRight: 20,
   },
   scrollableContent: {

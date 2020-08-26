@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, FlatList, Dimensions, ImageBackground, AsyncStorage } from 'react-native';
+import { StyleSheet, View, FlatList, Dimensions, ImageBackground, AsyncStorage, Image } from 'react-native';
 import { Provider as PaperProvider, Text, Button, ActivityIndicator } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';

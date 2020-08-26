@@ -60,3 +60,6 @@ buck-out/
 
 # Expo
 .expo/*
+
+# VsCode
+settings.json
