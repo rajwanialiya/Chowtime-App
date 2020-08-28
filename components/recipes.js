@@ -59,7 +59,10 @@ function Recipes({ route, navigation }) {
   const [foodItems, setFoodItems] = useState([]);
 
   useEffect(() => {
-    setLoading(true);
+    if (foodItems.length === 0){
+      setLoading(true);
+
+    }
      if (route.params && route.params.foodItems) {
       setFoodItems(route.params.foodItems);
       setLoading(true);
@@ -72,9 +75,6 @@ function Recipes({ route, navigation }) {
     base + "?ingredients=" + foodItems.join(", ") + "&apiKey=" + apiKey;
 
   if (foodItems.length === 0) {
-    useEffect(() => {
-      setLoading(false);
-    }, []);
     return (
       <PaperProvider theme={global}>
         <View style={styles.spaceBetweenView}>
