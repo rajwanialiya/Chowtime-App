@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, FlatList, Dimensions, ImageBackground, AsyncStorage, Image } from 'react-native';
+import { StyleSheet, View, FlatList, Dimensions, ImageBackground, AsyncStorage } from 'react-native';
 import { Provider as PaperProvider, Text, Button, ActivityIndicator } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
+import { MaterialIcons } from '@expo/vector-icons'; 
 
 import { oneRecipe } from './oneRecipe.js';
 import EmptyPage  from './empty'; 
@@ -49,35 +50,24 @@ function savedRecipes({navigation}) {
 
   useEffect(() => {
     getFavs()
-  }, [isFocused])
-
-  // useEffect(() => { 
-  //   setLoading(false) 
-  //   console.log("local")
-  //   console.log(favs)
-  //   // if (favs.length >= 0) {
-  //   //   setEmpty(true)
-  //   // }
-  // }, [favs]) 
-
+  } , [isFocused])
 
   async function getFavs() {
-    // setLoading(true)
     try {
       const value = await AsyncStorage.getItem('favRecipes');
-      const parsedValue = await JSON.parse(value)
+      const parsedValue = JSON.parse(value)
       if (parsedValue && parsedValue.length > 0) {
-        setFavs(parsedValue)
+        await setFavs(parsedValue)
         setEmpty(false)
       } else {
         setEmpty(true)
       }
       set(true)
     } catch(e) {
-      console.log(e)
-      // setError(true)
+      setError(true)
     }
     setLoading(false)
+    console.log(favs)
   }
 
   function _renderItem({item}, navigation) {
@@ -103,12 +93,13 @@ function savedRecipes({navigation}) {
     setLoading(true)
     let updatedFavs = []
     favs.forEach((recipe) => {
-      if (recipe.title !== title) {
+      if (recipe.title !== title && !updatedFavs.includes(title)) {
         updatedFavs.push(recipe)
       }
     }) 
     await AsyncStorage.setItem('favRecipes', JSON.stringify(updatedFavs))
-    setFavs(updatedFavs)
+    console.log(updatedFavs)
+    getFavs()
   }
 
   if (isLoading) {
@@ -128,7 +119,7 @@ function savedRecipes({navigation}) {
             <View>
               <Text style={styles.title}>Saved</Text>
               <EmptyPage 
-                image={<Image style={styles.emptyIcon} source={require("../assets/empty-faves.png")} />} 
+                image={<MaterialIcons style={styles.emptyIcon} name='favorite-border' color={green} size={100} />} 
                 title="Save your Favs." 
                 text={[
                   "You haven't added any recipes to your favourites yet. Get started by snapping some pics of the items in your fridge!"
