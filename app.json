@@ -10,6 +10,10 @@
       "package": "com.yourcompany.chowtime",
       "versionCode": 1
     },
+    "splash": {
+      "image": "./assets/splashScreen.png",
+      "resizeMode": "cover"
+    },
     "platforms": ["ios", "android", "web"],
     "assetBundlePatterns": ["**/*"]
   }

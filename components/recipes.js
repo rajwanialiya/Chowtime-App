@@ -55,11 +55,17 @@ function Recipes({ route, navigation }) {
   const [recipes, setRecipes] = useState([]);
   const [isError, setError] = useState(false);
 
-  let foodItems = ['chicken', 'apple', 'tomato'];
+  // let foodItems = ['chicken', 'apple', 'tomato'];
+  const [foodItems, setFoodItems] = useState([]);
 
-  if (route.params && route.params.foodItems) {
-    foodItems = route.params.foodItems;
+  useEffect(() => {
+    setLoading(true);
+     if (route.params && route.params.foodItems) {
+      setFoodItems(route.params.foodItems);
+      setLoading(true);
   }
+  }, [route.params]);
+ 
   const base = "https://api.spoonacular.com/recipes/findByIngredients";
 
   const url =
@@ -87,7 +93,7 @@ function Recipes({ route, navigation }) {
           <SolidButton
             color={green}
             text="Start Cooking"
-            onPress={() => navigation.navigate("oneRecipe", { item: item })}
+            onPress={() => navigation.navigate("Camera")}
           />
         </View>
       </PaperProvider>
