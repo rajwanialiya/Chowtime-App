@@ -55,20 +55,35 @@ function Recipes({ route, navigation }) {
   const [recipes, setRecipes] = useState([]);
   const [isError, setError] = useState(false);
 
-  let foodItems = ['chicken', 'apple', 'tomato'];
+  // let foodItems = ['chicken', 'apple', 'tomato'];
+  const [foodItems, setFoodItems] = useState([]);
 
-  if (route.params && route.params.foodItems) {
-    foodItems = route.params.foodItems;
-  }
+
+  // if (route.params && route.params.foodItems) {
+  //   foodItems = route.params.foodItems;
+  // }
+
+  useEffect(() => {
+    if (foodItems.length === 0)
+      setLoading(false);
+    if (route.params && route.params.foodItems) {
+      setFoodItems(route.params.foodItems);
+      setLoading(true);
+    }
+  }, [route.params])
+
+  // useEffect(() => {
+  //   if(foodItems.length === 0)
+  //     setLoading(false);
+  // }, [foodItems.length]);
+
   const base = "https://api.spoonacular.com/recipes/findByIngredients";
 
   const url =
     base + "?ingredients=" + foodItems.join(", ") + "&apiKey=" + apiKey;
 
   if (foodItems.length === 0) {
-    useEffect(() => {
-      setLoading(false);
-    }, []);
+    
     return (
       <PaperProvider theme={global}>
         <View style={styles.spaceBetweenView}>
@@ -87,7 +102,7 @@ function Recipes({ route, navigation }) {
           <SolidButton
             color={green}
             text="Start Cooking"
-            onPress={() => navigation.navigate("oneRecipe", { item: item })}
+            onPress={() => navigation.navigate("Camera")}
           />
         </View>
       </PaperProvider>

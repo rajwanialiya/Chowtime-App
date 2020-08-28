@@ -74,6 +74,12 @@ export function PictureScreen(props) {
   const [showNext, setShowNext] = useState(false);
   const [loading, setLoading] = useState(true);
   const [rawIngredients, setRawIngredents] = useState([]);
+  const [emptyTitle, setEmptyTitle] = useState("Get Your Recipes.")
+  const [emptyText, setEmptyText] = useState([
+    "1. Take Pictures of your fridge",
+    "2. Confirm the ingredients",
+    "3. Get your suggestions!",
+  ])
 
   let step = "1";
   let title = "Capture";
@@ -244,6 +250,11 @@ export function PictureScreen(props) {
           const newAnnotatedList = [];
           const ingredientList = [];
 
+          setEmptyTitle("No Ingredients Found");
+          setEmptyText([
+            "Aweh, we didn't have any luck. Try adding so more pics"
+          ]
+          );
           for (var i = 0; i < listOfPictures.length; i++) {
             const ingredients = runClarifai(listOfPictures[i].uri);
             ingredientList.push(ingredients);
@@ -539,12 +550,8 @@ export function PictureScreen(props) {
               setWidth="100%"
               setHeight="40%"
               image={<SvgXml xml={EmptyXml} width="100%" height="100%" />}
-              title="Get your recipes."
-              text={[
-                "1. Take Pictures of your fridge",
-                "2. Confirm the ingredients",
-                "3. Get your suggestions!",
-              ]}
+              title={emptyTitle}
+              text={emptyText}
             />
           )}
           <FloatingButton

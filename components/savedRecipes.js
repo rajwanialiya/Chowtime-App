@@ -134,7 +134,7 @@ function savedRecipes({navigation}) {
                   "You haven't added any recipes to your favourites yet. Get started by snapping some pics of the items in your fridge!"
                 ]}/>
             </View>
-            <SolidButton color={green} text="Get Recipes" onPress={() => navigation.navigate('oneRecipe', {item:item})} />
+            <SolidButton color={green} text="Get Recipes" onPress={() => navigation.navigate("Camera")} />
           </View>
         </PaperProvider>
       )
