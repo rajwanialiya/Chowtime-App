@@ -37,5 +37,4 @@ const styles = StyleSheet.create({
   padding: {
     ...padding
   }
-
 })
