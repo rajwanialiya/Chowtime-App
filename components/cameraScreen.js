@@ -10,8 +10,7 @@ import {
 } from "react-native";
 import { Camera } from "expo-camera";
 import { SimpleLineIcons } from "@expo/vector-icons";
-import { view, title, subtitle, chip, coloredSection } from "../styles";
-import { green } from "../styles";
+import { view } from "../styles";
 import { AsyncStorage } from "react-native";
 
 export function CameraScreen({ navigation }) {

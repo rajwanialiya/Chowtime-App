@@ -23,11 +23,6 @@ import {
   coloredSection,
   text,
 } from "../styles";
-import {
-  CommonActions,
-  StackActions,
-  NavigationActions,
-} from "@react-navigation/native";
 import { green, grey, darkGrey } from "../styles";
 import FloatingButton from "./FloatingButton";
 import { Provider as PaperProvider } from "react-native-paper";
@@ -38,6 +33,7 @@ import EmptyIcon from "./empty";
 import { EmptyXml } from "../assets/emptyxml";
 import { SvgXml } from "react-native-svg";
 import LottieView from "lottie-react-native";
+
 const Clarifai = require("clarifai");
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -636,6 +632,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     backgroundColor: green,
     alignItems: "flex-end",
+    marginBottom: 20
   },
   horizontalStack: {
     flexDirection: "row",
