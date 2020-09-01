@@ -5,8 +5,8 @@
 	<key>EXUpdatesReleaseChannel</key>
 	<string>default</string>
 	<key>EXUpdatesSDKVersion</key>
-	<string>37.0.0</string>
+	<string>38.0.0</string>
 	<key>EXUpdatesURL</key>
-	<string>https://exp.host/@jjwilkin/Chowtime</string>
+	<string>https://exp.host/@jjwilkin/ChowTime</string>
 </dict>
 </plist>
