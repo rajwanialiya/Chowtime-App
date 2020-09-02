@@ -82,10 +82,10 @@ function Recipes({ route, navigation }) {
             <Text style={styles.title}>Recipes</Text>
             <EmptyPage
               image={<Image style={styles.emptyIcon} source={require("../assets/empty-recipes.png")} />}
-              title="Snap pics of your fridge."
+              title="Snap fridge pics."
               text={[
-                "1. Click the camera icon in the navigation bar.",
-                "2. Upload pics of your fridge.",
+                "1. Click the button below.",
+                "2. Snap pics of your fridge.",
                 "3. Get cooking!",
               ]}
             />
