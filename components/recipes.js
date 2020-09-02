@@ -1,22 +1,7 @@
 import React, { useState, useEffect } from "react";
-import {
-  StyleSheet,
-  View,
-  FlatList,
-  Dimensions,
-  ImageBackground,
-  TouchableWithoutFeedback,
-} from "react-native";
-import {
-  Provider as PaperProvider,
-  Text,
-  ActivityIndicator,
-} from "react-native-paper";
-import {
-  createStackNavigator,
-  TransitionPresets,
-} from "@react-navigation/stack";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import {StyleSheet, View, FlatList, Dimensions, ImageBackground, TouchableWithoutFeedback, Image } from "react-native";
+import { Provider as PaperProvider, Text, ActivityIndicator } from "react-native-paper";
+import { createStackNavigator, TransitionPresets } from "@react-navigation/stack";
 
 import { oneRecipe } from "./oneRecipe.js";
 import { SolidButton } from "./buttons/solidButton.js";
@@ -70,34 +55,33 @@ function Recipes({ route, navigation }) {
   const [recipes, setRecipes] = useState([]);
   const [isError, setError] = useState(false);
 
-  let foodItems = ["chicken", "apple", "tomato"];
+  // let foodItems = ['chicken', 'apple', 'tomato'];
+  const [foodItems, setFoodItems] = useState([]);
 
-  if (route.params && route.params.foodItems) {
-    foodItems = route.params.foodItems;
+  useEffect(() => {
+    if (foodItems.length === 0){
+      setLoading(true);
+
+    }
+     if (route.params && route.params.foodItems) {
+      setFoodItems(route.params.foodItems);
+      setLoading(true);
   }
+  }, [route.params]);
+ 
   const base = "https://api.spoonacular.com/recipes/findByIngredients";
 
   const url =
     base + "?ingredients=" + foodItems.join(", ") + "&apiKey=" + apiKey;
 
   if (foodItems.length === 0) {
-    useEffect(() => {
-      setLoading(false);
-    }, []);
     return (
       <PaperProvider theme={global}>
         <View style={styles.spaceBetweenView}>
           <View>
             <Text style={styles.title}>Recipes</Text>
             <EmptyPage
-              image={
-                <MaterialCommunityIcons
-                  style={styles.emptyIcon}
-                  name="camera-outline"
-                  color={green}
-                  size={90}
-                />
-              }
+              image={<Image style={styles.emptyIcon} source={require("../assets/empty-recipes.png")} />}
               title="Snap pics of your fridge."
               text={[
                 "1. Click the camera icon in the navigation bar.",
@@ -109,7 +93,7 @@ function Recipes({ route, navigation }) {
           <SolidButton
             color={green}
             text="Start Cooking"
-            onPress={() => navigation.navigate("oneRecipe", { item: item })}
+            onPress={() => navigation.navigate("Camera")}
           />
         </View>
       </PaperProvider>
@@ -139,16 +123,9 @@ function Recipes({ route, navigation }) {
             <View>
               <Text style={styles.title}>Recipes</Text>
               <EmptyPage
-                image={
-                  <MaterialCommunityIcons
-                    style={styles.emptyIcon}
-                    name="camera-outline"
-                    color={red}
-                    size={90}
-                  />
-                }
+                image={<Image style={styles.emptyImage} source={require("../assets/error.png" )}/>}
                 title="OH NO"
-                text={[":(("]}
+                text={['Something went wrong. Please try again.']}
               />
             </View>
           </View>
@@ -182,6 +159,7 @@ function Recipes({ route, navigation }) {
                 showsHorizontalScrollIndicator={false}
                 snapToInterval={Dimensions.get("window").width - 52 + 18}
                 snapToAlignment={"center"}
+                decelerationRate={0.8}
                 horizontal={true}
                 scrollEnabled={true}
                 data={recipes}
@@ -219,6 +197,11 @@ function _renderItem({ item }, navigation) {
 }
 
 const styles = StyleSheet.create({
+  emptyImage: {
+    marginTop: 30,
+    width: 120,
+    height: 120
+  },
   view: {
     ...view,
   },

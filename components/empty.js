@@ -2,7 +2,7 @@ import * as React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { subtitle, text, grey } from '../styles'
 
-export default function EmptyPage (props){
+export default function EmptyPage (props) {
   let width = '100%'
   let height = '60%'
 

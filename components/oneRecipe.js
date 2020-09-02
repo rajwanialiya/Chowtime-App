@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, ScrollView, View, ImageBackground, Dimensions, FlatList, Linking, AsyncStorage } from 'react-native';
 import { Provider as PaperProvider, Text, ActivityIndicator, IconButton, Snackbar } from 'react-native-paper';
-import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons'; 
+import { MaterialIcons } from '@expo/vector-icons';
 
 import { apiKey } from '../constants';
 import { global, view, title, subtitle, chip, padding, grey, darkGrey, green, red, spaceBetweenView } from '../styles';
@@ -101,10 +101,10 @@ export function oneRecipe({route, navigation}) {
                 <IconButton onPress={() => navigation.goBack()} icon='keyboard-backspace' color='white' size={36} style={styles.icon} /> 
               </View>
               <EmptyPage 
-                image={<MaterialCommunityIcons style={styles.emptyIcon} name='camera-outline' color={red} size={90} />} 
+                image={<Image style={styles.emptyImage} source={require("../assets/error.png") }/>} 
                 title="OH NO" 
                 text={[
-                  ':(('
+                  'Something went wrong. Please try again.'
                 ]}/>
             </View>
           </View>

@@ -125,7 +125,7 @@ function savedRecipes({navigation}) {
                   "You haven't added any recipes to your favourites yet. Get started by snapping some pics of the items in your fridge!"
                 ]}/>
             </View>
-            <SolidButton color={green} text="Get Recipes" onPress={() => navigation.navigate('oneRecipe', {item:item})} />
+            <SolidButton color={green} text="Get Recipes" onPress={() => navigation.navigate('Camera')} />
           </View>
         </PaperProvider>
       )
@@ -139,6 +139,7 @@ function savedRecipes({navigation}) {
               showsHorizontalScrollIndicator={false}
               snapToInterval={Dimensions.get('window').width - 52 + 18}
               snapToAlignment={"center"}
+              decelerationRate={0.8}
               horizontal={true}
               scrollEnabled={true}
               data={favs}
