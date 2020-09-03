@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, FlatList, Dimensions, ImageBackground, AsyncStorage } from 'react-native';
+import { StyleSheet, View, FlatList, Dimensions, ImageBackground, AsyncStorage, Image } from 'react-native';
 import { Provider as PaperProvider, Text, Button, ActivityIndicator } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
@@ -119,7 +119,7 @@ function savedRecipes({navigation}) {
             <View>
               <Text style={styles.title}>Saved</Text>
               <EmptyPage 
-                image={<MaterialIcons style={styles.emptyIcon} name='favorite-border' color={green} size={100} />} 
+                image={<Image style={styles.emptyImage} source={require("../assets/empty-faves.png") }/>} 
                 title="Save your Favs." 
                 text={[
                   "You haven't added any recipes to your favourites yet. Get started by snapping some pics of the items in your fridge!"

@@ -19,21 +19,22 @@ export function TabNav() {
   return (
     <NavigationContainer>
       <Tab.Navigator
-        shifting={true}
+        shifting={false}
+        labeled={false}
         initialRouteName="Camera"
         activeColor="#32CA81"
         barStyle={styles.navContainer}
         screenOptions={{
           headerShown: false,
         }}
+        tabBarOptions={{
+          activeTintColor: '#e91e63',
+        }}
       >
         <Tab.Screen
           name="Camera"
           component={CameraScreen}
-          // options={({ route }) => ({
-          //   tabBarVisible: isCameraScreen(route),
 
-          // })}
           options={{
             tabBarLabel: "Camera",
             tabBarIcon: ({ color }) => (
@@ -88,6 +89,13 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     paddingTop: 10,
     paddingBottom: 10,
+    shadowColor: "#000000",
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    shadowOffset: {
+        height: 15,
+        width: 1
+    }
   },
   container: {
     flex: 1,

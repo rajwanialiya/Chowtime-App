@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     height: 0.5 * Dimensions.get('window').height ,
     backgroundColor: grey, 
     paddingVertical: 50, 
-    paddingHorizontal: 25,
+    paddingHorizontal: 15,
     marginVertical: 25,
     marginHorizontal: 18,
     borderRadius: 20,
