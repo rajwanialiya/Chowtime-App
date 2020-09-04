@@ -20,14 +20,12 @@ import {
   createStackNavigator,
   TransitionPresets,
 } from "@react-navigation/stack";
-import { MaterialIcons } from "@expo/vector-icons";
-import { EmptyFaves } from "../assets/empty-faves";
-import { SvgXml } from "react-native-svg";
+
 
 import { oneRecipe } from "./oneRecipe.js";
 import EmptyPage from "./empty";
 import { SolidButton } from "./buttons/solidButton";
-const EmptyFav = require("../assets/empty-fav2.png")
+const EmptyFav = require("../assets/empty-fav.png")
 import {
   global,
   view,

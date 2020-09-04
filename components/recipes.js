@@ -7,9 +7,8 @@ import LottieView from "lottie-react-native";
 import { oneRecipe } from "./oneRecipe.js";
 import { SolidButton } from "./buttons/solidButton.js";
 import EmptyPage from "./empty.js";
-import { EmptyRecipes } from "../assets/empty-recipes";
-import { SvgXml } from "react-native-svg";
-const EmtypPng = require("../assets/empty-recipe2.png")
+
+const EmtypPng = require("../assets/empty-recipe.png")
 import { apiKeys } from "../constants";
 import {
   global,
