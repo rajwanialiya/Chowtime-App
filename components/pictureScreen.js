@@ -540,7 +540,7 @@ export function PictureScreen(props) {
           ) : (
             <EmptyIcon
               setWidth="100%"
-              setHeight="40%"
+              setHeight="55%"
               image={<SvgXml xml={EmptyXml} width="100%" height="100%" />}
               title={emptyTitle}
               text={emptyText}
