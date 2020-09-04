@@ -7,7 +7,9 @@ import LottieView from "lottie-react-native";
 import { oneRecipe } from "./oneRecipe.js";
 import { SolidButton } from "./buttons/solidButton.js";
 import EmptyPage from "./empty.js";
-
+import { EmptyRecipes } from "../assets/empty-recipes";
+import { SvgXml } from "react-native-svg";
+const EmtypPng = require("../assets/empty-recipe2.png")
 import { apiKeys } from "../constants";
 import {
   global,
@@ -137,11 +139,11 @@ function Recipes({ route, navigation }) {
           <View>
             <Text style={styles.title}>Recipes</Text>
             <EmptyPage
-              image={<Image style={styles.emptyIcon} source={require("../assets/empty-recipes.png")} />}
-              title="Snap pics of your fridge."
+              image={<Image style={styles.emptyImage} source={EmtypPng} />}
+              title="Snap fridge pics."
               text={[
-                "1. Click the camera icon in the navigation bar.",
-                "2. Upload pics of your fridge.",
+                "1. Click the button below.",
+                "2. Snap pics of your fridge.",
                 "3. Get cooking!",
               ]}
             />
@@ -252,9 +254,11 @@ function _renderItem({ item }, navigation) {
 
 const styles = StyleSheet.create({
   emptyImage: {
-    marginTop: 30,
-    width: 120,
-    height: 120
+    marginTop: 0,
+    resizeMode:'contain',
+    padding:10,
+    width:'80%',
+    height: '70%'
   },
   view: {
     ...view,

@@ -285,9 +285,11 @@ export function oneRecipe({route, navigation}) {
 
 const styles = StyleSheet.create({
   emptyImage: {
-    marginTop: 30,
-    width: 120,
-    height: 120
+    marginTop: 0,
+    resizeMode:'contain',
+    padding:10,
+    width:'80%',
+    height: '70%'
   },
   view: {
     ...view
