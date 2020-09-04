@@ -9,7 +9,7 @@ import { SolidButton } from "./buttons/solidButton.js";
 import EmptyPage from "./empty.js";
 
 const EmtypPng = require("../assets/empty-recipe.png")
-import { apiKeys } from "../constants";
+import { apiKeys } from "../config/constants";
 import {
   global,
   view,
@@ -59,7 +59,6 @@ function Recipes({ route, navigation }) {
   const [recipes, setRecipes] = useState([]);
   const [isError, setError] = useState(false);
   const [doneCheckingKeys, setDoneCheckingKeys] = useState(false);
-  const [imageDoneLoading, setImageLoading] = useState(false)
   const [foodItems, setFoodItems] = useState([]);
   // let foodItems = []
   let success = false;
@@ -156,7 +155,7 @@ function Recipes({ route, navigation }) {
       </PaperProvider>
     );
   } else {
-    if (isLoading && imageDoneLoading) {
+    if (isLoading) {
       
 
       return (
@@ -234,7 +233,6 @@ function Recipes({ route, navigation }) {
       >
         <View style={styles.recipesItem}>
           <ImageBackground
-            onLoad={() => setImageLoading(true)}
             style={styles.imageBackground}
             source={{ uri: item.image }}
             resizeMode="cover"

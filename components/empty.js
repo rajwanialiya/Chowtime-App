@@ -69,7 +69,6 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     ...subtitle,
-    paddingVertical: 15,
   },
   image: {
     justifyContent: "center",
