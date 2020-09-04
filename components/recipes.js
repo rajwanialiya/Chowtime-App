@@ -1,14 +1,29 @@
 import React, { useState, useEffect } from "react";
-import {StyleSheet, View, FlatList, Dimensions, ImageBackground, TouchableWithoutFeedback, Image } from "react-native";
-import { Provider as PaperProvider, Text, ActivityIndicator } from "react-native-paper";
-import { createStackNavigator, TransitionPresets } from "@react-navigation/stack";
+import {
+  StyleSheet,
+  View,
+  FlatList,
+  Dimensions,
+  ImageBackground,
+  TouchableWithoutFeedback,
+  Image,
+} from "react-native";
+import {
+  Provider as PaperProvider,
+  Text,
+  ActivityIndicator,
+} from "react-native-paper";
+import {
+  createStackNavigator,
+  TransitionPresets,
+} from "@react-navigation/stack";
 import LottieView from "lottie-react-native";
 
 import { oneRecipe } from "./oneRecipe.js";
 import { SolidButton } from "./buttons/solidButton.js";
 import EmptyPage from "./empty.js";
 
-const EmtypPng = require("../assets/empty-recipe.png")
+const EmtypPng = require("../assets/empty-recipe.png");
 import { apiKeys } from "../config/constants";
 import {
   global,
@@ -63,72 +78,62 @@ function Recipes({ route, navigation }) {
   // let foodItems = []
   let success = false;
   useEffect(() => {
-    
-    if (foodItems.length === 0){
+    if (foodItems.length === 0) {
       setLoading(true);
-
     }
-     if (route.params && route.params.foodItems) {
+    if (route.params && route.params.foodItems) {
       setFoodItems(route.params.foodItems);
-      let currentFoodItems = route.params.foodItems
-      
+      let currentFoodItems = route.params.foodItems;
+
       setLoading(true);
-       let baseUrl =
-    base + "?ingredients=" + currentFoodItems.join(", ") + "&apiKey=";
+      let baseUrl =
+        base + "?ingredients=" + currentFoodItems.join(", ") + "&apiKey=";
       getRecipes(baseUrl);
-      
-  }
+    }
   }, [route.params]);
- 
+
   const base = "https://api.spoonacular.com/recipes/findByIngredients";
 
   let index = 0;
-  
 
-    const getRecipes =  (url) => {
-      if (doneCheckingKeys) return
-      fetch(url + apiKeys[index])
+  const getRecipes = (url) => {
+    if (doneCheckingKeys) return;
+    fetch(url + apiKeys[index])
       .then(async (response) => {
         // setDoneCheckingKeys(false)
         if (response.ok) {
-          console.log('this worked')
-          const json = await response.json()
-          success = true
-          setRecipes(json)
+          console.log("this worked");
+          const json = await response.json();
+          success = true;
+          setRecipes(json);
           // setLoading(false);
-          setError(false)
-  
+          setError(false);
         } else {
-          index++
-         
-            if (!index < apiKeys.length){
-              setError(true)
-            }
-     
+          index++;
+
+          if (!index < apiKeys.length) {
+            setError(true);
+          }
         }
       })
-      .finally(() =>{        
-          if (success) {
-            setLoading(false)
-            setDoneCheckingKeys(true)
-            console.log('done')
+      .finally(() => {
+        if (success) {
+          setLoading(false);
+          setDoneCheckingKeys(true);
+          console.log("done");
+        } else {
+          console.log("not done");
+          console.log("this is index now: " + index);
+          if (index < apiKeys.length) {
+            getRecipes(url);
+          } else {
+            setLoading(false);
+            setDoneCheckingKeys(true);
           }
-          else {
-            console.log('not done')
-            console.log('this is index now: ' + index)
-            if (index < apiKeys.length){
-              
-              getRecipes(url);
-            }
-            else{
-              setLoading(false)
-              setDoneCheckingKeys(true)
-            }
-            
-          }
+        }
         // }
-      } );
-    }
+      });
+  };
 
   if (foodItems.length === 0) {
     return (
@@ -156,30 +161,35 @@ function Recipes({ route, navigation }) {
     );
   } else {
     if (isLoading) {
-      
-
       return (
         <View style={styles.viewCenter}>
-       <LottieView
-            style={{ width: windowWidth*0.75, height: windowWidth*0.75,}}
+          <LottieView
+            style={{ width: windowWidth * 0.75, height: windowWidth * 0.75 }}
             resizeMode="cover"
             source={require("./loading2.json")}
             autoPlay
             loop
           />
-          <Text style={[styles.subtitle, { marginVertical:40}]}>Loading Recipes</Text>
-      </View>
+          <Text style={[styles.subtitle, { marginVertical: 40 }]}>
+            Loading Recipes
+          </Text>
+        </View>
       );
-    } else if (isError ) {
+    } else if (isError) {
       return (
         <PaperProvider theme={global}>
           <View style={styles.spaceBetweenView}>
             <View>
               <Text style={styles.title}>Recipes</Text>
               <EmptyPage
-                image={<Image style={styles.emptyImage} source={require("../assets/error.png" )}/>}
+                image={
+                  <Image
+                    style={styles.emptyImage}
+                    source={require("../assets/error.png")}
+                  />
+                }
                 title="OH NO"
-                text={['Something went wrong. Please try again.']}
+                text={["Something went wrong. Please try again."]}
               />
             </View>
           </View>
@@ -247,18 +257,15 @@ function Recipes({ route, navigation }) {
       </TouchableWithoutFeedback>
     );
   }
-
 }
-
-
 
 const styles = StyleSheet.create({
   emptyImage: {
     marginTop: 0,
-    resizeMode:'contain',
-    padding:10,
-    width:'80%',
-    height: '70%'
+    resizeMode: "contain",
+    padding: 10,
+    width: "80%",
+    height: "70%",
   },
   view: {
     ...view,
