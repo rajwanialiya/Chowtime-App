@@ -1,5 +1,5 @@
 # Chowtime-App
-## React Native Application using Tensorflow Lite 
+## React Native Application 
 - Using a custom trained food-recognition model identifies ingredients in a user's fridge
 - Suggests possible recipes
 - Save favorite recipes
