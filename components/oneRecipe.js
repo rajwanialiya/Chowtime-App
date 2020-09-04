@@ -3,7 +3,7 @@ import { StyleSheet, ScrollView, View, ImageBackground, Dimensions, FlatList, Li
 import { Provider as PaperProvider, Text, ActivityIndicator, IconButton, Snackbar } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons';
 
-import { apiKey } from '../constants';
+import { apiKey } from '../config/constants';
 import { global, view, title, subtitle, chip, padding, grey, darkGrey, green, red, spaceBetweenView } from '../styles';
 import { SolidButton } from './buttons/solidButton';
 import EmptyPage from './empty';

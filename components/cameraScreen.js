@@ -28,6 +28,7 @@ export function CameraScreen({ navigation }) {
       setHasPermission(status === "granted");
     })();
   }, []);
+  
   takePicture = async () => {
     if (this.camera) {
       await this.camera.takePictureAsync({
@@ -49,6 +50,7 @@ export function CameraScreen({ navigation }) {
     }
     return result;
   }
+  
   onPictureSaved = async (photo) => {
     console.log(photo);
 

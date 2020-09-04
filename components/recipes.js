@@ -7,7 +7,7 @@ import { oneRecipe } from "./oneRecipe.js";
 import { SolidButton } from "./buttons/solidButton.js";
 import EmptyPage from "./empty.js";
 
-import { apiKey } from "../constants";
+import { apiKey } from "../config/constants";
 import {
   global,
   view,
@@ -54,8 +54,6 @@ function Recipes({ route, navigation }) {
   const [isLoading, setLoading] = useState(true);
   const [recipes, setRecipes] = useState([]);
   const [isError, setError] = useState(false);
-
-  // let foodItems = ['chicken', 'apple', 'tomato'];
   const [foodItems, setFoodItems] = useState([]);
 
   useEffect(() => {

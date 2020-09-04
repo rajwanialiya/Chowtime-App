@@ -33,16 +33,24 @@ import EmptyIcon from "./empty";
 import { EmptyXml } from "../assets/emptyxml";
 import { SvgXml } from "react-native-svg";
 import LottieView from "lottie-react-native";
+import Environment from "../config/environment";
+import * as firebase from "firebase";
+import { v4 as uuidv4 } from 'uuid';
 
 const Clarifai = require("clarifai");
-const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
+
+firebase.initializeApp({
+  apiKey: Environment["FIREBASE_API_KEY"],
+  // authDomain: Environment["FIREBASE_AUTH_DOMAIN"],
+  databaseURL: Environment["FIREBASE_DATABASE_URL"],
+  projectId: Environment["FIREBASE_PROJECT_ID"],
+  storageBucket: Environment["FIREBASE_STORAGE_BUCKET"],
+  // messagingSenderId: Environment["FIREBASE_MESSAGING_SENDER_ID"]
+});
 
 export function PictureScreen(props) {
   const app = new Clarifai.App({ apiKey: "e6e934d8af0c4b42ae3b67827cf5fc15" });
-
-  const intialList = [];
-
   const DATA = [
     {
       id: "bd7ac",
@@ -60,7 +68,6 @@ export function PictureScreen(props) {
       quantity: 1,
     },
   ];
-  const [image, setImage] = useState("");
   const [pictureList, setPictureList] = useState([]);
   const [ingredients, setIngredients] = useState([]);
   const [subtitle, setSubtitle] = useState("Images");
@@ -117,6 +124,34 @@ export function PictureScreen(props) {
     console.log(ingredients);
     return ingredients;
   };
+
+  const pics = async (uri) => {
+    console.log("hello")
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function() {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function(e) {
+        console.log(e);
+        reject(new TypeError('Network request failed'));
+      };
+      xhr.responseType = 'blob';
+      xhr.open('GET', uri, true);
+      xhr.send(null);
+    });
+  
+    const ref = firebase
+      .storage()
+      .ref()
+      .child(uuidv4());
+    const snapshot = await ref.put(blob);
+    console.log(ref)
+  
+    blob.close();
+  
+    return await snapshot.ref.getDownloadURL();
+  }
 
   const removeImage = async (id) => {
     const newList = pictureList.filter((picture) => picture.id != id);
@@ -252,6 +287,7 @@ export function PictureScreen(props) {
           );
           for (var i = 0; i < listOfPictures.length; i++) {
             const ingredients = runClarifai(listOfPictures[i].uri);
+            const moreIngredients = pics(listOfPictures[i].uri)
             ingredientList.push(ingredients);
           }
           console.log("Starting to wait");
@@ -306,6 +342,7 @@ export function PictureScreen(props) {
       console.log("WE DON't HAVE DATA");
     }
   };
+
   return (
     <PaperProvider theme={global}>
       <View style={styles.view}>
