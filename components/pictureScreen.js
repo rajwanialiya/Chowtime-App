@@ -1,29 +1,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import {
-  Image,
-  View,
-  StyleSheet,
-  Dimensions,
-  Text,
-  TouchableWithoutFeedback,
-  FlatList,
-  TouchableOpacity,
-  BackHandler,
-  ToastAndroid,
-  AsyncStorage,
-  setParams,
-} from "react-native";
-import {
-  global,
-  view,
-  title,
-  subtitle,
-  chip,
-  coloredSection,
-  text,
-} from "../styles";
-import { green, grey, darkGrey } from "../styles";
+import { Image, View, StyleSheet, Dimensions, Text, TouchableWithoutFeedback, FlatList, TouchableOpacity, BackHandler, ToastAndroid, AsyncStorage, setParams } from "react-native";
+import { global, view, title, subtitle, chip, coloredSection, text, green, grey, darkGrey  } from "../styles";
 import FloatingButton from "./FloatingButton";
 import { Provider as PaperProvider } from "react-native-paper";
 import { ScrollView } from "react-native-gesture-handler";
@@ -42,11 +20,11 @@ const windowHeight = Dimensions.get("window").height;
 
 firebase.initializeApp({
   apiKey: Environment["FIREBASE_API_KEY"],
-  // authDomain: Environment["FIREBASE_AUTH_DOMAIN"],
+  authDomain: Environment["FIREBASE_AUTH_DOMAIN"],
   databaseURL: Environment["FIREBASE_DATABASE_URL"],
   projectId: Environment["FIREBASE_PROJECT_ID"],
   storageBucket: Environment["FIREBASE_STORAGE_BUCKET"],
-  // messagingSenderId: Environment["FIREBASE_MESSAGING_SENDER_ID"]
+  messagingSenderId: Environment["FIREBASE_MESSAGING_SENDER_ID"]
 });
 
 export function PictureScreen(props) {
