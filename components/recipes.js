@@ -82,7 +82,7 @@ function Recipes({ route, navigation }) {
  
   const base = "https://api.spoonacular.com/recipes/findByIngredients";
 
-  let index = 2;
+  let index = 0;
   
 
     const getRecipes =  (url) => {
