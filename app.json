@@ -16,7 +16,7 @@
       }
     },
     "splash": {
-      "image": "./assets/splashScreen.png",
+      "image": "./assets/splashScreen2.png",
       "resizeMode": "cover"
     },
     "platforms": ["ios", "android", "web"],

@@ -59,7 +59,7 @@ function Recipes({ route, navigation }) {
   const [recipes, setRecipes] = useState([]);
   const [isError, setError] = useState(false);
   const [doneCheckingKeys, setDoneCheckingKeys] = useState(false);
-  // let foodItems = ['chicken', 'apple', 'tomato'];
+  const [imageDoneLoading, setImageLoading] = useState(false)
   const [foodItems, setFoodItems] = useState([]);
   // let foodItems = []
   let success = false;
@@ -156,7 +156,7 @@ function Recipes({ route, navigation }) {
       </PaperProvider>
     );
   } else {
-    if (isLoading) {
+    if (isLoading && imageDoneLoading) {
       
 
       return (
@@ -227,29 +227,32 @@ function Recipes({ route, navigation }) {
       );
     }
   }
+  function _renderItem({ item }, navigation) {
+    return (
+      <TouchableWithoutFeedback
+        onPress={() => navigation.navigate("oneRecipe", { item: item })}
+      >
+        <View style={styles.recipesItem}>
+          <ImageBackground
+            onLoad={() => setImageLoading(true)}
+            style={styles.imageBackground}
+            source={{ uri: item.image }}
+            resizeMode="cover"
+          >
+            <View style={styles.overlay} />
+            <Text style={styles.name}>{item.title}</Text>
+            <Text style={[styles.name, styles.ingredientCount]}>
+              Your Ingredients: {item.usedIngredientCount}
+            </Text>
+          </ImageBackground>
+        </View>
+      </TouchableWithoutFeedback>
+    );
+  }
+
 }
 
-function _renderItem({ item }, navigation) {
-  return (
-    <TouchableWithoutFeedback
-      onPress={() => navigation.navigate("oneRecipe", { item: item })}
-    >
-      <View style={styles.recipesItem}>
-        <ImageBackground
-          style={styles.imageBackground}
-          source={{ uri: item.image }}
-          resizeMode="cover"
-        >
-          <View style={styles.overlay} />
-          <Text style={styles.name}>{item.title}</Text>
-          <Text style={[styles.name, styles.ingredientCount]}>
-            Your Ingredients: {item.usedIngredientCount}
-          </Text>
-        </ImageBackground>
-      </View>
-    </TouchableWithoutFeedback>
-  );
-}
+
 
 const styles = StyleSheet.create({
   emptyImage: {

@@ -18,6 +18,7 @@ export function oneRecipe({route, navigation}) {
   const [visible, setVisible] = useState(false);
   const [snackBarText, setSnackBarText] = useState("Added to Favourites");
   const [recipe, setRecipe] = useState([]);
+  const [imageDoneLoading, setImageLoading] = useState(false)
   // const [prevFavs, setPrevFavs] = useState([]);
   const [favs, setFavs] = useState([]);
 
@@ -148,7 +149,7 @@ export function oneRecipe({route, navigation}) {
   }
 
 
-  if (isLoading) {
+  if (isLoading && !imageDoneLoading) {
 
     return (
       <View style={styles.viewCenter}>
@@ -173,7 +174,7 @@ export function oneRecipe({route, navigation}) {
                 <IconButton onPress={() => navigation.goBack()} icon='keyboard-backspace' color='white' size={36} style={styles.icon} /> 
               </View>
               <EmptyPage
-                image={<Image style={styles.emptyImage} source={require("../assets/error.png" )}/>}
+                image={<Image onLoad={() => setImageLoading(true)} style={styles.emptyImage} source={require("../assets/error.png" )}/>}
                 title="OH NO"
                 text={['Something went wrong. Please try again.']}
               />
