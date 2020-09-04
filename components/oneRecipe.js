@@ -3,14 +3,13 @@ import { StyleSheet, ScrollView, View, ImageBackground, BackHandler, Dimensions,
 import { Provider as PaperProvider, Text, ActivityIndicator, IconButton, Snackbar } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons';
 import LottieView from "lottie-react-native";
-import { apiKeys } from '../constants';
+import { apiKeys } from '../config/constants';
 import { global, view, title, subtitle, chip, padding, grey, darkGrey, green, red, spaceBetweenView } from '../styles';
 import { SolidButton } from './buttons/solidButton';
 import EmptyPage from './empty';
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
-// let allFavs = []
 export function oneRecipe({route, navigation}) {
   const [isLoading, setLoading] = useState(true);
   const [doneCheckingKeys, setDoneCheckingKeys] = useState(false);
@@ -18,7 +17,6 @@ export function oneRecipe({route, navigation}) {
   const [visible, setVisible] = useState(false);
   const [snackBarText, setSnackBarText] = useState("Added to Favourites");
   const [recipe, setRecipe] = useState([]);
-  // const [prevFavs, setPrevFavs] = useState([]);
   const [favs, setFavs] = useState([]);
 
   const base='https://api.spoonacular.com/recipes/'
@@ -26,10 +24,6 @@ export function oneRecipe({route, navigation}) {
   let fromSavedPage = route.params.fromSavedPage 
 
   let index = 0
-    // AsyncStorage.getItem('apiKeyIndex').then((value) =>{
-    //   console.log(value)
-    //   index = parseInt(value)
-    //   })
     let success = false;
 
   const url = base 
@@ -106,13 +100,11 @@ export function oneRecipe({route, navigation}) {
     if (doneCheckingKeys) return
     fetch(url + apiKeys[index])
     .then(async (response) => {
-      // setDoneCheckingKeys(false)
       if (response.ok) {
         console.log('this worked')
         const json = await response.json()
         success = true
         setRecipe(json)
-        // setLoading(false);
         setError(false)
 
       } else {
@@ -143,7 +135,6 @@ export function oneRecipe({route, navigation}) {
           }
           
         }
-      // }
     } );
   }
 

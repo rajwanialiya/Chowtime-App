@@ -9,7 +9,7 @@ import { SolidButton } from "./buttons/solidButton.js";
 import EmptyPage from "./empty.js";
 
 const EmtypPng = require("../assets/empty-recipe.png")
-import { apiKeys } from "../constants";
+import { apiKeys } from "../config/constants";
 import {
   global,
   view,
