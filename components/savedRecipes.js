@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, FlatList, Dimensions, ImageBackground, AsyncStorage } from 'react-native';
+import { StyleSheet, View, FlatList, Dimensions, ImageBackground, AsyncStorage, BackHandler } from 'react-native';
 import { Provider as PaperProvider, Text, Button, ActivityIndicator } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
@@ -49,7 +49,11 @@ function savedRecipes({navigation}) {
   const isFocused = useIsFocused()
 
   useEffect(() => {
-    getFavs()
+    getFavs();
+    BackHandler.addEventListener("hardwareBackPress", () => {
+      navigation.goBack();
+      return true;
+    });
   } , [isFocused])
 
   async function getFavs() {
@@ -63,11 +67,16 @@ function savedRecipes({navigation}) {
         setEmpty(true)
       }
       set(true)
+
+      console.log('this is current status of favs')
+      parsedValue.forEach((recipe) => {
+        console.log(recipe.title)
+      })
     } catch(e) {
       setError(true)
     }
     setLoading(false)
-    console.log(favs)
+    // console.log(favs)
   }
 
   function _renderItem({item}, navigation) {
@@ -93,13 +102,24 @@ function savedRecipes({navigation}) {
     setLoading(true)
     let updatedFavs = []
     favs.forEach((recipe) => {
-      if (recipe.title !== title && !updatedFavs.includes(title)) {
+      if (recipe.title !== title ) {
         updatedFavs.push(recipe)
       }
     }) 
+
+    console.log('filtered list')
+    updatedFavs.forEach((recipe) => {
+      console.log(recipe.title)
+    })
     await AsyncStorage.setItem('favRecipes', JSON.stringify(updatedFavs))
-    console.log(updatedFavs)
-    getFavs()
+    
+    await getFavs()
+
+    // const newList = favs.filter((recipe) => recipe.title != title);
+    // console.log(newList);
+    
+    // await AsyncStorage.setItem("favRecipes", JSON.stringify(newList));
+    // getFavs();
   }
 
   if (isLoading) {

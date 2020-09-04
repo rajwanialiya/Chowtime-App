@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import {StyleSheet, View, FlatList, Dimensions, ImageBackground, TouchableWithoutFeedback, Image } from "react-native";
 import { Provider as PaperProvider, Text, ActivityIndicator } from "react-native-paper";
 import { createStackNavigator, TransitionPresets } from "@react-navigation/stack";
+import LottieView from "lottie-react-native";
 
 import { oneRecipe } from "./oneRecipe.js";
 import { SolidButton } from "./buttons/solidButton.js";
 import EmptyPage from "./empty.js";
 
-import { apiKey } from "../constants";
+import { apiKeys } from "../constants";
 import {
   global,
   view,
@@ -19,6 +20,8 @@ import {
   red,
   spaceBetweenView,
 } from "../styles";
+const windowHeight = Dimensions.get("window").height;
+const windowWidth = Dimensions.get("window").width;
 
 const Stack = createStackNavigator();
 export function RecipesTab() {
@@ -54,25 +57,78 @@ function Recipes({ route, navigation }) {
   const [isLoading, setLoading] = useState(true);
   const [recipes, setRecipes] = useState([]);
   const [isError, setError] = useState(false);
-
+  const [doneCheckingKeys, setDoneCheckingKeys] = useState(false);
   // let foodItems = ['chicken', 'apple', 'tomato'];
   const [foodItems, setFoodItems] = useState([]);
-
+  // let foodItems = []
+  let success = false;
   useEffect(() => {
+    
     if (foodItems.length === 0){
       setLoading(true);
 
     }
      if (route.params && route.params.foodItems) {
       setFoodItems(route.params.foodItems);
+      let currentFoodItems = route.params.foodItems
+      
       setLoading(true);
+       let baseUrl =
+    base + "?ingredients=" + currentFoodItems.join(", ") + "&apiKey=";
+      getRecipes(baseUrl);
+      
   }
   }, [route.params]);
  
   const base = "https://api.spoonacular.com/recipes/findByIngredients";
 
-  const url =
-    base + "?ingredients=" + foodItems.join(", ") + "&apiKey=" + apiKey;
+  let index = 2;
+  
+
+    const getRecipes =  (url) => {
+      if (doneCheckingKeys) return
+      fetch(url + apiKeys[index])
+      .then(async (response) => {
+        // setDoneCheckingKeys(false)
+        if (response.ok) {
+          console.log('this worked')
+          const json = await response.json()
+          success = true
+          setRecipes(json)
+          // setLoading(false);
+          setError(false)
+  
+        } else {
+          index++
+         
+            if (!index < apiKeys.length){
+              setError(true)
+            }
+     
+        }
+      })
+      .finally(() =>{        
+          if (success) {
+            setLoading(false)
+            setDoneCheckingKeys(true)
+            console.log('done')
+          }
+          else {
+            console.log('not done')
+            console.log('this is index now: ' + index)
+            if (index < apiKeys.length){
+              
+              getRecipes(url);
+            }
+            else{
+              setLoading(false)
+              setDoneCheckingKeys(true)
+            }
+            
+          }
+        // }
+      } );
+    }
 
   if (foodItems.length === 0) {
     return (
@@ -100,23 +156,21 @@ function Recipes({ route, navigation }) {
     );
   } else {
     if (isLoading) {
-      fetch(url)
-        .then(async (response) => {
-          if (response.ok) {
-            let json = await response.json();
-            setRecipes(json);
-          } else {
-            setError(true);
-          }
-        })
-        .finally(() => setLoading(false));
+      
 
       return (
         <View style={styles.viewCenter}>
-          <ActivityIndicator color={green} size="large" />
-        </View>
+       <LottieView
+            style={{ width: windowWidth*0.75, height: windowWidth*0.75,}}
+            resizeMode="cover"
+            source={require("./loading2.json")}
+            autoPlay
+            loop
+          />
+          <Text style={[styles.subtitle, { marginVertical:40}]}>Loading Recipes</Text>
+      </View>
       );
-    } else if (isError) {
+    } else if (isError ) {
       return (
         <PaperProvider theme={global}>
           <View style={styles.spaceBetweenView}>
