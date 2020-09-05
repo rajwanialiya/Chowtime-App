@@ -11,6 +11,7 @@ import EmptyIcon from "./empty";
 import { EmptyXml } from "../assets/emptyxml";
 import { SvgXml } from "react-native-svg";
 import LottieView from "lottie-react-native";
+
 import Environment from "../config/environment";
 import * as firebase from "firebase";
 import { v4 as uuidv4 } from 'uuid';
@@ -84,7 +85,6 @@ export function PictureScreen(props) {
   }, []);
 
   const runClarifai = async (img) => {
-    console.log("starting clarifai");
     const base64Img = await FileSystem.readAsStringAsync(img, {
       encoding: FileSystem.EncodingType.Base64,
     });
@@ -99,12 +99,10 @@ export function PictureScreen(props) {
         ingredients.push(fullList[i].name);
       }
     }
-    console.log(ingredients);
     return ingredients;
   };
 
-  const pics = async (uri) => {
-    console.log("hello")
+  const getFirebaseUrl = async (uri) => {
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.onload = function() {
@@ -123,17 +121,73 @@ export function PictureScreen(props) {
       .storage()
       .ref()
       .child(uuidv4());
-    const snapshot = await ref.put(blob);
-    console.log(ref)
-  
-    blob.close();
-  
-    return await snapshot.ref.getDownloadURL();
-  }
+    
+    ref.put(blob)
+    .then(snapshot => {
+      return snapshot.ref.getDownloadURL();   // Will return a promise with the download link
+    })
+    .then(downloadURL => {
+      extractText(downloadURL)
+    })
+  };
+
+  const extractText = async (uri) => {
+    try {
+      const body = JSON.stringify({
+        requests: [{
+            features: [{ 
+                type: "TEXT_DETECTION", 
+                maxResults: 1
+            }],
+            image: {
+              source: {
+                imageUri: uri
+              }
+            }
+        }]
+      });
+      let response = await fetch (
+        "https://vision.googleapis.com/v1/images:annotate?key=" +
+          Environment["GOOGLE_CLOUD_VISION_API_KEY"],
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          },
+          method: "POST",
+          body: body
+        }
+      );
+      let responseJson = await response.json();
+      let extractedText = responseJson.responses[0].textAnnotations[0].description
+      analyzeText(extractedText)
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const analyzeText = async (text) => {
+    const GoogleNLP = require('@google-cloud/language');
+    const client = new GoogleNLP.LanguageServiceClient();
+    const document = {
+      content: text,
+      type: 'PLAIN_TEXT',
+    };
+    
+    const encodingType = 'UTF8';
+    
+    const [syntax] = await client.analyzeSyntax({document, encodingType});
+    
+    console.log('Tokens:');
+    syntax.tokens.forEach(part => {
+      console.log(`${part.partOfSpeech.tag}: ${part.text.content}`);
+      console.log('Morphology:', part.partOfSpeech);
+    });
+  };
 
   const removeImage = async (id) => {
     const newList = pictureList.filter((picture) => picture.id != id);
-    console.log(newList);
+    // console.log(newList);
     if (newList.length > 0) setShowNext(true);
     else setShowNext(false);
     setPictureList(newList);
@@ -159,7 +213,7 @@ export function PictureScreen(props) {
     });
     if (!newAnnotatedImages.length > 0) setShowNext(false);
     setAnnotatedImages(newAnnotatedImages);
-    console.log(newAnnotatedImages);
+    // console.log(newAnnotatedImages);
   };
 
   const updateQuantity = async (id, increment) => {
@@ -196,8 +250,8 @@ export function PictureScreen(props) {
             ingredientList.push(ingredients[j]);
         }
       }
-      console.log("COMBINE LIST LOOK");
-      console.log(ingredientList);
+      // console.log("COMBINE LIST LOOK");
+      // console.log(ingredientList);
       props.navigation.push("PictureScreen", {
         step: "3",
         ingredientList: ingredientList,
@@ -265,12 +319,12 @@ export function PictureScreen(props) {
           );
           for (var i = 0; i < listOfPictures.length; i++) {
             const ingredients = runClarifai(listOfPictures[i].uri);
-            const moreIngredients = pics(listOfPictures[i].uri)
+            const moreIngredients = getFirebaseUrl(listOfPictures[i].uri)
             ingredientList.push(ingredients);
           }
-          console.log("Starting to wait");
+          // console.log("Starting to wait");
           await Promise.all(ingredientList);
-          console.log("done waiting");
+          // console.log("done waiting");
           for (var i = 0; i < listOfPictures.length; i++) {
             const ingredients = ingredientList[i]._55;
 
@@ -317,7 +371,7 @@ export function PictureScreen(props) {
       }
     } catch (error) {
       console.log(error);
-      console.log("WE DON't HAVE DATA");
+      // console.log("WE DON't HAVE DATA");
     }
   };
 
@@ -555,7 +609,7 @@ export function PictureScreen(props) {
           ) : (
             <EmptyIcon
               setWidth="100%"
-              setHeight="40%"
+              setHeight="55%"
               image={<SvgXml xml={EmptyXml} width="100%" height="100%" />}
               title={emptyTitle}
               text={emptyText}
@@ -579,7 +633,6 @@ const styles = StyleSheet.create({
   },
   text: {
     ...text,
-    // paddingHorizontal: 0,
   },
   view: {
     ...view,

@@ -1,30 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, ScrollView, View, ImageBackground, Dimensions, FlatList, Linking, AsyncStorage } from 'react-native';
+import { StyleSheet, ScrollView, View, ImageBackground, BackHandler, Dimensions, FlatList, Linking, AsyncStorage , Image} from 'react-native';
 import { Provider as PaperProvider, Text, ActivityIndicator, IconButton, Snackbar } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons';
-
-import { apiKey } from '../config/constants';
+import LottieView from "lottie-react-native";
+import { apiKeys } from '../config/constants';
 import { global, view, title, subtitle, chip, padding, grey, darkGrey, green, red, spaceBetweenView } from '../styles';
 import { SolidButton } from './buttons/solidButton';
 import EmptyPage from './empty';
 
-let allFavs = []
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 export function oneRecipe({route, navigation}) {
   const [isLoading, setLoading] = useState(true);
+  const [doneCheckingKeys, setDoneCheckingKeys] = useState(false);
   const [isError, setError] = useState(false);
   const [visible, setVisible] = useState(false);
   const [snackBarText, setSnackBarText] = useState("Added to Favourites");
   const [recipe, setRecipe] = useState([]);
-  const [prevFavs, setPrevFavs] = useState([]);
+  const [favs, setFavs] = useState([]);
 
   const base='https://api.spoonacular.com/recipes/'
   const { item } = route.params
   let fromSavedPage = route.params.fromSavedPage 
 
+  let index = 0
+    let success = false;
+
   const url = base 
     + item.id
     + '/information'
-    + '?apiKey=' + apiKey
+    + '?apiKey=' ;
 
   useEffect(() => {
     setTimeout(function() { 
@@ -34,17 +39,23 @@ export function oneRecipe({route, navigation}) {
     }, 1500);
   }, [visible])
 
-  useEffect(() => {
-    getFavs()
+  useEffect( () => {
+     getFavs();
+     getRecipes();
+
+     BackHandler.addEventListener("hardwareBackPress", () => {
+      navigation.goBack();
+      return true;
+    });
   }, [])
 
   async function getFavs() {
     try {
       const value = await AsyncStorage.getItem('favRecipes');
-      await setPrevFavs(JSON.parse(value))
-      if (allFavs.length === 0 && prevFavs.length > 0) {
-        allFavs.push(prevFavs)
-      }
+      await setFavs(JSON.parse(value))
+      // if (allFavs.length === 0 && prevFavs.length > 0) {
+      //   allFavs.push(prevFavs)
+      // }
     } catch (e) {
       Promise.reject(e)
       fromSavedPage = true
@@ -52,46 +63,98 @@ export function oneRecipe({route, navigation}) {
   }
 
   async function saveRecipe(recipe) {
-    let added = await allFavs.includes(recipe)
+    
+    const value = await AsyncStorage.getItem('favRecipes');
+    let currentFavs = JSON.parse(value)
+    let added = false
+    // console.log('this is current recipe title: ')
+    // console.log(recipe.title);
+
+    // console.log('this is remaining favs')
+    currentFavs.forEach((fav) => {
+      // console.log(fav.title );
+      if(fav.title == recipe.title && currentFavs.length != 0) {
+        added = true;
+      }
+    })
+    // console.log('this is if it already exists')
+    // console.log(added)
     if (!added) {
-      allFavs.push(recipe)
+      currentFavs.push(recipe)
     } else {
       setSnackBarText("This recipe is already a favourite!")
     }
 
     try {
-      await AsyncStorage.setItem('favRecipes', JSON.stringify(allFavs));
+      await AsyncStorage.setItem('favRecipes', JSON.stringify(currentFavs));
       setVisible(true);
     } catch (e) {
       Promise.reject(e)
       setSnackBarText("Oh no! Something went wrong.")
       setVisible(true);
     }
-    getFavs()
+    await getFavs()
   }
 
-  if (isLoading) {
-    fetch(url)
+  const getRecipes =  () => {
+    if (doneCheckingKeys) return
+    fetch(url + apiKeys[index])
     .then(async (response) => {
       if (response.ok) {
+        // console.log('this worked')
         const json = await response.json()
+        success = true
         setRecipe(json)
+        setError(false)
+
       } else {
-        setError(true)
+        index++
+       
+          if (!index < apiKeys.length){
+            setError(true)
+          }
+   
       }
     })
-    .finally(() => setLoading(false));
+    .finally(() =>{        
+        if (success) {
+          setLoading(false)
+          setDoneCheckingKeys(true)
+          // console.log('done')
+        }
+        else {
+          // console.log('not done')
+          // console.log('this is index now: ' + index)
+          if (index < apiKeys.length){
+            
+            getRecipes();
+          }
+          else{
+            setLoading(false)
+            setDoneCheckingKeys(true)
+          }
+          
+        }
+    } );
+  }
+
+
+  if (isLoading) {
 
     return (
       <View style={styles.viewCenter}>
-        <ActivityIndicator 
-          color={green}
-          size='large'
-        />
+       <LottieView
+            style={{ width: windowWidth*0.75, height: windowWidth*0.75,}}
+            resizeMode="cover"
+            source={require("./loading2.json")}
+            autoPlay
+            loop
+          />
+          <Text style={[styles.subtitle, { marginVertical:40}]}>Loading Recipe</Text>
       </View>
     )
   } else {
-    if (isError) {
+    if (isError ) {
       return (
         <PaperProvider theme={global}>
           <View style={styles.spaceBetweenView}>
@@ -100,12 +163,11 @@ export function oneRecipe({route, navigation}) {
                 <Text style={styles.title} >Recipe</Text>
                 <IconButton onPress={() => navigation.goBack()} icon='keyboard-backspace' color='white' size={36} style={styles.icon} /> 
               </View>
-              <EmptyPage 
-                image={<Image style={styles.emptyImage} source={require("../assets/error.png") }/>} 
-                title="OH NO" 
-                text={[
-                  'Something went wrong. Please try again.'
-                ]}/>
+              <EmptyPage
+                image={<Image style={styles.emptyImage} source={require("../assets/error.png" )}/>}
+                title="OH NO"
+                text={['Something went wrong. Please try again.']}
+              />
             </View>
           </View>
         </PaperProvider>
@@ -213,6 +275,13 @@ export function oneRecipe({route, navigation}) {
 }
 
 const styles = StyleSheet.create({
+  emptyImage: {
+    marginTop: 0,
+    resizeMode:'contain',
+    padding:10,
+    width:'80%',
+    height: '70%'
+  },
   view: {
     ...view
   }, 

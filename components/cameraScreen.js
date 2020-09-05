@@ -52,15 +52,15 @@ export function CameraScreen({ navigation }) {
   }
   
   onPictureSaved = async (photo) => {
-    console.log(photo);
+    // console.log(photo);
 
     var imageList = [];
     var existingImages = false;
     try {
       const value = await AsyncStorage.getItem("@Images");
-      console.log("this is value: ");
-      console.log(value);
-      console.log(value == "null");
+      // console.log("this is value: ");
+      // console.log(value);
+      // console.log(value == "null");
       const valueObject = JSON.parse(value);
       if (valueObject && valueObject.length > 0) {
         existingImages = true;
