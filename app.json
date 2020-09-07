@@ -4,7 +4,7 @@
   "expo": {
     "name": "ChowTime",
     "slug": "ChowTime",
-    "version": "4.0.0",
+    "version": "3.1.0",
     "icon":"./assets/green-icon.png",
     "android": {
       "package": "com.yourcompany.chowtime",
