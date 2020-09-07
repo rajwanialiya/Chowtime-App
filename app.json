@@ -5,21 +5,30 @@
     "name": "ChowTime",
     "slug": "ChowTime",
     "version": "3.1.0",
-    "icon":"./assets/green-icon.png",
+    "icon": "./assets/green-icon-ios.png",
     "android": {
       "package": "com.yourcompany.chowtime",
       "versionCode": 3,
-      "icon":"./assets/green-icon.png",
-      "adaptiveIcon": { 
+      "icon": "./assets/green-icon.png",
+      "adaptiveIcon": {
         "foregroundImage": "./assets/green-icon.png",
-        "backgroundColor": "#23ad66" 
+        "backgroundColor": "#23ad66"
       }
     },
     "splash": {
       "image": "./assets/splashScreen2.png",
       "resizeMode": "cover"
     },
-    "platforms": ["ios", "android", "web"],
-    "assetBundlePatterns": ["**/*"]
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "bundleIdentifier": "com.itsjustdevs.chowtime"
+    }
   }
 }
