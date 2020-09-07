@@ -18,7 +18,6 @@ function getReleaseChannel() {
   return 'staging'
 }
 function getEnvironment(env) {
-  console.log('Release Channel: ', getReleaseChannel());
   return environments[env];
 }
 var Environment = getEnvironment(getReleaseChannel());

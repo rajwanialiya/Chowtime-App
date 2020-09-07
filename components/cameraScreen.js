@@ -28,6 +28,7 @@ export function CameraScreen({ navigation }) {
       setHasPermission(status === "granted");
     })();
   }, []);
+
   takePicture = async () => {
     if (this.camera) {
       await this.camera.takePictureAsync({
@@ -50,17 +51,13 @@ export function CameraScreen({ navigation }) {
     return result;
   }
   onPictureSaved = async (photo) => {
-    console.log(photo);
-
     var imageList = [];
     var existingImages = false;
     try {
       const value = await AsyncStorage.getItem("@Images");
-      console.log("this is value: ");
-      console.log(value);
-      console.log(value == "null");
       const valueObject = JSON.parse(value);
-      if (valueObject && valueObject.length > 0) {
+
+      if (valueObject && valueObject !== null && valueObject.length > 0) {
         existingImages = true;
         for (var i = 0; i < valueObject.length; i++) {
           imageList.push(valueObject[i]);

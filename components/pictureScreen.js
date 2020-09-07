@@ -99,7 +99,6 @@ export function PictureScreen(props) {
   }, []);
 
   const runClarifai = async (img) => {
-    console.log("starting clarifai");
     const base64Img = await FileSystem.readAsStringAsync(img, {
       encoding: FileSystem.EncodingType.Base64,
     });
@@ -114,13 +113,11 @@ export function PictureScreen(props) {
         ingredients.push(fullList[i].name);
       }
     }
-    console.log(ingredients);
     return ingredients;
   };
 
   const removeImage = async (id) => {
     const newList = pictureList.filter((picture) => picture.id != id);
-    console.log(newList);
     if (newList.length > 0) setShowNext(true);
     else setShowNext(false);
     setPictureList(newList);
@@ -146,7 +143,6 @@ export function PictureScreen(props) {
     });
     if (!newAnnotatedImages.length > 0) setShowNext(false);
     setAnnotatedImages(newAnnotatedImages);
-    console.log(newAnnotatedImages);
   };
 
   const updateQuantity = async (id, increment) => {
@@ -183,8 +179,6 @@ export function PictureScreen(props) {
             ingredientList.push(ingredients[j]);
         }
       }
-      console.log("COMBINE LIST LOOK");
-      console.log(ingredientList);
       props.navigation.push("PictureScreen", {
         step: "3",
         ingredientList: ingredientList,
@@ -239,7 +233,7 @@ export function PictureScreen(props) {
 
             setPictureList(listOfPictures);
           } else {
-            console.log("We Have NO Data");
+            console.log("We have no data");
           }
         }
         if (step == "2") {
@@ -254,9 +248,7 @@ export function PictureScreen(props) {
             const ingredients = runClarifai(listOfPictures[i].uri);
             ingredientList.push(ingredients);
           }
-          console.log("Starting to wait");
           await Promise.all(ingredientList);
-          console.log("done waiting");
           for (var i = 0; i < listOfPictures.length; i++) {
             const ingredients = ingredientList[i]._55;
 
@@ -303,7 +295,6 @@ export function PictureScreen(props) {
       }
     } catch (error) {
       console.log(error);
-      console.log("WE DON't HAVE DATA");
     }
   };
   return (

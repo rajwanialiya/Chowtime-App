@@ -78,10 +78,10 @@ export function oneRecipe({ route, navigation }) {
   async function getFavs() {
     try {
       const value = await AsyncStorage.getItem("favRecipes");
-      await setFavs(JSON.parse(value));
-      // if (allFavs.length === 0 && prevFavs.length > 0) {
-      //   allFavs.push(prevFavs)
-      // }
+      const parsedValue = JSON.parse(value)
+      if (parsedValue && parsedValue !== null) {
+        await setFavs(parsedValue);
+      }
     } catch (e) {
       Promise.reject(e);
       fromSavedPage = true;
@@ -92,18 +92,17 @@ export function oneRecipe({ route, navigation }) {
     const value = await AsyncStorage.getItem("favRecipes");
     let currentFavs = JSON.parse(value);
     let added = false;
-    console.log("this is current recipe title: ");
-    console.log(recipe.title);
 
-    console.log("this is remaining favs");
+    if (!currentFavs || currentFavs === null) {
+      currentFavs = []
+    }
+
     currentFavs.forEach((fav) => {
-      console.log(fav.title);
       if (fav.title == recipe.title && currentFavs.length != 0) {
         added = true;
       }
     });
-    console.log("this is if it already exists");
-    console.log(added);
+
     if (!added) {
       currentFavs.push(recipe);
     } else {
@@ -126,7 +125,6 @@ export function oneRecipe({ route, navigation }) {
     fetch(url + apiKeys[index])
       .then(async (response) => {
         if (response.ok) {
-          console.log("this worked");
           const json = await response.json();
           success = true;
           setRecipe(json);
@@ -143,10 +141,7 @@ export function oneRecipe({ route, navigation }) {
         if (success) {
           setLoading(false);
           setDoneCheckingKeys(true);
-          console.log("done");
         } else {
-          console.log("not done");
-          console.log("this is index now: " + index);
           if (index < apiKeys.length) {
             getRecipes();
           } else {

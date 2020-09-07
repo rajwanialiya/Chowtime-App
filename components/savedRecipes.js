@@ -86,23 +86,17 @@ function savedRecipes({ navigation }) {
     try {
       const value = await AsyncStorage.getItem("favRecipes");
       const parsedValue = JSON.parse(value);
-      if (parsedValue && parsedValue.length > 0) {
+      if (parsedValue && parsedValue !== null && parsedValue.length > 0) {
         await setFavs(parsedValue);
         setEmpty(false);
       } else {
         setEmpty(true);
       }
       set(true);
-
-      console.log("this is current status of favs");
-      parsedValue.forEach((recipe) => {
-        console.log(recipe.title);
-      });
     } catch (e) {
       setError(true);
     }
     setLoading(false);
-    // console.log(favs)
   }
 
   function _renderItem({ item }, navigation) {
@@ -148,19 +142,9 @@ function savedRecipes({ navigation }) {
       }
     });
 
-    console.log("filtered list");
-    updatedFavs.forEach((recipe) => {
-      console.log(recipe.title);
-    });
     await AsyncStorage.setItem("favRecipes", JSON.stringify(updatedFavs));
 
     await getFavs();
-
-    // const newList = favs.filter((recipe) => recipe.title != title);
-    // console.log(newList);
-
-    // await AsyncStorage.setItem("favRecipes", JSON.stringify(newList));
-    // getFavs();
   }
 
   if (isLoading) {

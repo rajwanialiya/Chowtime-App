@@ -100,13 +100,10 @@ function Recipes({ route, navigation }) {
     if (doneCheckingKeys) return;
     fetch(url + apiKeys[index])
       .then(async (response) => {
-        // setDoneCheckingKeys(false)
         if (response.ok) {
-          console.log("this worked");
           const json = await response.json();
           success = true;
           setRecipes(json);
-          // setLoading(false);
           setError(false);
         } else {
           index++;
@@ -120,10 +117,7 @@ function Recipes({ route, navigation }) {
         if (success) {
           setLoading(false);
           setDoneCheckingKeys(true);
-          console.log("done");
         } else {
-          console.log("not done");
-          console.log("this is index now: " + index);
           if (index < apiKeys.length) {
             getRecipes(url);
           } else {

@@ -63,3 +63,5 @@ buck-out/
 
 # VsCode
 settings.json
+
+config/
