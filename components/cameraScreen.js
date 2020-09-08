@@ -1,17 +1,38 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native";
+import * as Permissions from 'expo-permissions';
+import * as Device from 'expo-device';
 import {
   View,
   StyleSheet,
   Dimensions,
-  Text,
   TouchableOpacity,
+  Image,
+
 } from "react-native";
 import { Camera } from "expo-camera";
 import { SimpleLineIcons } from "@expo/vector-icons";
-import { view } from "../styles";
-import { AsyncStorage } from "react-native";
+import {
+  global,
+  view,
+  title,
+  subtitle,
+  chip,
+  flexView,
+  green,
+  red,
+  spaceBetweenView,
+} from "../styles";
+import { AsyncStorage, Alert } from "react-native";
+import {
+  Provider as PaperProvider,
+  Text,
+  IconButton
+} from "react-native-paper";
+import EmptyPage from "./empty.js";
+import { SolidButton } from "./buttons/solidButton.js";
+const EmptyPng = require("../assets/empty-recipe.png");
 
 export function CameraScreen({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -78,7 +99,54 @@ export function CameraScreen({ navigation }) {
   if (hasPermission === null) {
     return <View />;
   } else if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
+    return (
+      <PaperProvider theme={global}>
+        <View style={styles.spaceBetweenView}>
+          <View>
+          <View style={[styles.row, { backgroundColor: green }]}>
+                <Text style={styles.title}>Recipe</Text>
+                <IconButton
+                  onPress={() => navigation.goBack()}
+                  icon="keyboard-backspace"
+                  color="white"
+                  size={36}
+                  style={styles.icon}
+                />
+              </View>
+            <EmptyPage
+              image={<Image style={styles.emptyImage} source={EmptyPng} />}
+              title="Camera Access Needed"
+              text={[
+                "Chowtime needs the camera to take pictures of food"
+              ]}
+            />
+          </View>
+          <SolidButton
+            color={green}
+            text="Grant Access"
+            onPress={async () => {
+              if (Device.osName == "iOS" || Device.osName == "iPadOS") {
+                Alert.alert(
+                  "How To Grant Permissions",
+                  "Go to Settings -> ChowTime and enable camera permission.",
+                  [
+  
+                    { text: "OK" }
+                  ],
+                  { cancelable: false }
+                );
+              }
+              else{
+                const { status, permissions } = await Permissions.askAsync(Permissions.CAMERA);
+                if (status === 'granted') {
+                  setHasPermission(status === "granted");
+                } 
+              }
+            }}
+          />
+        </View>
+      </PaperProvider>
+    )
   }
   return (
     <View style={styles.view}>
@@ -118,5 +186,26 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "center",
     paddingBottom: 30,
+  },
+  spaceBetweenView: {
+    ...spaceBetweenView,
+  },
+  row: {
+    flexDirection: "row",
+  },
+  title: {
+    ...title,
+    flexWrap: "wrap",
+    flex: 3,
+  },
+  icon: {
+    marginTop: 75,
+  },
+  emptyImage: {
+    marginTop: 0,
+    resizeMode: "contain",
+    padding: 10,
+    width: "80%",
+    height: "70%",
   },
 });

@@ -46,7 +46,9 @@
     "react-native-unimodules": "~0.10.1",
     "react-native-web": "~0.11.7",
     "react-navigation": "^4.3.9",
-    "sharp-cli": "^1.14.1"
+    "sharp-cli": "^1.14.1",
+    "expo-permissions": "~9.0.1",
+    "expo-device": "~2.2.1"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
