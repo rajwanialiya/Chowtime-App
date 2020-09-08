@@ -14,11 +14,12 @@ var environments = {
 };
 
 function getReleaseChannel() {
-  let releaseChannel = Expo.Constants.manifest.releaseChannel;
   return 'staging'
 }
+
 function getEnvironment(env) {
   return environments[env];
 }
+
 var Environment = getEnvironment(getReleaseChannel());
 export default Environment;

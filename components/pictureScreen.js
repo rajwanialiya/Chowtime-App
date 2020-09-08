@@ -15,6 +15,7 @@ import LottieView from "lottie-react-native";
 import Environment from "../config/environment";
 import * as firebase from "firebase";
 import { v4 as uuidv4 } from 'uuid';
+import { nlpApiKey } from "../config/constants"
 
 const Clarifai = require("clarifai");
 const windowHeight = Dimensions.get("window").height;
@@ -124,7 +125,7 @@ export function PictureScreen(props) {
     
     ref.put(blob)
     .then(snapshot => {
-      return snapshot.ref.getDownloadURL();   // Will return a promise with the download link
+      return snapshot.ref.getDownloadURL();
     })
     .then(downloadURL => {
       extractText(downloadURL)
@@ -160,6 +161,7 @@ export function PictureScreen(props) {
       );
       let responseJson = await response.json();
       let extractedText = responseJson.responses[0].textAnnotations[0].description
+      console.log(extractedText)
       analyzeText(extractedText)
     } catch (error) {
       console.log(error);
@@ -167,22 +169,37 @@ export function PictureScreen(props) {
   };
 
   const analyzeText = async (text) => {
-    const GoogleNLP = require('@google-cloud/language');
-    const client = new GoogleNLP.LanguageServiceClient();
-    const document = {
-      content: text,
-      type: 'PLAIN_TEXT',
+    // let body = new FormData()
+    // body.append("text", text)
+    // body.append("extractors", "words")
+  
+    var details = {
+      'text': text,
+      'extractors': 'words',
     };
-    
-    const encodingType = 'UTF8';
-    
-    const [syntax] = await client.analyzeSyntax({document, encodingType});
-    
-    console.log('Tokens:');
-    syntax.tokens.forEach(part => {
-      console.log(`${part.partOfSpeech.tag}: ${part.text.content}`);
-      console.log('Morphology:', part.partOfSpeech);
-    });
+  
+    var formBody = [];
+    for (var property in details) {
+      var encodedKey = encodeURIComponent(property);
+      var encodedValue = encodeURIComponent(details[property]);
+      formBody.push(encodedKey + "=" + encodedValue);
+    }
+    formBody = formBody.join("&");
+
+    console.log(formBody)
+
+    const response = fetch('https://api.textrazor.com', {
+      method: 'POST',
+      headers: {
+        "x-textrazor-key": nlpApiKey,
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+      },
+      body: formBody
+    })
+    console.log(response)
+    .then(response => {
+      console.log(response)
+    })
   };
 
   const removeImage = async (id) => {
