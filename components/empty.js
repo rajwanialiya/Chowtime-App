@@ -1,7 +1,16 @@
 import * as React from "react";
 import { View, Text, StyleSheet, Dimensions } from "react-native";
 import { subtitle, text, grey } from "../styles";
-
+//Added dynamic padding for smaller devices so elements do not overlap
+//Screen Size
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
+let textSize = 16
+let cardVerticalPadding = 45
+if (windowHeight < 700) {
+  textSize = 12
+  cardVerticalPadding = 25
+}
 export default function EmptyPage(props) {
   let width = "100%";
   let height = "60%";
@@ -45,7 +54,7 @@ const styles = StyleSheet.create({
   card: {
     height: 0.5 * Dimensions.get("window").height,
     backgroundColor: grey,
-    paddingVertical: 45,
+    paddingVertical: cardVerticalPadding,
     paddingHorizontal: 15,
     marginVertical: 25,
     marginHorizontal: 18,
@@ -61,7 +70,7 @@ const styles = StyleSheet.create({
   },
   text: {
     ...text,
-    fontSize: 16,
+    fontSize: textSize,
     paddingHorizontal: 20,
     justifyContent: "center",
     alignItems: "flex-start",
