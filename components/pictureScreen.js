@@ -197,6 +197,7 @@ export function PictureScreen(props) {
     } else if (step == "3") {
       await AsyncStorage.setItem("@Images", "");
 
+      console.log(rawIngredients)
       props.navigation.reset({
         index: 0,
         routes: [{ name: "PictureScreen" }],
