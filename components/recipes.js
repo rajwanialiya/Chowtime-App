@@ -33,7 +33,8 @@ import {
   chip,
   flexView,
   green,
-  red,
+  grey,
+  darkGrey,
   spaceBetweenView,
 } from "../styles";
 const windowHeight = Dimensions.get("window").height;
@@ -73,59 +74,63 @@ function Recipes({ route, navigation }) {
   const [isLoading, setLoading] = useState(true);
   const [recipes, setRecipes] = useState([]);
   const [isError, setError] = useState(false);
-  const [doneCheckingKeys, setDoneCheckingKeys] = useState(false);
   const [foodItems, setFoodItems] = useState([]);
-  // let foodItems = []
   let success = false;
   useEffect(() => {
+    
     if (foodItems.length === 0) {
       setLoading(true);
     }
     if (route.params && route.params.foodItems) {
+      
+      console.log('loading recipes')
       setFoodItems(route.params.foodItems);
       let currentFoodItems = route.params.foodItems;
 
       setLoading(true);
       let baseUrl =
         base + "?ingredients=" + currentFoodItems.join(", ") + "&apiKey=";
+        console.log(baseUrl)
       getRecipes(baseUrl);
     }
   }, [route.params]);
+
 
   const base = "https://api.spoonacular.com/recipes/findByIngredients";
 
   let index = 0;
 
   const getRecipes = (url) => {
-    if (doneCheckingKeys) return;
     fetch(url + apiKeys[index])
       .then(async (response) => {
+        console.log('going to log')
         if (response.ok) {
+          console.log('this is okay')
           const json = await response.json();
           success = true;
           setRecipes(json);
           setError(false);
         } else {
+          console.log('this doesnt work')
           index++;
 
           if (!index < apiKeys.length) {
+            console.log('out of range')
             setError(true);
           }
         }
       })
       .finally(() => {
+        console.log('this is success' + success)
         if (success) {
           setLoading(false);
-          setDoneCheckingKeys(true);
         } else {
           if (index < apiKeys.length) {
             getRecipes(url);
           } else {
             setLoading(false);
-            setDoneCheckingKeys(true);
           }
         }
-        // }
       });
   };
 
@@ -205,7 +210,9 @@ function Recipes({ route, navigation }) {
               data={foodItems}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({ item, index }) => (
-                <Text style={styles.chip}>{item}</Text>
+                <View style={styles.chipContainer}>
+                  <Text style={styles.chip}>{item}</Text>
+                </View>
               )}
             />
 
@@ -286,9 +293,17 @@ const styles = StyleSheet.create({
     color: "white",
     marginVertical: 20,
   },
+  chipContainer: {
+    backgroundColor: grey,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    marginRight: 10,
+    marginVertical: 5,
+    borderRadius: 7,
+  },
   chip: {
-    ...chip,
-    marginRight: 8,
+    fontSize: 16,
+    color: darkGrey,
   },
   row: {
     flexDirection: "column",

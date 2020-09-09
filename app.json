@@ -4,12 +4,12 @@
   "expo": {
     "name": "ChowTime",
     "slug": "ChowTime",
-    "version": "4.1.0",
+    "version": "4.2.0",
     "orientation":"portrait",
-    "icon": "./assets/green-icon-ios.png",
+    "icon": "./assets/green-icon.png",
     "android": {
       "package": "com.yourcompany.chowtime",
-      "versionCode": 8,
+      "versionCode": 11,
       "icon": "./assets/green-icon.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/green-icon.png",
