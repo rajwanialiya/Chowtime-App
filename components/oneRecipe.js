@@ -284,7 +284,6 @@ export function oneRecipe({ route, navigation }) {
                   return (
                     <View style={styles.padding}>
                       <View style={styles.recipeStep}>
-                        <Text style={styles.stepNumber}>1</Text>
                         <Text>
                           Please visit the following site to view the full list
                           of steps. Click the link below to get cooking:{" "}
