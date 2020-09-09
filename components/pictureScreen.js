@@ -37,7 +37,18 @@ import LottieView from "lottie-react-native";
 const Clarifai = require("clarifai");
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
-
+//Provide dynamic sizing based on screen height
+//iPhone 8 height is under 700 so we use this as benchmark for smaller devices
+let stepTextSize = 12;
+let sectionWidth = 50;
+let stepSize = 35;
+let iconSize = 20;
+if (windowHeight < 700) {
+  stepTextSize = 9;
+  sectionWidth = 40;
+  stepSize = 29;
+  iconSize = 16;
+}
 export function PictureScreen(props) {
   const app = new Clarifai.App({ apiKey: "e6e934d8af0c4b42ae3b67827cf5fc15" });
 
@@ -70,12 +81,12 @@ export function PictureScreen(props) {
   const [showNext, setShowNext] = useState(false);
   const [loading, setLoading] = useState(true);
   const [rawIngredients, setRawIngredents] = useState([]);
-  const [emptyTitle, setEmptyTitle] = useState("Get Your Recipes.")
+  const [emptyTitle, setEmptyTitle] = useState("Get Your Recipes.");
   const [emptyText, setEmptyText] = useState([
     "1. Take Pictures of your fridge",
     "2. Confirm the ingredients",
     "3. Get your suggestions!",
-  ])
+  ]);
 
   let step = "1";
   let title = "Capture";
@@ -241,9 +252,8 @@ export function PictureScreen(props) {
           const ingredientList = [];
           setEmptyTitle("No Ingredients Found");
           setEmptyText([
-            "Aweh, we didn't have any luck. Try adding so more pics"
-          ]
-          );
+            "Aweh, we didn't have any luck. Try adding so more pics",
+          ]);
           for (var i = 0; i < listOfPictures.length; i++) {
             const ingredients = runClarifai(listOfPictures[i].uri);
             ingredientList.push(ingredients);
@@ -267,7 +277,6 @@ export function PictureScreen(props) {
             );
             setShowNext(true);
           } else {
-            
             setShowNext(false);
           }
           setLoading(false);
@@ -313,7 +322,7 @@ export function PictureScreen(props) {
               >
                 <AntDesign
                   name="camera"
-                  size={20}
+                  size={iconSize}
                   color={step == "1" ? "#FFF" : "black"}
                 />
               </View>
@@ -329,7 +338,7 @@ export function PictureScreen(props) {
               >
                 <AntDesign
                   name="picture"
-                  size={20}
+                  size={iconSize}
                   color={step == "2" ? "#FFF" : "black"}
                 />
               </View>
@@ -345,7 +354,7 @@ export function PictureScreen(props) {
               >
                 <Feather
                   name="list"
-                  size={20}
+                  size={iconSize}
                   color={step == "3" ? "#FFF" : "black"}
                 />
               </View>
@@ -529,13 +538,15 @@ export function PictureScreen(props) {
               </View>
             </ScrollView>
           ) : (
-            <EmptyIcon
-              setWidth="100%"
-              setHeight="55%"
-              image={<SvgXml xml={EmptyXml} width="100%" height="100%" />}
-              title={emptyTitle}
-              text={emptyText}
-            />
+            <View style={{ marginTop: 20 }}>
+              <EmptyIcon
+                setWidth="100%"
+                setHeight="55%"
+                image={<SvgXml xml={EmptyXml} width="100%" height="100%" />}
+                title={emptyTitle}
+                text={emptyText}
+              />
+            </View>
           )}
           <FloatingButton
             navigation={props.navigation}
@@ -600,20 +611,20 @@ const styles = StyleSheet.create({
   },
   stepSection: {
     alignItems: "center",
-    width: 50,
+    width: sectionWidth,
     paddingHorizontal: 5,
   },
   steps: {
     backgroundColor: "black",
-    height: 35,
-    width: 35,
-    borderRadius: 35 / 2,
+    height: stepSize,
+    width: stepSize,
+    borderRadius: stepSize / 2,
     justifyContent: "center",
     alignItems: "center",
   },
   steptext: {
     color: "black",
-    fontSize: 12,
+    fontSize: stepTextSize,
     fontFamily: "Poppins-Regular",
     fontWeight: "700",
     paddingVertical: 5,
@@ -623,7 +634,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     backgroundColor: green,
     alignItems: "flex-end",
-    marginBottom: 20
   },
   horizontalStack: {
     flexDirection: "row",
