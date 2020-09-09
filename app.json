@@ -9,7 +9,7 @@
     "icon": "./assets/green-icon.png",
     "android": {
       "package": "com.yourcompany.chowtime",
-      "versionCode": 10,
+      "versionCode": 11,
       "icon": "./assets/green-icon.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/green-icon.png",
