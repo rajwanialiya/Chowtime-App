@@ -78,7 +78,7 @@ export function oneRecipe({ route, navigation }) {
   async function getFavs() {
     try {
       const value = await AsyncStorage.getItem("favRecipes");
-      const parsedValue = JSON.parse(value)
+      const parsedValue = JSON.parse(value);
       if (parsedValue && parsedValue !== null) {
         await setFavs(parsedValue);
       }
@@ -94,7 +94,7 @@ export function oneRecipe({ route, navigation }) {
     let added = false;
 
     if (!currentFavs || currentFavs === null) {
-      currentFavs = []
+      currentFavs = [];
     }
 
     currentFavs.forEach((fav) => {
@@ -268,7 +268,11 @@ export function oneRecipe({ route, navigation }) {
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({ item, index }) => (
                           <View style={styles.recipeStep}>
-                            <Text style={styles.stepNumber}>{item.number}</Text>
+                            <View style={styles.stepNumberContainer}>
+                              <Text style={styles.stepNumber}>
+                                {item.number}
+                              </Text>
+                            </View>
                             <Text style={styles.instructions}>{item.step}</Text>
                           </View>
                         )}
@@ -443,13 +447,23 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     marginBottom: 12,
   },
+  stepNumberContainer: {
+    backgroundColor: grey,
+    width: 35,
+    height: 35,
+    borderRadius: 35 / 2,
+    marginRight: 15,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: 2,
+  },
   stepNumber: {
     ...chip,
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    marginRight: 15,
+    paddingVertical: 0,
+    paddingHorizontal: 0,
+    marginBottom: 0,
     fontSize: 14,
-    borderRadius: 50,
+    backgroundColor: "transparent",
   },
   instructions: {
     flex: 1,
