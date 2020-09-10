@@ -142,10 +142,10 @@ function Recipes({ route, navigation }) {
             <Text style={styles.title}>Recipes</Text>
             <EmptyPage
               image={<Image style={styles.emptyImage} source={EmtypPng} />}
-              title="Snap fridge pics."
+              title="Snap Food Pics."
               text={[
                 "1. Click the button below.",
-                "2. Snap pics of your fridge.",
+                "2. Snap pics of some food.",
                 "3. Get cooking!",
               ]}
             />

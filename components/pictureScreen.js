@@ -33,6 +33,7 @@ import EmptyIcon from "./empty";
 import { EmptyXml } from "../assets/emptyxml";
 import { SvgXml } from "react-native-svg";
 import LottieView from "lottie-react-native";
+import {clarifaiKey} from '../config/constants'
 
 const Clarifai = require("clarifai");
 const windowWidth = Dimensions.get("window").width;
@@ -50,7 +51,7 @@ if (windowHeight < 700) {
   iconSize = 16;
 }
 export function PictureScreen(props) {
-  const app = new Clarifai.App({ apiKey: "e6e934d8af0c4b42ae3b67827cf5fc15" });
+  const app = new Clarifai.App({ apiKey: clarifaiKey });
 
   const intialList = [];
 
@@ -83,7 +84,7 @@ export function PictureScreen(props) {
   const [rawIngredients, setRawIngredents] = useState([]);
   const [emptyTitle, setEmptyTitle] = useState("Get Your Recipes.");
   const [emptyText, setEmptyText] = useState([
-    "1. Take Pictures of your fridge",
+    "1. Take Pictures of Food",
     "2. Confirm the ingredients",
     "3. Get your suggestions!",
   ]);
@@ -118,9 +119,9 @@ export function PictureScreen(props) {
     });
     const fullList = response.outputs[0].data.concepts;
     const ingredients = [];
-    const whiteList = ["vegetable", "pasture", "sweet"];
+    const whiteList = ["vegetable", "pasture", "sweet", "juice"];
     for (var i = 0; i < 7; i++) {
-      if (fullList[i].value > 0.9 && !whiteList.includes(fullList[i].name)) {
+      if (fullList[i].value > 0.96 && !whiteList.includes(fullList[i].name)) {
         ingredients.push(fullList[i].name);
       }
     }
