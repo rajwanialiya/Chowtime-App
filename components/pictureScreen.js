@@ -119,9 +119,9 @@ export function PictureScreen(props) {
     });
     const fullList = response.outputs[0].data.concepts;
     const ingredients = [];
-    const whiteList = ["vegetable", "pasture", "sweet", "juice"];
+    const whiteList = ["vegetable", "pasture", "sweet", "juice", "cake"];
     for (var i = 0; i < 7; i++) {
-      if (fullList[i].value > 0.96 && !whiteList.includes(fullList[i].name)) {
+      if (fullList[i].value > 0.93 && !whiteList.includes(fullList[i].name)) {
         ingredients.push(fullList[i].name);
       }
     }
