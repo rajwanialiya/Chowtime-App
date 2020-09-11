@@ -196,15 +196,19 @@ export function PictureScreen(props) {
       },
       body: formBody
     })
-    console.log(response)
-    .then(response => {
-      console.log(response)
+    .then(async response => {
+      const responseJson = await response.json()
+      const wordObjects = responseJson.response.sentences
+      getIngredientsNLP(wordObjects)
     })
   };
 
+  const getIngredientsNLP = (words) => {
+    console.log(words)
+  }
+
   const removeImage = async (id) => {
     const newList = pictureList.filter((picture) => picture.id != id);
-    // console.log(newList);
     if (newList.length > 0) setShowNext(true);
     else setShowNext(false);
     setPictureList(newList);
