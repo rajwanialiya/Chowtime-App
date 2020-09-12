@@ -1,27 +1,28 @@
 import React from 'react';
 import { Button } from 'react-native-paper';
 
-export function SmallButton(props) {
+export default function SmallButton(props) {
   return (
     <Button 
       mode='contained'
       color={props.color}
+      onPress={props.onPress}
       uppercase={false}
       labelStyle={{
-        fontFamily: 'Poppins-Medium',
-        fontSize: 14,
+        fontFamily: 'Poppins-Regular',
+        fontSize: 20,
         color: 'white',
         margin: 0,
         padding: 0
       }}
       style={{
-        flexDirection: 'column',
-        justifyContent: 'center',
-        minWidth: 64,
-        minHeight: 30,
-        padding: 0,
-        margin: 12,
-        borderRadius: 30,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        paddingHorizontal: 8,
+        paddingVertical: 0,
+        borderRadius: 10,
+        marginBottom: 4
       }}
     >
       {props.text}
