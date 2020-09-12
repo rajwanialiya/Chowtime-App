@@ -22,14 +22,17 @@ import {
   chip,
   coloredSection,
   text,
+  green, grey, darkGrey
 } from "../styles";
-import { green, grey, darkGrey } from "../styles";
+
 import FloatingButton from "./FloatingButton";
+import SmallButton from "./buttons/smallButton";
+import EmptyIcon from "./empty";
+
 import { Provider as PaperProvider } from "react-native-paper";
 import { ScrollView } from "react-native-gesture-handler";
 import { AntDesign, Feather } from "@expo/vector-icons";
 import * as FileSystem from "expo-file-system";
-import EmptyIcon from "./empty";
 import { EmptyXml } from "../assets/emptyxml";
 import { SvgXml } from "react-native-svg";
 import LottieView from "lottie-react-native";
@@ -529,13 +532,14 @@ export function PictureScreen(props) {
               </View>
               <View style={{ alignItems: "center", paddingBottom: 25 }}>
                 {showNext && (
-                  <TouchableOpacity onPress={() => handleNext(step)}>
-                    <View style={styles.button}>
-                      <Text style={[{ color: "white", fontSize: 20 }]}>
-                        Next
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
+                  <SmallButton onPress={() => handleNext(step)} color={green} text="Next"/>
+                  // <TouchableOpacity onPress={() => handleNext(step)}>
+                  //   <View style={styles.button}>
+                  //     <Text style={[{ color: "white", fontSize: 20 }]}>
+                  //       Next
+                  //     </Text>
+                  //   </View>
+                  // </TouchableOpacity>
                 )}
               </View>
             </ScrollView>
@@ -676,17 +680,6 @@ const styles = StyleSheet.create({
   },
   whiteBackground: {
     backgroundColor: "white",
-  },
-  button: {
-    backgroundColor: "#32CA81",
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 25,
-    paddingVertical: 8,
-    borderRadius: 10,
-    marginBottom: 4,
-    // width: 100,
-    // height: 50,
   },
   list: {
     width: "100%",
