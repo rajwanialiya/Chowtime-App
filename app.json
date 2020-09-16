@@ -4,12 +4,12 @@
   "expo": {
     "name": "ChowTime",
     "slug": "ChowTime",
-    "version": "4.5.0",
+    "version": "5.0.0",
     "orientation":"portrait",
-    "icon": "./assets/green-icon-small.png",
+    "icon": "./assets/green-icon-ios.png",
     "android": {
       "package": "com.yourcompany.chowtime",
-      "versionCode": 17,
+      "versionCode": 18,
       "icon": "./assets/green-icon-small.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/green-icon-small.png",
@@ -29,7 +29,7 @@
       "**/*"
     ],
     "ios": {
-      "buildNumber": "3",
+      "buildNumber": "4",
       "bundleIdentifier": "com.itsjustdevs.chowtime",
       "infoPlist": {
         "NSCameraUsageDescription": "ChowTime needs access to your camera to capture images of food and recommend recipes"

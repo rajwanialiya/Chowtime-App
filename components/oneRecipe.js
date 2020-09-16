@@ -365,6 +365,7 @@ const styles = StyleSheet.create({
     ...title,
     flexWrap: "wrap",
     flex: 3,
+    marginBottom:0
   },
   smaller: {
     fontSize: 24,
