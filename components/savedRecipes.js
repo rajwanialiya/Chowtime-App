@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
   },
   emptySub: {
     paddingVertical: 20,
-    fontFamily: "Poppins-Medium",
+    fontFamily: "SF-Medium",
     fontSize: 16,
   },
   view: {
