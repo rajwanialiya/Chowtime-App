@@ -9,7 +9,7 @@ export default function SmallButton(props) {
       onPress={props.onPress}
       uppercase={false}
       labelStyle={{
-        fontFamily: 'Poppins-Regular',
+        fontFamily: 'SF-Regular',
         fontSize: 20,
         color: 'white',
         margin: 0,

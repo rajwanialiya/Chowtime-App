@@ -413,7 +413,7 @@ const styles = StyleSheet.create({
     color: "white",
   },
   info: {
-    fontFamily: "Poppins-Medium",
+    fontFamily: "SF-Medium",
     color: "white",
     fontSize: 18,
   },
