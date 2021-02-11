@@ -1,42 +1,17 @@
 import React, { useState, useEffect } from "react";
-import {
-  StyleSheet,
-  View,
-  FlatList,
-  Dimensions,
-  ImageBackground,
-  TouchableWithoutFeedback,
-  Image,
-} from "react-native";
-import {
-  Provider as PaperProvider,
-  Text,
-  ActivityIndicator,
-} from "react-native-paper";
-import {
-  createStackNavigator,
-  TransitionPresets,
-} from "@react-navigation/stack";
+import { StyleSheet, View, FlatList, Dimensions, ImageBackground, TouchableWithoutFeedback, Image} from "react-native";
+import { Provider as PaperProvider, Text, ActivityIndicator } from "react-native-paper";
+import { createStackNavigator, TransitionPresets } from "@react-navigation/stack";
 import LottieView from "lottie-react-native";
 
 import { oneRecipe } from "./oneRecipe.js";
 import { SolidButton } from "./buttons/solidButton.js";
 import EmptyPage from "./empty.js";
+import CardComponent from "./cardComponent.js"
 
 const EmtypPng = require("../assets/empty-recipe.png");
 import { apiKeys } from "../config/constants";
-import {
-  global,
-  view,
-  title,
-  subtitle,
-  chip,
-  flexView,
-  green,
-  grey,
-  darkGrey,
-  spaceBetweenView,
-} from "../styles";
+import { global, view, title, subtitle, chip, flexView, green, grey, darkGrey, spaceBetweenView } from "../styles";
 const windowHeight = Dimensions.get("window").height;
 const windowWidth = Dimensions.get("window").width;
 
@@ -137,6 +112,7 @@ function Recipes({ route, navigation }) {
   if (foodItems.length === 0) {
     return (
       <PaperProvider theme={global}>
+        <CardComponent />
         <View style={styles.spaceBetweenView}>
           <View>
             <Text style={styles.title}>Recipes</Text>
@@ -242,7 +218,8 @@ function Recipes({ route, navigation }) {
       <TouchableWithoutFeedback
         onPress={() => navigation.navigate("oneRecipe", { item: item })}
       >
-        <View style={styles.recipesItem}>
+        <CardComponent/>
+        {/* <View style={styles.recipesItem}>
           <ImageBackground
             style={styles.imageBackground}
             source={{ uri: item.image }}
@@ -254,7 +231,7 @@ function Recipes({ route, navigation }) {
               Your Ingredients: {item.usedIngredientCount}
             </Text>
           </ImageBackground>
-        </View>
+        </View> */}
       </TouchableWithoutFeedback>
     );
   }
@@ -319,18 +296,18 @@ const styles = StyleSheet.create({
     paddingRight: 18,
     marginBottom: 20,
   },
-  imageBackground: {
-    ...flexView,
-    width: Dimensions.get("window").width - 52,
-    borderRadius: 10,
-    overflow: "hidden",
-    shadowColor: "black",
-    shadowOpacity: 0.5,
-    shadowRadius: 10,
-    elevation: 6,
-    justifyContent: "space-between",
-    paddingBottom: 10,
-  },
+  // imageBackground: {
+  //   ...flexView,
+  //   width: Dimensions.get("window").width - 52,
+  //   borderRadius: 10,
+  //   overflow: "hidden",
+  //   shadowColor: "black",
+  //   shadowOpacity: 0.5,
+  //   shadowRadius: 10,
+  //   elevation: 6,
+  //   justifyContent: "space-between",
+  //   paddingBottom: 10,
+  // },
   overlay: {
     position: "absolute",
     top: 0,
