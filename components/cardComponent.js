@@ -1,51 +1,62 @@
 import * as React from "react";
-import { StyleSheet, View, FlatList, Dimensions, ImageBackground, TouchableWithoutFeedback, Image, Text } from "react-native";
-import { global, view, title, subtitle, chip, flexView, green, grey, darkGrey, spaceBetweenView } from "../styles";
+import { StyleSheet, View, Dimensions, ImageBackground, Text } from "react-native";
+import { subtitle, text, white } from "../styles";
 
-//Added dynamic padding for smaller devices so elements do not overlap
-//Screen Size
-const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
-let textSize = 16
-let cardVerticalPadding = 45
-if (windowHeight < 700) {
-  textSize = 12
-  cardVerticalPadding = 25
-}
+const windowWidth = "100%";
+const windowHeight = Dimensions.get("window").height * 0.5;
+
+let cardWidth = windowWidth;
+let cardHeight = windowHeight
 
 export default function CardComponent(props) {
-  let width = "100%";
-  let height = "60%";
+  cardWidth = props.width ? props.width : windowWidth;
+  cardHeight = props.height ? props.height : windowHeight;
 
   return (
-    <View style={styles.recipesItem}>
+    <View style={styles.cardContainer}>
       <ImageBackground
         style={styles.imageBackground}
         source={{ uri: props.imageUri }}
         resizeMode="cover"
       >
         <View style={styles.overlay} />
-        <Text style={styles.name}>{props.title}</Text>
-        <Text style={styles.name}>{props.subtitle}</Text>
-        {/* <Text style={[styles.name, styles.ingredientCount]}>
-          Your Ingredients: {item.usedIngredientCount}
-        </Text> */}
+        <Text style={styles.title}>{props.title}</Text>
+        <Text style={styles.subtitle}>{props.subtitle}</Text>
       </ImageBackground>
     </View> 
   );
 }
 
 const styles = StyleSheet.create({
-  imageBackground: {
-    ...flexView,
-    width: Dimensions.get("window").width - 52,
-    borderRadius: 10,
-    overflow: "hidden",
-    shadowColor: "black",
-    shadowOpacity: 0.5,
-    shadowRadius: 10,
-    elevation: 6,
-    justifyContent: "space-between",
-    paddingBottom: 10,
+  cardContainer: {
+    height: cardHeight,
+    width: cardWidth,
   },
+  imageBackground: {
+    height: cardHeight,
+    borderRadius: 12,
+    backgroundColor: "black",
+    padding: 25,
+    justifyContent: "flex-end",
+  },
+  overlay: {
+    height: cardHeight,
+    borderRadius: 12,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0,0,0,0.4)",
+  },
+  title: {
+    ...subtitle,
+    color: white,
+    fontSize: 30
+  },
+  subtitle: {
+    ...text,
+    color: white,
+    fontSize: 18
+  }
 });

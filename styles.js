@@ -41,10 +41,6 @@ export const global = {
   },
 };
 
-export let title;
-export let subtitle;
-export let text;
-
 //Set Styles differently for smaller devices
 // if (windowHeight < 700) {
 //   title = {
@@ -73,7 +69,7 @@ export let text;
 //     paddingHorizontal: 18,
 //   };
 // } else {
-title = { 
+export const title = { 
   backgroundColor: white,
   color: black,
   paddingTop: 75,
@@ -81,22 +77,21 @@ title = {
   fontSize: 35,
   justifyContent: "flex-start",
   marginBottom: 20,
-  paddingHorizontal: 18,
 };
-subtitle = {
+
+export const subtitle = {
   color: black,
   fontFamily: "SF-Semibold",
   fontSize: 25,
   justifyContent: "flex-start",
   marginBottom: 4,
-  paddingHorizontal: 18,
 };
-text = {
+
+export const text = {
   color: darkGrey,
   fontSize: 14,
   fontFamily: "SF-Regular",
   justifyContent: "flex-start",
-  paddingHorizontal: 18,
 };
 // }
 
@@ -126,9 +121,13 @@ export const flexView = {
   justifyContent: "space-between",
 };
 
-export const spaceBetweenView = {
+export const mainContainer = {
   ...view,
   justifyContent: "space-between",
+  paddingHorizontal: 18,
+  fontFamily: "SF-Regular",
+  flex: 1,
+  backgroundColor: white,
 };
 
 export const padding = {

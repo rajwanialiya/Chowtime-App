@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, FlatList, Dimensions, ImageBackground, TouchableWithoutFeedback, Image} from "react-native";
+import { StyleSheet, View, FlatList, Dimensions, TouchableWithoutFeedback, Image} from "react-native";
 import { Provider as PaperProvider, Text, ActivityIndicator } from "react-native-paper";
 import { createStackNavigator, TransitionPresets } from "@react-navigation/stack";
 import LottieView from "lottie-react-native";
@@ -11,7 +11,7 @@ import CardComponent from "./cardComponent.js"
 
 const EmtypPng = require("../assets/empty-recipe.png");
 import { apiKeys } from "../config/constants";
-import { global, view, title, subtitle, chip, flexView, green, grey, darkGrey, spaceBetweenView } from "../styles";
+import { global, view, title, subtitle, chip, flexView, green, grey, darkGrey, mainContainer } from "../styles";
 const windowHeight = Dimensions.get("window").height;
 const windowWidth = Dimensions.get("window").width;
 
@@ -112,18 +112,13 @@ function Recipes({ route, navigation }) {
   if (foodItems.length === 0) {
     return (
       <PaperProvider theme={global}>
-        <CardComponent />
-        <View style={styles.spaceBetweenView}>
+        <View style={styles.mainContainer}>
           <View>
             <Text style={styles.title}>Recipes</Text>
-            <EmptyPage
-              image={<Image style={styles.emptyImage} source={EmtypPng} />}
-              title="Snap Food Pics."
-              text={[
-                "1. Click the button below.",
-                "2. Snap pics of some food.",
-                "3. Get cooking!",
-              ]}
+            <CardComponent 
+              title="Hamburger" 
+              subtitle="hello this is subtitle omg hello this is subtitle omg hello this is subtitle omg" 
+              imageUri="https://food.fnr.sndimg.com/content/dam/images/food/fullset/2004/2/25/0/bw2b07_hambugers1.jpg.rend.hgtvcom.616.462.suffix/1558017418187.jpeg"
             />
           </View>
           <SolidButton
@@ -153,7 +148,7 @@ function Recipes({ route, navigation }) {
     } else if (isError) {
       return (
         <PaperProvider theme={global}>
-          <View style={styles.spaceBetweenView}>
+          <View style={styles.mainContainer}>
             <View>
               <Text style={styles.title}>Recipes</Text>
               <EmptyPage
@@ -256,8 +251,8 @@ const styles = StyleSheet.create({
   flexView: {
     ...flexView,
   },
-  spaceBetweenView: {
-    ...spaceBetweenView,
+  mainContainer: {
+    ...mainContainer,
   },
   title: {
     ...title,
