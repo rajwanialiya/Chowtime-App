@@ -314,58 +314,7 @@ export function PictureScreen(props) {
   return (
     <PaperProvider theme={global}>
       <View style={styles.view}>
-        <View style={styles.header}>
-          <Text style={styles.title}>{title}</Text>
-          <View style={styles.stepView}>
-            <View style={styles.stepSection}>
-              {step == "1" ? <Text style={styles.steptext}>Step 1</Text> : null}
-              <View
-                style={[
-                  styles.steps,
-                  step == "1" ? styles.blackBackground : styles.whiteBackground,
-                ]}
-              >
-                <AntDesign
-                  name="camera"
-                  size={iconSize}
-                  color={step == "1" ? "#FFF" : "black"}
-                />
-              </View>
-            </View>
-
-            <View style={styles.stepSection}>
-              {step == "2" ? <Text style={styles.steptext}>Step 2</Text> : null}
-              <View
-                style={[
-                  styles.steps,
-                  step == "2" ? styles.blackBackground : styles.whiteBackground,
-                ]}
-              >
-                <AntDesign
-                  name="picture"
-                  size={iconSize}
-                  color={step == "2" ? "#FFF" : "black"}
-                />
-              </View>
-            </View>
-
-            <View style={styles.stepSection}>
-              {step == "3" ? <Text style={styles.steptext}>Step 3</Text> : null}
-              <View
-                style={[
-                  styles.steps,
-                  step == "3" ? styles.blackBackground : styles.whiteBackground,
-                ]}
-              >
-                <Feather
-                  name="list"
-                  size={iconSize}
-                  color={step == "3" ? "#FFF" : "black"}
-                />
-              </View>
-            </View>
-          </View>
-        </View>
+        <Text style={styles.title}>{title}</Text>
         <View style={styles.view}>
           {(step == "1" && pictureList.length > 0) ||
           (step == "2" && (annotatedImages.length > 0 || loading)) ||
@@ -631,15 +580,9 @@ const styles = StyleSheet.create({
   steptext: {
     color: "black",
     fontSize: stepTextSize,
-    fontFamily: "Poppins-Regular",
+    fontFamily: "SF-Regular",
     fontWeight: "700",
     paddingVertical: 5,
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    backgroundColor: green,
-    alignItems: "flex-end",
   },
   horizontalStack: {
     flexDirection: "row",

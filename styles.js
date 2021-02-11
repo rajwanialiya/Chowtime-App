@@ -27,16 +27,16 @@ export const global = {
   },
   fonts: {
     regular: {
-      fontFamily: "Poppins-Regular",
+      fontFamily: "SF-Regular",
     },
     medium: {
-      fontFamily: "Poppins-Medium",
+      fontFamily: "SF-Medium",
     },
     light: {
-      fontFamily: "Poppins-Light",
+      fontFamily: "SF-Light",
     },
     thin: {
-      fontFamily: "Poppins-Thin",
+      fontFamily: "SF-Thin",
     },
   },
 };
@@ -46,59 +46,59 @@ export let subtitle;
 export let text;
 
 //Set Styles differently for smaller devices
-if (windowHeight < 700) {
-  title = {
-    backgroundColor: green,
-    color: white,
-    paddingTop: 48,
-    fontFamily: "Poppins-SemiBold",
-    fontSize: 29,
-    justifyContent: "flex-start",
-    marginBottom: 20,
-    paddingHorizontal: 18,
-  };
-  subtitle = {
-    color: black,
-    fontFamily: "Poppins-SemiBold",
-    fontSize: 20,
-    justifyContent: "flex-start",
-    marginBottom: 4,
-    paddingHorizontal: 18,
-  };
-  text = {
-    color: darkGrey,
-    fontSize: 12,
-    fontFamily: "Poppins-Regular",
-    justifyContent: "flex-start",
-    paddingHorizontal: 18,
-  };
-} else {
-  title = {
-    backgroundColor: green,
-    color: white,
-    paddingTop: 75,
-    fontFamily: "Poppins-SemiBold",
-    fontSize: 35,
-    justifyContent: "flex-start",
-    marginBottom: 20,
-    paddingHorizontal: 18,
-  };
-  subtitle = {
-    color: black,
-    fontFamily: "Poppins-SemiBold",
-    fontSize: 25,
-    justifyContent: "flex-start",
-    marginBottom: 4,
-    paddingHorizontal: 18,
-  };
-  text = {
-    color: darkGrey,
-    fontSize: 14,
-    fontFamily: "Poppins-Regular",
-    justifyContent: "flex-start",
-    paddingHorizontal: 18,
-  };
-}
+// if (windowHeight < 700) {
+//   title = {
+//     backgroundColor: green,
+//     color: white,
+//     paddingTop: 48,
+//     fontFamily: "Poppins-SemiBold",
+//     fontSize: 29,
+//     justifyContent: "flex-start",
+//     marginBottom: 20,
+//     paddingHorizontal: 18,
+//   };
+//   subtitle = {
+//     color: black,
+//     fontFamily: "Poppins-SemiBold",
+//     fontSize: 20,
+//     justifyContent: "flex-start",
+//     marginBottom: 4,
+//     paddingHorizontal: 18,
+//   };
+//   text = {
+//     color: darkGrey,
+//     fontSize: 12,
+//     fontFamily: "Poppins-Regular",
+//     justifyContent: "flex-start",
+//     paddingHorizontal: 18,
+//   };
+// } else {
+title = { 
+  backgroundColor: white,
+  color: black,
+  paddingTop: 75,
+  fontFamily: "SF-Bold",
+  fontSize: 35,
+  justifyContent: "flex-start",
+  marginBottom: 20,
+  paddingHorizontal: 18,
+};
+subtitle = {
+  color: black,
+  fontFamily: "SF-Semibold",
+  fontSize: 25,
+  justifyContent: "flex-start",
+  marginBottom: 4,
+  paddingHorizontal: 18,
+};
+text = {
+  color: darkGrey,
+  fontSize: 14,
+  fontFamily: "SF-Regular",
+  justifyContent: "flex-start",
+  paddingHorizontal: 18,
+};
+// }
 
 //Other 
 //These are small elements so they do not need ot be resized on smaller devices
@@ -116,7 +116,7 @@ export const chip = {
 
 export const view = {
   paddingBottom: 0,
-  fontFamily: "Poppins-Regular",
+  fontFamily: "SF-Regular",
   flex: 1,
   backgroundColor: white,
 };

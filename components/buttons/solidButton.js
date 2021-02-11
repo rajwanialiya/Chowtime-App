@@ -12,7 +12,7 @@ export function SolidButton(props) {
       onPress={props.onPress}
       uppercase={false}
       labelStyle={{
-        fontFamily: 'Poppins-Medium',
+        fontFamily: 'SF-Medium',
         fontSize: 20,
         color: 'white',
         margin: 0,

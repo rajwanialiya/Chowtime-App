@@ -12,7 +12,7 @@ export function OutlinedButton(props) {
       onPress={props.onPress}
       uppercase={false}
       labelStyle={{
-        fontFamily: 'Poppins-Medium',
+        fontFamily: 'SF-Medium',
         fontSize: 20,
         margin: 0,
         padding: 0
