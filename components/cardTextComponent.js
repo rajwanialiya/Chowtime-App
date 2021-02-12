@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   overlay: {
-    height: cardHeight * 0.4,
+    height: cardHeight * 0.45,
     borderBottomLeftRadius: borderRadius,
     borderBottomRightRadius: borderRadius,
     padding: 20,
