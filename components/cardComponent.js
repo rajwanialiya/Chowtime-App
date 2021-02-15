@@ -35,9 +35,9 @@ const styles = StyleSheet.create({
   imageBackground: {
     height: cardHeight,
     borderRadius: borderRadius,
-    backgroundColor: "black",
     padding: 20,
     justifyContent: "flex-end",
+    elevation: 15,
   },
   overlay: {
     height: cardHeight,

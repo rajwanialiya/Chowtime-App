@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { StyleSheet, View, Dimensions, ImageBackground, Text } from "react-native";
 import { IconButton, Button } from "react-native-paper";
-import { subtitle, text, white, black, darkGrey, borderRadius } from "../styles";
+import { subtitle, text, white, black, darkGrey, borderRadius, medGrey, lightGrey } from "../styles";
 
 const windowWidth = "100%";
 const windowHeight = Dimensions.get("window").height * 0.35;
@@ -44,7 +44,7 @@ export default function CardTextComponent(props) {
           </View>
           <Text style={styles.subtitle}>{props.subtitle}</Text>
           { props.buttonText ? (
-            <Button>{props.buttonText}</Button>
+            <Text style={styles.textButton}>View &#8250;</Text>
            ) : null }
         </View>
       </ImageBackground>
@@ -57,8 +57,10 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius
   },
   imageBackground: {
-    height: cardHeight,
+    borderRadius: borderRadius,
     justifyContent: "flex-end",
+    height: cardHeight,
+    elevation: 15,
   },
   overlay: {
     height: cardHeight * 0.45,
@@ -88,7 +90,13 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     ...text,
-    color: darkGrey,
+    color: medGrey,
     fontSize: 18
+  },
+  textButton: {
+    fontFamily: "SF-Semibold",
+    fontSize: 18,
+    marginVertical: 10,
+    color: darkGrey
   }
 });
