@@ -1,7 +1,7 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import { StyleSheet, View, Dimensions, ImageBackground, Text } from "react-native";
-import { IconButton, Button } from "react-native-paper";
-import { subtitle, text, white, black, darkGrey, borderRadius, medGrey, lightGrey } from "../styles";
+import { IconButton} from "react-native-paper";
+import { subtitle, text, white, black, darkGrey, medGrey, borderRadius } from "../styles";
 
 const windowWidth = "100%";
 const windowHeight = Dimensions.get("window").height * 0.35;
