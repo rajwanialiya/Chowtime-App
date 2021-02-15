@@ -13,8 +13,8 @@ export const red = "#EC5454";
 export const white = "#FFFFFF";
 export const black = "#000000";
 export const grey = "#F0F3F4";
-export const darkGrey = "#949494";
-export const medGrey = "#b9bcbd";
+export const darkGrey = "#787878";
+export const medGrey = "#949494";
 
 //Theme
 export const global = {
