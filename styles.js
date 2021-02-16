@@ -1,9 +1,11 @@
 import { DefaultTheme } from "react-native-paper";
 import { Dimensions } from "react-native";
+import { SimpleLineIcons } from "@expo/vector-icons";
 
 //Screen Size
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
+export const borderRadius = 20;
 
 //App Colours
 export const green = "#27B671";
@@ -11,8 +13,8 @@ export const red = "#EC5454";
 export const white = "#FFFFFF";
 export const black = "#000000";
 export const grey = "#F0F3F4";
-export const darkGrey = "#949494";
-export const medGrey = "#b9bcbd";
+export const darkGrey = "#787878";
+export const medGrey = "#949494";
 
 //Theme
 export const global = {
@@ -84,7 +86,7 @@ export const subtitle = {
   fontFamily: "SF-Semibold",
   fontSize: 25,
   justifyContent: "flex-start",
-  marginBottom: 4,
+  marginBottom: 5
 };
 
 export const text = {
