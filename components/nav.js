@@ -34,7 +34,8 @@ export function TabNav() {
       >
         <Tab.Screen
           name="Camera"
-          component={LiveCameraScreen}
+          // component={LiveCameraScreen}
+          component={CameraScreen}
 
           options={{
             tabBarLabel: "Camera",

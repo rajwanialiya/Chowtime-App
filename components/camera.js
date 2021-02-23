@@ -14,7 +14,7 @@ export default function CameraStack() {
       }}
     >
       <CameraNavigator.Screen name="PictureScreen" component={PictureScreen} />
-      <CameraNavigator.Screen name="CameraCapture" component={LiveCameraScreen} options={{ tabBarVisible: false }}/>
+      <CameraNavigator.Screen name="CameraCapture" component={CameraScreen} options={{ tabBarVisible: false }}/>
     </CameraNavigator.Navigator>
   );
 }

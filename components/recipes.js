@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, FlatList, Dimensions, TouchableWithoutFeedback, Image} from "react-native";
+import { StyleSheet, View, FlatList, Dimensions, TouchableWithoutFeedback, Image, ImageBackground } from "react-native";
 import { Provider as PaperProvider, Text, ActivityIndicator } from "react-native-paper";
 import { createStackNavigator, TransitionPresets } from "@react-navigation/stack";
 import LottieView from "lottie-react-native";
@@ -52,7 +52,6 @@ function Recipes({ route, navigation }) {
   const [foodItems, setFoodItems] = useState([]);
   let success = false;
   useEffect(() => {
-    
     if (foodItems.length === 0) {
       setLoading(true);
     }
@@ -213,8 +212,7 @@ function Recipes({ route, navigation }) {
       <TouchableWithoutFeedback
         onPress={() => navigation.navigate("oneRecipe", { item: item })}
       >
-        <CardComponent/>
-        {/* <View style={styles.recipesItem}>
+        <View style={styles.recipesItem}>
           <ImageBackground
             style={styles.imageBackground}
             source={{ uri: item.image }}
@@ -226,7 +224,7 @@ function Recipes({ route, navigation }) {
               Your Ingredients: {item.usedIngredientCount}
             </Text>
           </ImageBackground>
-        </View> */}
+        </View>
       </TouchableWithoutFeedback>
     );
   }
@@ -291,18 +289,18 @@ const styles = StyleSheet.create({
     paddingRight: 18,
     marginBottom: 20,
   },
-  // imageBackground: {
-  //   ...flexView,
-  //   width: Dimensions.get("window").width - 52,
-  //   borderRadius: 10,
-  //   overflow: "hidden",
-  //   shadowColor: "black",
-  //   shadowOpacity: 0.5,
-  //   shadowRadius: 10,
-  //   elevation: 6,
-  //   justifyContent: "space-between",
-  //   paddingBottom: 10,
-  // },
+  imageBackground: {
+    ...flexView,
+    width: Dimensions.get("window").width - 52,
+    borderRadius: 10,
+    overflow: "hidden",
+    shadowColor: "black",
+    shadowOpacity: 0.5,
+    shadowRadius: 10,
+    elevation: 6,
+    justifyContent: "space-between",
+    paddingBottom: 10,
+  },
   overlay: {
     position: "absolute",
     top: 0,

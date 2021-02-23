@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     height: cardHeight * 0.45,
     borderBottomLeftRadius: borderRadius,
     borderBottomRightRadius: borderRadius,
-    padding: 20,
+    padding: 20, 
     position: "absolute",
     justifyContent: "center",
     left: 0,
@@ -81,22 +81,24 @@ const styles = StyleSheet.create({
     alignItems: "flex-end"
   },
   favIcon: {
-    margin: 0
+    margin: 0,
+    position: "absolute",
+    right: 0
   },
   title: {
     ...subtitle,
     color: black,
-    fontSize: 25
+    fontSize: 20
   },
   subtitle: {
     ...text,
-    color: medGrey,
-    fontSize: 18
+    color: darkGrey,
+    fontSize: 16
   },
   textButton: {
     fontFamily: "SF-Semibold",
-    fontSize: 18,
-    marginVertical: 10,
-    color: darkGrey
+    fontSize: 16,
+    color: darkGrey,
+    marginTop: 8
   }
 });

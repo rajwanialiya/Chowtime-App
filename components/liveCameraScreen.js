@@ -46,7 +46,6 @@ export default function LiveCameraScreen({navigation}) {
         setFrameworkReady(true);
       })();
     }
-    console.log(frameworkReady)
   }, []);
 
   useEffect(() => {
