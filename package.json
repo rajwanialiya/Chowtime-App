@@ -33,6 +33,7 @@
     "expo-permissions": "~9.0.1",
     "expo-updates": "~0.2.8",
     "express": "^2.5.11",
+    "jpeg-js": "^0.4.3",
     "lottie-react-native": "~2.6.1",
     "material-design-icons": "^3.0.1",
     "react": "16.11.0",

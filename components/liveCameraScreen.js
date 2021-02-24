@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { ActivityIndicator, Text, View, ScrollView, StyleSheet, Button, Platform } from 'react-native';
-import Constants from 'expo-constants';
+import { ActivityIndicator, Text, View, ScrollView, StyleSheet, Button, Platform, Image } from 'react-native';
+import * as FileSystem from 'expo-file-system';
+import * as jpeg from 'jpeg-js';
 import { useIsFocused } from "@react-navigation/native";
 
 //Permissions
@@ -16,6 +17,7 @@ import TesseractOcr, { LANG_ENGLISH } from 'react-native-tesseract-ocr';
 
 export default function LiveCameraScreen({navigation}) {
   const isFocused = useIsFocused();
+  const [uri, setUri] = useState("")
 
   useEffect(() => {
     handleCameraStream()
@@ -65,14 +67,34 @@ export default function LiveCameraScreen({navigation}) {
 Helper function to handle the camera tensor streams. Here, to keep up reading input streams, we use requestAnimationFrame JS method to keep looping for getting better predictions (until we get one with enough confidence level).
 More info on RAF: https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame
 -------------------------------------------------------------------------*/
-const handleCameraStream = (imageAsTensors) => {
+const handleCameraStream = async (imageAsTensors) => {
   const loop = async () => {
-    const nextImageTensor = await imageAsTensors.next().value;
-    console.log(nextImageTensor)
-    await tf.node.encodePng(nextImageTensor)
-    requestAnimationFrameId = requestAnimationFrame(loop);
+    const tensor = await imageAsTensors.next().value;
+    console.log(tensor)
+    const height = tensor.shape[0]
+    const width = tensor.shape[1]
+    const data = new Buffer(
+      // concat with an extra alpha channel and slice up to 4 channels to handle 3 and 4 channels tensors
+      tf.concat([tensor, tf.ones([height, width, 1]).mul(255)], [-1])
+        .slice([0], [height, width, 4])
+        .dataSync(),
+    )
+
+    const rawImageData = {data, width, height};
+    const jpegImageData = jpeg.encode(rawImageData, 100);
+
+    const imgBase64 = tf.util.decodeString(jpegImageData.data, "base64")
+    const salt = `${Date.now()}-${Math.floor(Math.random() * 10000)}`
+    const uri = FileSystem.documentDirectory + `tensor-${salt}.jpg`;
+    await FileSystem.writeAsStringAsync(uri, imgBase64, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+    console.log(uri)
+    setUri(uri)
+    // return {uri, width, height}
   };
-  loop();
+  // requestAnimationFrameId = requestAnimationFrame(loop);
+  !uri ? setTimeout(() => loop(), 4000) : null;
 }
 
 
@@ -103,6 +125,9 @@ const handleCameraStream = (imageAsTensors) => {
     <View>
       <View>
         { frameworkReady ? renderCameraView() : <Text>Loading</Text> }
+        <Text>Image</Text>
+        {uri ? <Image style={styles.image} source={{uri: uri}}/> : null}
+
         {/* <Canvas id="canvas"></Canvas> */}
       </View>  
     </View>
@@ -127,5 +152,9 @@ const styles = StyleSheet.create({
     zIndex: 1,
     borderWidth: 0,
     borderRadius: 0,
+  },
+  image: {
+    height: 400,
+    width: 400
   }
 });
