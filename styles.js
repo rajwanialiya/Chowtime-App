@@ -6,6 +6,8 @@ import { SimpleLineIcons } from "@expo/vector-icons";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 export const borderRadius = 20;
+export const padding = 18;
+export const elevation = 5;
 
 //App Colours
 export const green = "#27B671";
@@ -13,6 +15,7 @@ export const red = "#EC5454";
 export const white = "#FFFFFF";
 export const black = "#000000";
 export const grey = "#F0F3F4";
+export const lightGrey = "#FAFAFA" 
 export const darkGrey = "#787878";
 export const medGrey = "#949494";
 
@@ -72,7 +75,6 @@ export const global = {
 //   };
 // } else {
 export const title = { 
-  backgroundColor: white,
   color: black,
   paddingTop: 75,
   fontFamily: "SF-Bold",
@@ -91,7 +93,7 @@ export const subtitle = {
 
 export const text = {
   color: darkGrey,
-  fontSize: 14,
+  fontSize: 16,
   fontFamily: "SF-Regular",
   justifyContent: "flex-start",
 };
@@ -100,12 +102,11 @@ export const text = {
 //Other 
 //These are small elements so they do not need ot be resized on smaller devices
 export const chip = {
-  fontSize: 16,
+  ...text,
   backgroundColor: grey,
-  color: darkGrey,
   borderRadius: 10,
   paddingHorizontal: 12,
-  paddingVertical: 5,
+  paddingVertical: 8,
   marginBottom: 8,
   justifyContent: "center",
   alignItems: "center",
@@ -124,17 +125,15 @@ export const flexView = {
 };
 
 export const mainContainer = {
-  ...view,
-  justifyContent: "space-between",
   paddingHorizontal: 18,
   fontFamily: "SF-Regular",
   flex: 1,
-  backgroundColor: white,
+  backgroundColor: lightGrey,
 };
 
-export const padding = {
-  paddingHorizontal: 18,
-};
+// export const padding = {
+//   paddingHorizontal: 18,
+// };
 
 export const lastItem = {
   marginBottom: 20,

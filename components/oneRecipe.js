@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   StyleSheet,
   ScrollView,
@@ -21,25 +21,13 @@ import {
 import { MaterialIcons } from "@expo/vector-icons";
 import LottieView from "lottie-react-native";
 import { apiKeys } from "../config/constants";
-import {
-  global,
-  view,
-  title,
-  subtitle,
-  chip,
-  padding,
-  grey,
-  darkGrey,
-  green,
-  red,
-  spaceBetweenView,
-} from "../styles";
+import { global, subtitle, padding, white, mainContainer, borderRadius, elevation, chip, grey, darkGrey, green, title } from "../styles";
 import { SolidButton } from "./buttons/solidButton";
 import EmptyPage from "./empty";
 
-const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 export function oneRecipe({ route, navigation }) {
+  const favIcon = useRef(null)
+
   const [isLoading, setLoading] = useState(true);
   const [doneCheckingKeys, setDoneCheckingKeys] = useState(false);
   const [isError, setError] = useState(false);
@@ -47,6 +35,7 @@ export function oneRecipe({ route, navigation }) {
   const [snackBarText, setSnackBarText] = useState("Added to Favourites");
   const [recipe, setRecipe] = useState([]);
   const [favs, setFavs] = useState([]);
+  const [clicked, setClicked] = useState(false)
 
   const base = "https://api.spoonacular.com/recipes/";
   const { item } = route.params;
@@ -120,6 +109,10 @@ export function oneRecipe({ route, navigation }) {
     await getFavs();
   }
 
+  const addToFavs = () => {
+    setClicked(!clicked)
+  }
+
   const getRecipes = () => {
     if (doneCheckingKeys) return;
     fetch(url + apiKeys[index])
@@ -154,188 +147,118 @@ export function oneRecipe({ route, navigation }) {
 
   if (isLoading) {
     return (
-      <View style={styles.viewCenter}>
-        <LottieView
-          style={{ width: windowWidth * 0.75, height: windowWidth * 0.75 }}
-          resizeMode="cover"
-          source={require("./loading2.json")}
-          autoPlay
-          loop
-        />
-        <Text style={[styles.subtitle, { marginVertical: 40 }]}>
-          Loading Recipe
-        </Text>
+      <View>
+        <Text>Loading Recipe</Text>
       </View>
     );
   } else {
     if (isError) {
       return (
         <PaperProvider theme={global}>
-          <View style={styles.spaceBetweenView}>
-            <View>
-              <View style={[styles.row, { backgroundColor: green }]}>
-                <Text style={styles.title}>Recipe</Text>
-                <IconButton
-                  onPress={() => navigation.goBack()}
-                  icon="keyboard-backspace"
-                  color="white"
-                  size={36}
-                  style={styles.icon}
-                />
-              </View>
-              <EmptyPage
-                image={
-                  <Image
-                    style={styles.emptyImage}
-                    source={require("../assets/error.png")}
-                  />
-                }
-                title="OH NO"
-                text={["Something went wrong. Please try again."]}
-              />
-            </View>
-          </View>
+          <Text>Error</Text>
         </PaperProvider>
       );
     } else {
       return (
         <PaperProvider theme={global}>
-          <View style={styles.view}>
-            <View style={[styles.row, { backgroundColor: green }]}>
-              <Text
-                style={[
-                  styles.title,
-                  item.title.length > 24 ? styles.smaller : styles.none,
-                ]}
-              >
-                {recipe.title}
-              </Text>
+          <ImageBackground style={styles.header} source={{ uri: recipe.image }} resizeMode="cover">
+            <View style={styles.overlay}/>
+            <View style={styles.headerContainer}>
               <IconButton
                 onPress={() => navigation.goBack()}
                 icon="keyboard-backspace"
                 color="white"
                 size={36}
-                style={styles.icon}
+                style={styles.backIcon}
               />
-            </View>
-            <ScrollView showsVerticalScrollIndicator={false}>
-              <View style={styles.imageContainer}>
-                <ImageBackground
-                  style={styles.imageBackground}
-                  source={{ uri: recipe.image }}
-                  resizeMode="cover"
-                >
-                  <View style={styles.overlay}></View>
-                  <View style={{ flexDirection: "row" }}>
-                    <MaterialIcons name="access-time" size={36} color="white" />
-                    <Text style={styles.time}>
-                      {recipe.readyInMinutes} mins
-                    </Text>
-                  </View>
-                  <View>
-                    <FlatList
-                      data={recipe.diets}
-                      keyExtractor={(item, index) => index.toString()}
-                      renderItem={({ item, index }) => (
-                        <Text style={styles.info}>{item}</Text>
-                      )}
-                    />
-                  </View>
-                </ImageBackground>
+              <View style={styles.firstRow}>
+                <Text style={styles.title}>{recipe.title}</Text>                
+                <IconButton
+                  onPress={() => addToFavs()}
+                  icon={clicked ? "heart" : "heart-outline"}
+                  color="white"
+                  size={30}
+                  style={styles.favIcon}
+                  ref={favIcon}
+                />
               </View>
-              <Text style={styles.subtitle}>Ingredients</Text>
-              <FlatList
-                style={styles.list}
-                data={recipe.extendedIngredients}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item, index }) => (
-                  <View style={styles.ingredient}>
-                    <Text style={styles.ingredientName}>{item.name}</Text>
-                    <Text style={styles.ingredientAmount}>
-                      {item.measures.us.amount} {item.measures.us.unitShort}
-                    </Text>
-                  </View>
-                )}
-              />
-              <Text style={styles.subtitle}>Recipe</Text>
-              {(() => {
-                if (recipe.analyzedInstructions.length > 0) {
-                  return (
-                    <View>
-                      <FlatList
-                        style={styles.list}
-                        data={recipe.analyzedInstructions[0].steps}
-                        keyExtractor={(item, index) => index.toString()}
-                        renderItem={({ item, index }) => (
-                          <View style={styles.recipeStep}>
-                            <View style={styles.stepNumberContainer}>
-                              <Text style={styles.stepNumber}>
-                                {item.number}
-                              </Text>
-                            </View>
-                            <Text style={styles.instructions}>{item.step}</Text>
-                          </View>
-                        )}
-                      />
-                    </View>
-                  );
-                } else {
-                  const url = recipe.sourceUrl;
-                  return (
-                    <View style={styles.padding}>
-                      <View style={styles.recipeStep}>
-                        <Text>
-                          Please visit the following site to view the full list
-                          of steps. Click the link below to get cooking:{" "}
-                        </Text>
-                      </View>
-                      <Text
-                        style={styles.link}
-                        onPress={() => {
-                          Linking.openURL(url);
-                        }}
-                      >
-                        View full recipe &#8250;
+            </View>
+          </ImageBackground>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={styles.mainContainer}>
+              <View style={styles.row}>
+                <View style={[styles.card, styles.first]}>
+                  <Text>20</Text>
+                  <Text>Hello</Text>
+                </View>
+                <View style={styles.card}></View>
+              </View>
+              <View style={styles.row}>
+                <View style={[styles.card, styles.first]}></View>
+                <View style={styles.card}></View>
+              </View>
+              <View style={styles.ingredients}>
+                <Text style={styles.subtitle}>Ingredients</Text>
+                <FlatList
+                  data={recipe.extendedIngredients}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({ item, index }) => (
+                    <View style={styles.ingredient}>
+                      <Text style={styles.ingredientName}>{item.name}</Text>
+                      <Text style={styles.ingredientAmount}>
+                        {item.measures.us.amount} {item.measures.us.unitShort}
                       </Text>
                     </View>
-                  );
-                }
-              })()}
-              {(() => {
-                if (!fromSavedPage) {
-                  return (
-                    <View style={styles.buttonContainer}>
-                      <SolidButton
-                        color={green}
-                        flex={1}
-                        text="Add to Favourites"
-                        onPress={() => {
-                          saveRecipe(recipe);
-                        }}
-                      ></SolidButton>
-                    </View>
-                  );
-                }
-              })()}
-            </ScrollView>
-            <View style={styles.snackbarView}>
-              <Snackbar
-                visible={visible}
-                duration={1500}
-                onDismiss={() => setVisible(false)}
-                wrapperStyle={styles.snackbarContainer}
-                style={styles.snackbar}
-                action={
-                  {
-                    // label: 'Undo',
-                    // onPress: () => {}
+                  )}
+                />
+                <Text style={styles.subtitle}>Recipe</Text>
+                {(() => {
+                  if (recipe.analyzedInstructions.length > 0) {
+                    return (
+                      <View>
+                        <FlatList
+                          style={styles.list}
+                          data={recipe.analyzedInstructions[0].steps}
+                          keyExtractor={(item, index) => index.toString()}
+                          renderItem={({ item, index }) => (
+                            <View style={styles.recipeStep}>
+                              <View style={styles.stepNumberContainer}>
+                                <Text style={styles.stepNumber}>
+                                  {item.number}
+                                </Text>
+                              </View>
+                              <Text style={styles.instructions}>{item.step}</Text>
+                            </View>
+                          )}
+                        />
+                      </View>
+                    );
+                  } else {
+                    const url = recipe.sourceUrl;
+                    return (
+                      <View style={styles.padding}>
+                        <View style={styles.recipeStep}>
+                          <Text>
+                            Please visit the following site to view the full list
+                            of steps. Click the link below to get cooking:{" "}
+                          </Text>
+                        </View>
+                        <Text
+                          style={styles.link}
+                          onPress={() => {
+                            Linking.openURL(url);
+                          }}
+                        >
+                          View full recipe &#8250;
+                        </Text>
+                      </View>
+                    );
                   }
-                }
-              >
-                {snackBarText}
-              </Snackbar>
+                })()}
+              </View>
             </View>
-          </View>
+          </ScrollView>
+
         </PaperProvider>
       );
     }
@@ -343,89 +266,87 @@ export function oneRecipe({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
-  emptyImage: {
-    marginTop: 0,
-    resizeMode: "contain",
-    padding: 10,
-    width: "80%",
-    height: "70%",
+  // Containers
+  mainContainer: {
+    ...mainContainer,
+    paddingVertical: padding
   },
-  view: {
-    ...view,
+  headerContainer: {
+    paddingVertical: padding,
+    justifyContent: "space-between",
+    height: "100%",
+    paddingTop: 40
   },
-  viewCenter: {
-    ...view,
-    justifyContent: "center",
-    alignItems: "center",
+
+  // Containing Elements
+  header: {
+    width: Dimensions.get("window").width,
+    height: 300,
+    paddingHorizontal: padding,
   },
-  spaceBetweenView: {
-    ...spaceBetweenView,
-  },
-  title: {
-    ...title,
-    flexWrap: "wrap",
-    flex: 3,
-    marginBottom:0
-  },
-  smaller: {
-    fontSize: 24,
-  },
-  icon: {
-    marginTop: 75,
-  },
-  subtitle: {
-    ...subtitle,
-  },
-  padding: {
-    ...padding,
-  },
-  row: {
-    flexDirection: "row",
-  },
-  imageContainer: {
-    alignItems: "center",
-    marginVertical: 20,
-    height: 310,
+  card: {
+    flex: 1,
+    height: 80,
+    borderRadius: borderRadius,
+    marginBottom: 10,
+    padding: padding,
+    backgroundColor: white,
+    elevation: elevation
   },
   overlay: {
-    height: 360,
+    height: 300,
+    backgroundColor: "rgba(0,0,0,0.5)",
     position: "absolute",
     top: 0,
     left: 0,
     right: 0,
-    bottom: 0,
-    backgroundColor: "rgba(0,0,0,0.3)",
   },
-  imageBackground: {
-    height: 300,
-    width: Dimensions.get("window").width - 32,
-    borderRadius: 10,
-    overflow: "hidden",
-    shadowColor: "black",
-    shadowOpacity: 0.5,
-    shadowRadius: 10,
-    elevation: 6,
+
+  // Rows
+  firstRow: {
+    display: "flex",
+    flexDirection: "row",
     justifyContent: "space-between",
-    padding: 20,
+    alignItems: "flex-end",
   },
-  time: {
+  row: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "stretch",
+  },
+
+  // Text
+  title: {
     ...subtitle,
-    color: "white",
+      color: white,
+      fontSize: 30,
+      maxWidth: 210
   },
-  info: {
-    fontFamily: "SF-Medium",
-    color: "white",
-    fontSize: 18,
+  subtitle: {
+    ...subtitle,
+    fontSize: 25,
+    paddingVertical: 10,
   },
-  list: {
-    marginHorizontal: 16,
-    marginVertical: 12,
+
+  // Icons
+  favIcon: {
+    margin: 0,
+    position: "absolute",
+    right: 0
+  },
+  backIcon: {
+    margin: 0,
+    marginLeft: -10
+  },
+
+  // Other
+  first: {
+    marginRight: 10
   },
   ingredient: {
     ...chip,
     justifyContent: "space-between",
     flexDirection: "row",
-    backgroundColor: grey,
     borderRadius: 10,
     marginBottom: 8,
     alignItems: "center",
@@ -474,25 +395,5 @@ const styles = StyleSheet.create({
     color: green,
     marginTop: 10,
     marginBottom: 20,
-  },
-  buttonContainer: {
-    justifyContent: "center",
-    flexDirection: "row",
-  },
-  snackbarView: {
-    position: "relative",
-    justifyContent: "center",
-    marginHorizontal: 10,
-  },
-  snackbarContainer: {
-    backgroundColor: "#303030",
-    padding: 0,
-    borderRadius: 10,
-    color: "white",
-    marginVertical: 10,
-  },
-  snackbar: {
-    backgroundColor: "#303030",
-    margin: 0,
   },
 });

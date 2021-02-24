@@ -178,7 +178,7 @@ function savedRecipes({ navigation }) {
     } else {
       return (
         <PaperProvider theme={global}>
-          <View style={styles.view}>
+          <View style={styles.mainContainer}>
             <Text style={styles.title}>Saved</Text>
             <FlatList
               contentContainerStyle={styles.recipesContainer}

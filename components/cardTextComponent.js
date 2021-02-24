@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { StyleSheet, View, Dimensions, ImageBackground, Text } from "react-native";
 import { IconButton} from "react-native-paper";
-import { subtitle, text, white, black, darkGrey, medGrey, borderRadius } from "../styles";
+import { subtitle, text, white, black, darkGrey, elevation, borderRadius } from "../styles";
 
 const windowWidth = "100%";
 const windowHeight = Dimensions.get("window").height * 0.35;
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius,
     justifyContent: "flex-end",
     height: cardHeight,
-    elevation: 15,
+    elevation: elevation,
   },
   overlay: {
     height: cardHeight * 0.45,

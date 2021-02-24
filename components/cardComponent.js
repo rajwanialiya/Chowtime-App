@@ -1,6 +1,6 @@
 import * as React from "react";
 import { StyleSheet, View, Dimensions, ImageBackground, Text } from "react-native";
-import { subtitle, text, white, borderRadius } from "../styles";
+import { subtitle, text, white, borderRadius, elevation } from "../styles";
 
 const windowWidth = "100%";
 const windowHeight = Dimensions.get("window").height * 0.5;
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius,
     padding: 20,
     justifyContent: "flex-end",
-    elevation: 15,
+    elevation: elevation,
   },
   overlay: {
     height: cardHeight,
