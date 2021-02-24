@@ -21,6 +21,7 @@ export default function LiveCameraScreen({navigation}) {
 
   useEffect(() => {
     handleCameraStream()
+    setUri('')
   }, [isFocused]);
 
   const [run, setRun] = useState(true);
@@ -61,12 +62,46 @@ export default function LiveCameraScreen({navigation}) {
   //   return model;
   // }
 
-  //   
-
 /*-----------------------------------------------------------------------
 Helper function to handle the camera tensor streams. Here, to keep up reading input streams, we use requestAnimationFrame JS method to keep looping for getting better predictions (until we get one with enough confidence level).
 More info on RAF: https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame
 -------------------------------------------------------------------------*/
+// const handleCameraStream = async (imageAsTensors) => {
+//   const loop = async () => {
+//     const tensor = await imageAsTensors.next().value;
+//     const [height, width] = tensor.shape;
+//     const buffer = new Uint8ClampedArray(width * height * 4)
+
+//     const data = tensor.dataSync();
+//     var i = 0;
+//     for(var y = 0; y < height; y++) {
+//     for(var x = 0; x < width; x++) {
+//         var pos = (y * width + x) * 4;      // position in buffer based on x and y
+//         buffer[pos  ] = data[i]             // some R value [0, 255]
+//         buffer[pos+1] = data[i+1]           // some G value
+//         buffer[pos+2] = data[i+2]           // some B value
+//         buffer[pos+3] = 255;                // set alpha channel
+//         i+=3
+//     }
+//   }
+//     //set the buffer to the image data
+//     const rawImageData = {imageData, width, height};
+//     const jpegImageData = jpeg.encode(rawImageData, 100);
+
+//     const imgBase64 = tf.util.decodeString(jpegImageData.data, "base64")
+//     const salt = `${Date.now()}-${Math.floor(Math.random() * 10000)}`
+//     const uri = FileSystem.documentDirectory + `tensor-${salt}.jpg`;
+//     await FileSystem.writeAsStringAsync(uri, imgBase64, {
+//       encoding: FileSystem.EncodingType.Base64,
+//     });
+//     console.log(uri)
+//     setUri(uri)
+//     // return {uri, width, height}
+//   };
+//   // requestAnimationFrameId = requestAnimationFrame(loop);
+//   !uri ? setTimeout(() => loop(), 4000) : null;
+// }
+
 const handleCameraStream = async (imageAsTensors) => {
   const loop = async () => {
     const tensor = await imageAsTensors.next().value;
@@ -81,7 +116,7 @@ const handleCameraStream = async (imageAsTensors) => {
     )
 
     const rawImageData = {data, width, height};
-    const jpegImageData = jpeg.encode(rawImageData, 100);
+    const jpegImageData = jpeg.encode(rawImageData, 200);
 
     const imgBase64 = tf.util.decodeString(jpegImageData.data, "base64")
     const salt = `${Date.now()}-${Math.floor(Math.random() * 10000)}`
@@ -94,7 +129,7 @@ const handleCameraStream = async (imageAsTensors) => {
     // return {uri, width, height}
   };
   // requestAnimationFrameId = requestAnimationFrame(loop);
-  !uri ? setTimeout(() => loop(), 4000) : null;
+  !uri ? setTimeout(() => loop(), 2000) : null;
 }
 
 
