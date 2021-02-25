@@ -13,7 +13,7 @@ import { Camera } from 'expo-camera';
 //tensorflow
 import * as tf from '@tensorflow/tfjs';
 import {cameraWithTensors} from '@tensorflow/tfjs-react-native';
-import TesseractOcr, { LANG_ENGLISH } from 'react-native-tesseract-ocr';
+import TesseractOcr, { LANG_ENGLISH, LEVEL_WORD } from 'react-native-tesseract-ocr';
 
 export default function LiveCameraScreen({navigation}) {
   const isFocused = useIsFocused();
@@ -105,9 +105,7 @@ More info on RAF: https://developer.mozilla.org/en-US/docs/Web/API/window/reques
 const handleCameraStream = async (imageAsTensors) => {
   const loop = async () => {
     const tensor = await imageAsTensors.next().value;
-    console.log(tensor)
-    const height = tensor.shape[0]
-    const width = tensor.shape[1]
+    const [height, width] = tensor.shape
     const data = new Buffer(
       // concat with an extra alpha channel and slice up to 4 channels to handle 3 and 4 channels tensors
       tf.concat([tensor, tf.ones([height, width, 1]).mul(255)], [-1])
@@ -124,7 +122,15 @@ const handleCameraStream = async (imageAsTensors) => {
     await FileSystem.writeAsStringAsync(uri, imgBase64, {
       encoding: FileSystem.EncodingType.Base64,
     });
-    console.log(uri)
+
+    console.log("started")
+
+    const tessOptions = { level: LEVEL_WORD };
+    console.log(TesseractOcr);
+    const result = await TesseractOcr.recognize(uri, LANG_ENGLISH, tessOptions);
+    console.log("finished")
+    console.log(result)
+
     setUri(uri)
     // return {uri, width, height}
   };
