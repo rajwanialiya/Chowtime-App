@@ -21,7 +21,7 @@ import {
 import { MaterialIcons } from "@expo/vector-icons";
 import LottieView from "lottie-react-native";
 import { apiKeys } from "../config/constants";
-import { global, subtitle, padding, white, mainContainer, borderRadius, elevation, chip, grey, darkGrey, green, title } from "../styles";
+import { global, subtitle, padding, white, mainContainer, borderRadius, elevation, chip, grey, darkGrey, green, title, medGrey } from "../styles";
 import { SolidButton } from "./buttons/solidButton";
 import EmptyPage from "./empty";
 
@@ -222,11 +222,7 @@ export function oneRecipe({ route, navigation }) {
                           keyExtractor={(item, index) => index.toString()}
                           renderItem={({ item, index }) => (
                             <View style={styles.recipeStep}>
-                              <View style={styles.stepNumberContainer}>
-                                <Text style={styles.stepNumber}>
-                                  {item.number}
-                                </Text>
-                              </View>
+                              <Text style={styles.stepNumber}>{item.number}</Text>
                               <Text style={styles.instructions}>{item.step}</Text>
                             </View>
                           )}
@@ -327,6 +323,23 @@ const styles = StyleSheet.create({
     fontSize: 25,
     paddingVertical: 10,
   },
+  stepNumber: {
+    ...subtitle,
+    fontSize: 18,
+    paddingRight: 15,
+    color: medGrey,
+  },
+  ingredientName: {
+    fontSize: 16,
+    color: darkGrey,
+    paddingLeft: 6,
+    paddingVertical: 4,
+  },
+  ingredientAmount: {
+    fontSize: 16,
+    color: green,
+    paddingRight: 6,
+  },
 
   // Icons
   favIcon: {
@@ -351,40 +364,11 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     alignItems: "center",
   },
-  ingredientName: {
-    fontSize: 16,
-    color: darkGrey,
-    paddingLeft: 6,
-    paddingVertical: 4,
-  },
-  ingredientAmount: {
-    fontSize: 16,
-    color: green,
-    paddingRight: 6,
-  },
   recipeStep: {
     flexDirection: "row",
-    justifyContent: "flex-start",
+    justifyContent: "center",
     alignItems: "flex-start",
     marginBottom: 12,
-  },
-  stepNumberContainer: {
-    backgroundColor: grey,
-    width: 35,
-    height: 35,
-    borderRadius: 35 / 2,
-    marginRight: 15,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingTop: 2,
-  },
-  stepNumber: {
-    ...chip,
-    paddingVertical: 0,
-    paddingHorizontal: 0,
-    marginBottom: 0,
-    fontSize: 14,
-    backgroundColor: "transparent",
   },
   instructions: {
     flex: 1,

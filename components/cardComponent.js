@@ -1,29 +1,29 @@
 import * as React from "react";
 import { StyleSheet, View, Dimensions, ImageBackground, Text } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { subtitle, text, white, borderRadius, elevation } from "../styles";
 
 const windowWidth = "100%";
 const windowHeight = Dimensions.get("window").height * 0.5;
 
-let cardWidth = windowWidth;
-let cardHeight = windowHeight
-
 export default function CardComponent(props) {
-  cardWidth = props.width ? props.width : windowWidth;
-  cardHeight = props.height ? props.height : windowHeight;
+  let cardWidth = props.width ? props.width : windowWidth;
+  let cardHeight = props.height ? props.height : windowHeight;
 
   return (
     <View>
-      <ImageBackground
-        style={styles.imageBackground}
-        imageStyle={styles.imageContainer}
-        source={{ uri: props.imageUri }}
-        resizeMode="cover"
-      >
-        <View style={styles.overlay} />
-        <Text style={styles.title}>{props.title}</Text>
-        <Text style={styles.subtitle}>{props.subtitle}</Text>
-      </ImageBackground>
+      <TouchableOpacity onPress={() => props.onPress()}>
+        <ImageBackground
+          style={[styles.imageBackground, {height: cardHeight, width: cardWidth}]}
+          imageStyle={styles.imageContainer}
+          source={{ uri: props.imageUri }}
+          resizeMode="cover"
+        >
+          <View style={styles.overlay} />
+          <Text style={styles.title}>{props.title}</Text>
+          <Text style={styles.subtitle}>{props.subtitle}</Text>
+        </ImageBackground>
+      </TouchableOpacity>
     </View> 
   );
 }
@@ -33,14 +33,12 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius,
   },
   imageBackground: {
-    height: cardHeight,
     borderRadius: borderRadius,
     padding: 20,
     justifyContent: "flex-end",
     elevation: elevation,
   },
   overlay: {
-    height: cardHeight,
     borderRadius: borderRadius,
     position: "absolute",
     top: 0,
