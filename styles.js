@@ -1,10 +1,7 @@
 import { DefaultTheme } from "react-native-paper";
-import { Dimensions } from "react-native";
 import { SimpleLineIcons } from "@expo/vector-icons";
 
 //Screen Size
-const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 export const borderRadius = 20;
 export const padding = 18;
 export const elevation = 5;
@@ -18,6 +15,7 @@ export const grey = "#F0F3F4";
 export const lightGrey = "#FAFAFA" 
 export const darkGrey = "#787878";
 export const medGrey = "#949494";
+export const overlay = "rgba(0,0,0,0.55)";
 
 //Theme
 export const global = {

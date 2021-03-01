@@ -1,41 +1,17 @@
 import React, { useState, useEffect } from "react";
-import {StyleSheet,
-  View,
-  FlatList,
-  Dimensions,
-  ImageBackground,
-  AsyncStorage,
-  Image,
-  BackHandler,
-} from "react-native";
-import {
-  Provider as PaperProvider,
-  Text,
-  Button,
-  ActivityIndicator,
-} from "react-native-paper";
+import {StyleSheet, View, FlatList, AsyncStorage, BackHandler } from "react-native";
+import { Provider as PaperProvider, Text, ActivityIndicator} from "react-native-paper";
 import { useIsFocused } from "@react-navigation/native";
-import {
-  createStackNavigator,
-  TransitionPresets,
-} from "@react-navigation/stack";
+import { createStackNavigator, TransitionPresets } from "@react-navigation/stack";
 
-
-import { oneRecipe } from "./oneRecipe.js";
-import CardTextComponent from './cardTextComponent';
-import {
-  global,
-  view,
-  title,
-  subtitle,
-  green,
-  padding,
-  mainContainer,
-  flexView
-} from "../styles";
+import oneRecipe from "./oneRecipe.js";
 import CardComponent from "./cardComponent.js";
+import Empty from "./empty";
+
+import {global, title, green, mainContainer } from "../styles";
 
 const Stack = createStackNavigator();
+
 export function SavedTab() {
   return (
     <Stack.Navigator
@@ -148,13 +124,13 @@ function savedRecipes({ navigation }) {
       return (
         <PaperProvider theme={global}>
           <View style={styles.mainContainer}>
-            <View>
-              <Text style={styles.title}>Saved</Text>
-            </View>
-            <SolidButton
-              color={green}
-              text="Get Recipes"
+            <Text style={styles.title}>Saved</Text>
+            <Empty 
+              imageUri="https://food.fnr.sndimg.com/content/dam/images/food/fullset/2004/2/25/0/bw2b07_hambugers1.jpg.rend.hgtvcom.616.462.suffix/1558017418187.jpeg"
+              title="No saved recipes yet."
+              subtitle="Filler text, filler text, filler text"
               onPress={() => navigation.navigate("Camera")}
+
             />
           </View>
         </PaperProvider>

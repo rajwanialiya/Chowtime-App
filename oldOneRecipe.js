@@ -21,7 +21,7 @@ import {
 import { MaterialIcons } from "@expo/vector-icons";
 import LottieView from "lottie-react-native";
 import { apiKeys } from "../config/constants";
-import { global, view, title, subtitle, chip, padding, grey, darkGrey, green, white, spaceBetweenView, mainContainer } from "../styles";
+import { global, view, title, subtitle, chip, padding, grey, darkGrey, green, white, spaceBetweenView, mainContainer, overlay } from "../styles";
 import { SolidButton } from "./buttons/solidButton";
 import EmptyPage from "./empty";
 
@@ -377,7 +377,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     height: 300,
-    backgroundColor: "rgba(0,0,0,0.5)",
+    backgroundColor: overlay,
     position: "absolute",
     justifyContent: "space-between",
     top: 0,

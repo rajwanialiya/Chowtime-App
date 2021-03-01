@@ -21,11 +21,11 @@ import {
 import { MaterialIcons } from "@expo/vector-icons";
 import LottieView from "lottie-react-native";
 import { apiKeys } from "../config/constants";
-import { global, subtitle, padding, white, mainContainer, borderRadius, elevation, chip, grey, darkGrey, green, title, medGrey } from "../styles";
+import { global, subtitle, padding, white, mainContainer, borderRadius, elevation, chip, overlay, darkGrey, green, title, medGrey } from "../styles";
 import { SolidButton } from "./buttons/solidButton";
 import EmptyPage from "./empty";
 
-export function oneRecipe({ route, navigation }) {
+export default function oneRecipe({ route, navigation }) {
   const favIcon = useRef(null)
 
   const [isLoading, setLoading] = useState(true);
@@ -291,7 +291,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     height: 300,
-    backgroundColor: "rgba(0,0,0,0.5)",
+    backgroundColor: overlay,
     position: "absolute",
     top: 0,
     left: 0,

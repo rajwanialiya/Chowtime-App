@@ -4,14 +4,14 @@ import { Provider as PaperProvider, Text, ActivityIndicator } from "react-native
 import { createStackNavigator, TransitionPresets } from "@react-navigation/stack";
 import LottieView from "lottie-react-native";
 
-import { oneRecipe } from "./oneRecipe.js";
-import { SolidButton } from "./buttons/solidButton.js";
+import oneRecipe from "./oneRecipe.js";
+import SolidButton from "./buttons/solidButton.js";
 import EmptyPage from "./empty.js";
 import CardComponent from "./cardComponent.js"
 
 const EmtypPng = require("../assets/empty-recipe.png");
 import { apiKeys } from "../config/constants";
-import { global, view, title, subtitle, chip, flexView, green, grey, darkGrey, mainContainer } from "../styles";
+import { global, view, title, subtitle, overlay, flexView, green, grey, darkGrey, mainContainer } from "../styles";
 const windowHeight = Dimensions.get("window").height;
 const windowWidth = Dimensions.get("window").width;
 
@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "rgba(0,0,0,0.4)",
+    backgroundColor: overlay,
   },
   ingredientCount: {
     fontSize: 18,

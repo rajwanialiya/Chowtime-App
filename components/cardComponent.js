@@ -1,7 +1,7 @@
-import * as React from "react";
+import React from 'react';
 import { StyleSheet, View, Dimensions, ImageBackground, Text } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { subtitle, text, white, borderRadius, elevation } from "../styles";
+import { subtitle, text, white, borderRadius, elevation, overlay } from "../styles";
 
 const windowWidth = "100%";
 const windowHeight = Dimensions.get("window").height * 0.5;
@@ -12,7 +12,7 @@ export default function CardComponent(props) {
 
   return (
     <View>
-      <TouchableOpacity onPress={() => props.onPress()}>
+      <TouchableOpacity activeOpacity={props.onPress ? 0.8 : 1} onPress={props.onPress ? () => props.onPress() : null}>
         <ImageBackground
           style={[styles.imageBackground, {height: cardHeight, width: cardWidth}]}
           imageStyle={styles.imageContainer}
@@ -20,8 +20,12 @@ export default function CardComponent(props) {
           resizeMode="cover"
         >
           <View style={styles.overlay} />
-          <Text style={styles.title}>{props.title}</Text>
-          <Text style={styles.subtitle}>{props.subtitle}</Text>
+          { props.emptyPageCard ? props.emptyPageCard : 
+          <View>
+            <Text style={styles.title}>{props.title}</Text>
+            <Text style={styles.subtitle}>{props.subtitle}</Text>
+          </View>
+          }
         </ImageBackground>
       </TouchableOpacity>
     </View> 
@@ -45,7 +49,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "rgba(0,0,0,0.45)",
+    backgroundColor: overlay,
   },
   title: {
     ...subtitle,
