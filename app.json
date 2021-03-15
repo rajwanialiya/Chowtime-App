@@ -8,7 +8,7 @@
     "orientation":"portrait",
     "icon": "./assets/green-icon-ios.png",
     "android": {
-      "package": "com.yourcompany.chowtime",
+      "package": "com.chowtime",
       "versionCode": 18,
       "icon": "./assets/green-icon-small.png",
       "adaptiveIcon": {
