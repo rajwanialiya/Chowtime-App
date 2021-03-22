@@ -13,7 +13,6 @@ import { Camera } from 'expo-camera';
 //tensorflow
 import * as tf from '@tensorflow/tfjs';
 import {cameraWithTensors} from '@tensorflow/tfjs-react-native';
-import TesseractOcr, { LANG_ENGLISH, LEVEL_WORD } from 'react-native-tesseract-ocr';
 
 export default function LiveCameraScreen({navigation}) {
   const isFocused = useIsFocused();
@@ -138,12 +137,10 @@ const handleCameraStream = async (imageAsTensors) => {
   !uri ? setTimeout(() => loop(), 2000) : null;
 }
 
-
   //TO DO: USE TO RESET
   const loadNewTranslation = () => {
     setPredictionFound(false);
   }
-
 
   const renderCameraView = () => {
     return <View>

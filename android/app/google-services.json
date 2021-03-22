@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "41612884734",
+    "project_id": "chowtimev3",
+    "storage_bucket": "chowtimev3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:41612884734:android:5d755639855f5e471343af",
+        "android_client_info": {
+          "package_name": "com.chowtime"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "41612884734-t72cjmpqctqseasm33nmgigirqd4q5il.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEqgMl2Khq4mxDvhcahd0MgKkDWQdpK-I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "41612884734-t72cjmpqctqseasm33nmgigirqd4q5il.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

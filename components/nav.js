@@ -7,7 +7,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 
 //Components
-import CameraScreen from "./camera";
+import CameraScreen from "./cameraScreen";
 import LiveCameraScreen from "./liveCameraScreen";
 import { RecipesTab } from "./recipes";
 import {SavedTab} from './savedRecipes'
@@ -34,6 +34,7 @@ export function TabNav() {
       >
         <Tab.Screen
           name="Camera"
+          // component={CameraScreen}
           component={LiveCameraScreen}
 
           options={{
