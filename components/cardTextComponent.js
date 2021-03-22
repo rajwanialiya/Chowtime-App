@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { StyleSheet, View, Dimensions, ImageBackground, Text } from "react-native";
 import { IconButton} from "react-native-paper";
-import { subtitle, text, white, black, darkGrey, medGrey, borderRadius } from "../styles";
+import { subtitle, text, white, black, darkGrey, elevation, borderRadius } from "../styles";
 
 const windowWidth = "100%";
 const windowHeight = Dimensions.get("window").height * 0.35;
@@ -60,13 +60,13 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius,
     justifyContent: "flex-end",
     height: cardHeight,
-    elevation: 15,
+    elevation: elevation,
   },
   overlay: {
     height: cardHeight * 0.45,
     borderBottomLeftRadius: borderRadius,
     borderBottomRightRadius: borderRadius,
-    padding: 20,
+    padding: 20, 
     position: "absolute",
     justifyContent: "center",
     left: 0,
@@ -81,22 +81,24 @@ const styles = StyleSheet.create({
     alignItems: "flex-end"
   },
   favIcon: {
-    margin: 0
+    margin: 0,
+    position: "absolute",
+    right: 0
   },
   title: {
     ...subtitle,
     color: black,
-    fontSize: 25
+    fontSize: 20
   },
   subtitle: {
     ...text,
-    color: medGrey,
-    fontSize: 18
+    color: darkGrey,
+    fontSize: 16
   },
   textButton: {
     fontFamily: "SF-Semibold",
-    fontSize: 18,
-    marginVertical: 10,
-    color: darkGrey
+    fontSize: 16,
+    color: darkGrey,
+    marginTop: 8
   }
 });

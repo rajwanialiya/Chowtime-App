@@ -2,6 +2,7 @@ import * as React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { CameraScreen } from "./cameraScreen";
 import { PictureScreen } from "./pictureScreen";
+import { LiveCameraScreen } from "./liveCameraScreen";
 
 const CameraNavigator = createStackNavigator();
 
@@ -13,11 +14,7 @@ export default function CameraStack() {
       }}
     >
       <CameraNavigator.Screen name="PictureScreen" component={PictureScreen} />
-      <CameraNavigator.Screen
-        name="CameraCapture"
-        component={CameraScreen}
-        options={{ tabBarVisible: false }}
-      />
+      <CameraNavigator.Screen name="CameraCapture" component={CameraScreen} options={{ tabBarVisible: false }}/>
     </CameraNavigator.Navigator>
   );
 }
