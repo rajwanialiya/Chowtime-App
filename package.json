@@ -32,7 +32,7 @@
     "expo-image-picker": "~8.3.0",
     "expo-permissions": "~9.0.1",
     "expo-updates": "~0.2.8",
-    "express": "^2.5.11",
+    "express": "^3.11.0",
     "lottie-react-native": "~2.6.1",
     "material-design-icons": "^3.0.1",
     "react": "16.11.0",
