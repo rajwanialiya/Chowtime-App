@@ -2,7 +2,7 @@ import * as React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { CameraScreen } from "./cameraScreen";
 import { PictureScreen } from "./pictureScreen";
-import { LiveCameraScreen } from "./liveCameraScreen";
+// import { LiveCameraScreen } from "./liveCameraScreen";
 
 const CameraNavigator = createStackNavigator();
 

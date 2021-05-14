@@ -167,7 +167,7 @@ function Recipes({ route, navigation }) {
     } else {
       return (
         <PaperProvider theme={global}>
-          <View style={styles.view}>
+          <View style={styles.mainContainer}>
             <Text style={styles.title}>Recipes</Text>
 
             {/* Your Ingredients */}

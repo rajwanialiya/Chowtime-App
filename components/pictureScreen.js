@@ -22,7 +22,7 @@ import {
   chip,
   coloredSection,
   text,
-  green, grey, darkGrey
+  green, grey, darkGrey, mainContainer
 } from "../styles";
 
 import FloatingButton from "./FloatingButton";
@@ -313,7 +313,7 @@ export function PictureScreen(props) {
   };
   return (
     <PaperProvider theme={global}>
-      <View style={styles.view}>
+      <View style={styles.mainContainer}>
         <Text style={styles.title}>{title}</Text>
         <View style={styles.view}>
           {(step == "1" && pictureList.length > 0) ||
@@ -497,7 +497,8 @@ export function PictureScreen(props) {
               <EmptyIcon
                 setWidth="100%"
                 setHeight="55%"
-                image={<SvgXml xml={EmptyXml} width="100%" height="100%" />}
+                // image={<SvgXml xml={EmptyXml} width="100%" height="100%" />}
+                imageUri={"https://food.fnr.sndimg.com/content/dam/images/food/fullset/2004/2/25/0/bw2b07_hambugers1.jpg.rend.hgtvcom.616.462.suffix/1558017418187.jpeg"}
                 title={emptyTitle}
                 text={emptyText}
               />
@@ -535,6 +536,9 @@ const styles = StyleSheet.create({
   title: {
     ...title,
     marginBottom: 0,
+  },
+  mainContainer: {
+    ...mainContainer
   },
   close: {
     backgroundColor: "grey",

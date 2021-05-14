@@ -1,15 +1,14 @@
 {
-  "name": "ChowTime",
-  "displayName": "ChowTime",
   "expo": {
-    "name": "ChowTime",
-    "slug": "ChowTime",
-    "version": "5.0.0",
+    "name": "QuickDish",
+    "slug": "QuickDish",
+    "version": "20.0.0",
     "orientation":"portrait",
     "icon": "./assets/green-icon-ios.png",
     "android": {
       "package": "com.yourcompany.chowtime",
-      "versionCode": 18,
+      "versionCode": 20,
+      "permissions": ["CAMERA"],
       "icon": "./assets/green-icon-small.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/green-icon-small.png",
@@ -17,7 +16,7 @@
       }
     },
     "splash": {
-      "image": "./assets/splashScreen2.png",
+      "image": "./assets/splashScreen3.png",
       "resizeMode": "cover"
     },
     "platforms": [
@@ -29,7 +28,7 @@
       "**/*"
     ],
     "ios": {
-      "buildNumber": "4",
+      "buildNumber": "20",
       "bundleIdentifier": "com.itsjustdevs.chowtime",
       "infoPlist": {
         "NSCameraUsageDescription": "ChowTime needs access to your camera to capture images of food and recommend recipes"

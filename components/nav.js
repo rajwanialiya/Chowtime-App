@@ -8,7 +8,7 @@ import { createMaterialBottomTabNavigator } from "@react-navigation/material-bot
 
 //Components
 import CameraScreen from "./camera";
-import LiveCameraScreen from "./liveCameraScreen";
+// import LiveCameraScreen from "./liveCameraScreen";
 import { RecipesTab } from "./recipes";
 import {SavedTab} from './savedRecipes'
 //Style
